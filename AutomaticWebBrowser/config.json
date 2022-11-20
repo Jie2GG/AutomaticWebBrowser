@@ -1,0 +1,69 @@
+{
+    // 软件设置
+    "setting": {
+        "window": {
+            // 设置窗口最大化 (true 时忽略 size 属性)
+            "maximize": false,
+            // 设置浏览区域的大小 (不是窗口大小)
+            "size": {
+                "width": 1500,
+                "height": 1200
+            }
+        },
+        "browser": {
+            // 浏览器缓存路径 (相对路径或绝对路径)
+            "profile": "./profile",
+            // 浏览器默认语言
+            "language": "zh-CN,zh;q=0.9,en;q=0.8",
+            // 浏览器用户标识
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0",
+            // 启用浏览器字体渲染
+            "enable-font-rendering": true,
+            // 启用浏览器不被追踪
+            "enable-donottrackheader": true,
+            // 启用上下文菜单
+            "enable-context-menu": true
+        }
+    },
+    // 任务信息
+    "task-info": {
+        // 任务地址
+        "url": "https://www.iqiyi.com/",
+        // 任务包含的所有操作
+        "actions": [
+            // 在首页搜索框输入内容并回车
+            {
+                // 操作名称
+                "name": "搜索海绵宝宝",
+                // 操作执行条件
+                "condition": {
+                    "type": "ReadyState",
+                    "value": "complete"
+                },
+                // 操作执行元素
+                "element": {
+                    "type": "GetById",
+                    "value": "J-header-search-input"
+                },
+                // 操作执行动作
+                "options": [
+                    {
+                        "type": "Focus"
+                    },
+                    {
+                        "type": "Input",
+                        "value": "海绵宝宝"
+                    },
+                    {
+                        "type": "KeyDown",
+                        "value": {
+                            "key-code": "Enter"
+                        }
+                    }
+                ]
+            }
+            // 开始对搜索结果进行爬虫 
+
+        ]
+    }
+}

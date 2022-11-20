@@ -1,0 +1,9 @@
+{
+    "profiles": {
+        "AutomaticWebBrowser": {
+            "commandName": "Project",
+            "commandLineArgs": "-config config.json",
+            "nativeDebugging": false
+        }
+    }
+}
