@@ -28,13 +28,13 @@
     // 任务信息
     "task-info": {
         // 任务地址
-        "url": "https://www.baidu.com/",
+        "url": "https://www.pptv.com/",
         // 任务包含的所有操作
         "actions": [
             // 在首页搜索框输入内容并回车
             {
                 // 操作名称
-                "name": "搜索海绵宝宝",
+                "name": "输入搜索内容",
                 // 操作执行条件
                 "condition": {
                     "type": "ReadyState",
@@ -43,27 +43,34 @@
                 // 操作执行元素
                 "element": {
                     "type": "ElementId",
-                    "value": "kw"
+                    "value": "cmspc-hserachtext"
                 },
                 // 操作执行动作
                 "options": [
                     {
+                        "type": "Focus"
+                    },
+                    {
                         "type": "KeypressInput",
-                        "value": "海绵宝宝"
-                    },
+                        "value": "长津湖"
+                    }
+                ]
+            },
+            {
+                "name": "点击搜索",
+                "element": {
+                    "type": "ElementId",
+                    "value": "doquanwangshou"
+                },
+                "options": [
                     {
-                        "type": "Input",
-                        "value": "123"
-                    },
-                    {
-                        "type": "KeyDown",
+                        "type": "MouseDown",
                         "value": {
-                            "key": "Enter"
+                            "button": "Left"
                         }
                     }
                 ]
             }
-            // 开始对搜索结果进行爬虫 
 
         ]
     }

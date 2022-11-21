@@ -7,17 +7,17 @@ using Gecko;
 
 namespace AutomaticWebBrowser.Commands
 {
-    [OptionCommand (OptionType.MouseUp)]
-    public class MouseUpOptionCommand : OptionCommand
+    [OptionCommand( OptionType.MouseClick)]
+    public class MouseClickOptionCommand : OptionCommand
     {
-        public MouseUpOptionCommand (TaskWebBrowser webBrowser, GeckoNode node, Option option) : base (webBrowser, node, option)
+        public MouseClickOptionCommand (TaskWebBrowser webBrowser, GeckoNode node, Option option) : base (webBrowser, node, option)
         {
         }
 
         public override void Execute ()
         {
             MouseKeyInfo mouseKeyInfo = this.Option.Value.Deserialize<MouseKeyInfo> (GlobalConfig.JsonSerializerOptions);
-            TaskWebBrowser.Option.MouseUp (this.Browser, this.Node, mouseKeyInfo);
+            TaskWebBrowser.Option.MouseClick (this.Browser, this.Node, mouseKeyInfo);
         }
     }
 }

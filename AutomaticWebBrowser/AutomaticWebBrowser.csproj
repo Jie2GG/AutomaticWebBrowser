@@ -8,7 +8,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="Commands\MouseDownOptionCommand.cs" />
 		<Compile Remove="Commands\MouseUpOptionCommand.cs" />
 	</ItemGroup>
 

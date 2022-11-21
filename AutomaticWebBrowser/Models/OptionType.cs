@@ -37,5 +37,17 @@
         /// 按键按下并松开
         /// </summary>
         KeyPress,
+        /// <summary>
+        /// 鼠标按键按下
+        /// </summary>
+        MouseDown,
+        /// <summary>
+        /// 鼠标按键松开
+        /// </summary>
+        MouseUp,
+        /// <summary>
+        /// 鼠标按键按下并松开
+        /// </summary>
+        MouseClick,
     }
 }

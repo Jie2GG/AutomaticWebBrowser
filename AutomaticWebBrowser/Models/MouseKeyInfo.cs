@@ -1,46 +1,47 @@
 ﻿using System.Text.Json.Serialization;
-using System.Windows.Forms;
+
+using Gecko;
 
 namespace AutomaticWebBrowser.Models
 {
     /// <summary>
-    /// 鼠标信息
+    /// 鼠标键信息
     /// </summary>
-    public class MouseInfo
+    public class MouseKeyInfo
     {
         /// <summary>
-        /// 是否按下 Ctrl 键
+        /// 按下 Control 键
         /// </summary>
         [JsonPropertyName ("ctrl")]
-        public bool CtrlKey { get; set; }
+        public bool Control { get; set; } = false;
 
         /// <summary>
-        /// 是否按下 Alt 键
+        /// 按下 Alt 键
         /// </summary>
         [JsonPropertyName ("alt")]
-        public bool AltKey { get; set; }
+        public bool Alt { get; set; } = false;
 
         /// <summary>
-        /// 是否按下 Shift 键
+        /// 按下 Shift 键
         /// </summary>
         [JsonPropertyName ("shift")]
-        public bool ShiftKey { get; set; }
+        public bool Shift { get; set; } = false;
 
         /// <summary>
-        /// 是否按下 Meta 键
+        /// 按下 Meta 键
         /// </summary>
         [JsonPropertyName ("meta")]
-        public bool MetaKey { get; set; }
+        public bool Meta { get; set; } = false;
 
         /// <summary>
-        /// 按键码
+        /// 按下鼠标键的键值
         /// </summary>
-        [JsonPropertyName ("key-code")]
+        [JsonPropertyName ("button")]
         [JsonConverter (typeof (JsonStringEnumConverter))]
-        public MouseKeys KeyCode { get; set; }
+        public GeckoMouseButton Button { get; set; } = GeckoMouseButton.None;
 
         /// <summary>
-        /// 触发次数
+        /// 按下键的次数
         /// </summary>
         [JsonPropertyName ("count")]
         public int Count { get; set; } = 1;
