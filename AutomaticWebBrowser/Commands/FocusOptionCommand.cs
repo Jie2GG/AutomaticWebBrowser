@@ -14,13 +14,13 @@ namespace AutomaticWebBrowser.Commands
     [OptionCommand (OptionType.Focus)]
     public class FocusOptionCommand : OptionCommand
     {
-        public FocusOptionCommand (TaskWebBrowser webBrowser, GeckoElement element, Option option) : base (webBrowser, element, option)
+        public FocusOptionCommand (TaskWebBrowser webBrowser, GeckoNode node, Option option) : base (webBrowser, node, option)
         {
         }
 
         public override void Execute ()
         {
-            TaskWebBrowser.Option.Focus (this.Browser, this.Element);
+            TaskWebBrowser.Option.Focus (this.Browser, this.Node);
         }
     }
 }

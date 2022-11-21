@@ -23,15 +23,15 @@ namespace AutomaticWebBrowser.Commands
 
         #region --属性--
         public TaskWebBrowser Browser { get; }
-        public GeckoElement Element { get; }
+        public GeckoNode Node { get; }
         public Option Option { get; }
         #endregion
 
         #region --构造函数--
-        protected OptionCommand (TaskWebBrowser webBrowser, GeckoElement element, Option option)
+        protected OptionCommand (TaskWebBrowser webBrowser, GeckoNode node, Option option)
         {
             this.Browser = webBrowser;
-            this.Element = element;
+            this.Node = node;
             this.Option = option;
         }
         #endregion
@@ -39,17 +39,17 @@ namespace AutomaticWebBrowser.Commands
         #region --公开方法--
         public abstract void Execute ();
 
-        public static OptionCommand CreateCommand (TaskWebBrowser browser, GeckoElement element, Option option)
+        public static OptionCommand CreateCommand (TaskWebBrowser browser, GeckoNode node, Option option)
         {
             foreach (Type optionType in optionTypes)
             {
                 OptionCommandAttribute attribute = optionType.GetCustomAttribute<OptionCommandAttribute> ();
                 if (attribute != null && attribute.OptionType == option.Type)
                 {
-                    return (OptionCommand)Activator.CreateInstance (optionType, new object[] { browser, element, option });
+                    return (OptionCommand)Activator.CreateInstance (optionType, new object[] { browser, node, option });
                 }
             }
-            return new DefaultOptionCommand (browser, element, option);
+            return new DefaultOptionCommand (browser, node, option);
         }
         #endregion
     }

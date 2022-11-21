@@ -10,14 +10,14 @@ namespace AutomaticWebBrowser.Commands
     [OptionCommand (OptionType.KeyUp)]
     public class KeyUpOptionCommand : OptionCommand
     {
-        public KeyUpOptionCommand (TaskWebBrowser webBrowser, GeckoElement element, Option option) : base (webBrowser, element, option)
+        public KeyUpOptionCommand (TaskWebBrowser webBrowser, GeckoNode node, Option option) : base (webBrowser, node, option)
         {
         }
 
         public override void Execute ()
         {
-            KeyInfo keyInfo = Option.Value.Deserialize<KeyInfo> (GlobalConfig.JsonSerializerOptions);
-            TaskWebBrowser.Option.KeyUp (Browser, Element, keyInfo);
+            KeyInfo keyInfo = this.Option.Value.Deserialize<KeyInfo> (GlobalConfig.JsonSerializerOptions);
+            TaskWebBrowser.Option.KeyUp (this.Browser, this.Node, keyInfo);
         }
     }
 }

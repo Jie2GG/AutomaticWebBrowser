@@ -9,7 +9,7 @@ namespace AutomaticWebBrowser.Commands
 {
     public class DefaultOptionCommand : OptionCommand
     {
-        public DefaultOptionCommand (TaskWebBrowser webBrowser, GeckoElement element, Option option)
+        public DefaultOptionCommand (TaskWebBrowser webBrowser, GeckoNode element, Option option)
             : base (webBrowser, element, option)
         { }
 

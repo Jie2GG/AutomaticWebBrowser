@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 using AutomaticWebBrowser.Commands;
 using AutomaticWebBrowser.Exceptions;
@@ -131,7 +132,7 @@ namespace AutomaticWebBrowser.Controls
 
                     if (action.Element == null)
                     {
-                        throw new ConfigNodeException ($"Action: {actionName} 没有指定 Element 节点");
+                        throw new ConfigNodeException ($"Action: {actionName} 没有指定 Node 节点");
                     }
 
                     // 处理执行条件
@@ -151,29 +152,32 @@ namespace AutomaticWebBrowser.Controls
                         {
                             case SearchType.DomDocument:
                                 {
-                                    return webBrowser.Document.DocumentElement;
+                                    return webBrowser.Document;
                                 }
                             case SearchType.XPath:
                                 {
                                     string xpath = action.Element.Value.Deserialize<string> (GlobalConfig.JsonSerializerOptions);
                                     return webBrowser.Document.SelectFirst (xpath);
                                 }
-                            case SearchType.GetById:
+                            case SearchType.ElementId:
                                 {
                                     string elementId = action.Element.Value.Deserialize<string> (GlobalConfig.JsonSerializerOptions);
                                     return webBrowser.Document.GetElementById (elementId);
                                 }
                             default:
-                                throw new ConfigNodeException ($"Action: {actionName} 的 Element 中没有设置正确的元素搜索方式");
+                                throw new ConfigNodeException ($"Action: {actionName} 的 Node 中没有设置正确的元素搜索方式");
                         }
                     }));
-                    if (webBrowser.EndInvoke (result) is GeckoElement element)
+                    if (webBrowser.EndInvoke (result) is GeckoNode element)
                     {
                         // 对元素的执行操作
                         foreach (Models.Option option in action.Options)
                         {
                             OptionCommand.CreateCommand (webBrowser, element, option)
                                 .Execute ();
+
+                            // 延迟 1ms 作为缓冲
+                            Thread.Sleep (1);
                         }
                     }
 
@@ -191,123 +195,18 @@ namespace AutomaticWebBrowser.Controls
         public static class Option
         {
             /// <summary>
-            /// 将数据输入到元素
+            /// 元素获取焦点
             /// </summary>
             /// <param name="browser"></param>
-            /// <param name="element"></param>
-            /// <param name="value"></param>
-            public static DomEventArgs Input (TaskWebBrowser browser, GeckoElement element, string value)
-            {
-                // 输入字符
-                IAsyncResult result = browser.BeginInvoke (new Func<DomEventArgs> (() =>
-                {
-                    DomEventArgs args = GetKeyEvents (browser);
-                    KeyEvent @event = new KeyEvent (element.Window, args.DomEvent as nsISupports);
-                    foreach (char c in value.ToCharArray ())
-                    {
-                        uint keyCode = (uint)(Keys)c;
-                        @event.InitKeyEvent ("keypress", true, false, (nsIDOMWindow)browser.Window.DomWindow, false, false, false, false, keyCode, c);
-                        element.GetEventTarget ()
-                            .DispatchEvent (args);
-                    }
-
-                    return args;
-                }));
-
-                return browser.EndInvoke (result) as DomEventArgs;
-            }
-
-            /// <summary>
-            /// 将按键按下并松开的操作输入到元素
-            /// </summary>
-            /// <param name="browser"></param>
-            /// <param name="element"></param>
-            /// <param name="keyInfo"></param>
-            /// <returns></returns>
-            public static DomEventArgs KeyPress (TaskWebBrowser browser, GeckoElement element, KeyInfo keyInfo)
-            {
-                // 输入字符
-                IAsyncResult result = browser.BeginInvoke (new Func<DomEventArgs> (() =>
-                {
-                    DomEventArgs args = GetKeyEvents (browser);
-                    KeyEvent @event = new KeyEvent (element.Window, args.DomEvent as nsISupports);
-                    uint keyCode = (uint)keyInfo.KeyCode;
-                    @event.InitKeyEvent ("keypress", true, false, (nsIDOMWindow)browser.Window.DomWindow, keyInfo.CtrlKey, keyInfo.AltKey, keyInfo.ShiftKey, keyInfo.MetaKey, keyCode);
-                    while (keyInfo.Count-- > 0)
-                    {
-                        element.GetEventTarget ().DispatchEvent (args);
-                    }
-                    return args;
-                }));
-
-                return browser.EndInvoke (result) as DomEventArgs;
-            }
-
-            /// <summary>
-            /// 将按键按下的操作输入到元素
-            /// </summary>
-            /// <param name="browser"></param>
-            /// <param name="element"></param>
-            /// <param name="keyInfo"></param>
-            /// <returns></returns>
-            public static DomEventArgs KeyDown (TaskWebBrowser browser, GeckoElement element, KeyInfo keyInfo)
-            {
-                // 输入字符
-                IAsyncResult result = browser.BeginInvoke (new Func<DomEventArgs> (() =>
-                {
-                    DomEventArgs args = GetKeyEvents (browser);
-                    KeyEvent @event = new KeyEvent (element.Window, args.DomEvent as nsISupports);
-                    uint keyCode = (uint)keyInfo.KeyCode;
-                    @event.InitKeyEvent ("keydown", true, false, (nsIDOMWindow)browser.Window.DomWindow, keyInfo.CtrlKey, keyInfo.AltKey, keyInfo.ShiftKey, keyInfo.MetaKey, keyCode);
-                    while (keyInfo.Count-- > 0)
-                    {
-                        element.GetEventTarget ().DispatchEvent (args);
-                    }
-                    return args;
-                }));
-
-                return browser.EndInvoke (result) as DomEventArgs;
-            }
-
-            /// <summary>
-            /// 将按键松开的操作输入到元素
-            /// </summary>
-            /// <param name="browser"></param>
-            /// <param name="element"></param>
-            /// <param name="keyInfo"></param>
-            /// <returns></returns>
-            public static DomEventArgs KeyUp (TaskWebBrowser browser, GeckoElement element, KeyInfo keyInfo)
-            {
-                // 输入字符
-                IAsyncResult result = browser.BeginInvoke (new Func<DomEventArgs> (() =>
-                {
-                    DomEventArgs args = GetKeyEvents (browser);
-                    KeyEvent @event = new KeyEvent (element.Window, args.DomEvent as nsISupports);
-                    uint keyCode = (uint)keyInfo.KeyCode;
-                    @event.InitKeyEvent ("keyup", true, false, (nsIDOMWindow)browser.Window.DomWindow, keyInfo.CtrlKey, keyInfo.AltKey, keyInfo.ShiftKey, keyInfo.MetaKey, keyCode);
-                    while (keyInfo.Count-- > 0)
-                    {
-                        element.GetEventTarget ().DispatchEvent (args);
-                    }
-                    return args;
-                }));
-
-                return browser.EndInvoke (result) as DomEventArgs;
-            }
-
-            /// <summary>
-            /// 将焦点移动到元素
-            /// </summary>
-            /// <param name="browser"></param>
-            /// <param name="element"></param>
-            public static void Focus (TaskWebBrowser browser, GeckoElement element)
+            /// <param name="node"></param>
+            public static void Focus (TaskWebBrowser browser, GeckoNode node)
             {
                 IAsyncResult result = browser.BeginInvoke (new Action (() =>
                 {
                     // 获取焦点
-                    if (element is GeckoHtmlElement inputElement)
+                    if (node is GeckoHtmlElement htmlElement)
                     {
-                        inputElement.Focus ();
+                        htmlElement.Focus ();
                     }
                 }));
 
@@ -315,101 +214,316 @@ namespace AutomaticWebBrowser.Controls
             }
 
             /// <summary>
-            /// 将鼠标点击事件输入到元素
+            /// 元素点击
             /// </summary>
             /// <param name="browser"></param>
-            /// <param name="element"></param>
+            /// <param name="node"></param>
             /// <returns></returns>
-            public static DomEventArgs Click (TaskWebBrowser browser, GeckoElement element, int count)
+            public static void Click (TaskWebBrowser browser, GeckoNode node, int count)
             {
-                IAsyncResult result = browser.BeginInvoke (new Func<DomEventArgs> (() =>
+                IAsyncResult result = browser.BeginInvoke (new Action (() =>
                 {
-                    // 获取事件
-                    DomEventArgs args = GetMouseEvents (browser);
-
-                    // 点击
-                    MouseEvent @event = new MouseEvent (element.Window, args.DomEvent as nsISupports);
-                    @event.InitMouseEvent ("click", true, false, (nsIDOMWindow)browser.Window.DomWindow);
-                    while (count-- > 0)
+                    // 点击元素
+                    if (node is GeckoHtmlElement htmlElement)
                     {
-                        element.GetEventTarget ().DispatchEvent (args);
+                        while (count-- > 0)
+                        {
+                            htmlElement.Click ();
+                        }
                     }
-                    return args;
                 }));
 
-                return browser.EndInvoke (result) as DomEventArgs;
+                browser.EndInvoke (result);
             }
 
             /// <summary>
-            /// 将鼠标按键按下事件输入到元素
+            /// 元素输入
             /// </summary>
             /// <param name="browser"></param>
-            /// <param name="element"></param>
-            /// <returns></returns>
-            public static DomEventArgs MouseDown (TaskWebBrowser browser, GeckoElement element, MouseInfo mouseInfo)
+            /// <param name="node"></param>
+            /// <param name="value"></param>
+            public static void Input (TaskWebBrowser browser, GeckoNode node, string value)
             {
-                IAsyncResult result = browser.BeginInvoke (new Func<DomEventArgs> (() =>
+                // 输入字符
+                IAsyncResult result = browser.BeginInvoke (new Action (() =>
                 {
-                    // 获取事件
-                    DomMouseEventArgs args = GetMouseEvents (browser);
-
-                    // 计算点击位置
-                    Rectangle rect = element.GetBoundingClientRect ();
-                    int clientX = rect.Left + rect.Width / 2;
-                    int clientY = rect.Top + rect.Height / 2;
-
-                    // 触发事件
-                    MouseEvent @event = new MouseEvent (element.Window, args.DomEvent as nsISupports);
-                    @event.InitMouseEvent ("mousedown", true, false, (nsIDOMWindow)browser.Window.DomWindow, 1, 0, 0, clientX, clientY, mouseInfo.CtrlKey, mouseInfo.AltKey, mouseInfo.ShiftKey, mouseInfo.MetaKey, (short)mouseInfo.KeyCode);
-                    while (mouseInfo.Count-- > 0)
+                    if (node is GeckoInputElement inputElement)
                     {
-                        element.GetEventTarget ().DispatchEvent (args);
+                        inputElement.Value = value;
                     }
-                    return args;
                 }));
 
-                return browser.EndInvoke (result) as DomEventArgs;
+                browser.EndInvoke (result);
             }
 
             /// <summary>
-            /// 将鼠标按键松开事件输入到元素
+            /// 元素模拟输入
             /// </summary>
             /// <param name="browser"></param>
-            /// <param name="element"></param>
-            /// <returns></returns>
-            public static DomEventArgs MouseUp (TaskWebBrowser browser, GeckoElement element, MouseInfo mouseInfo)
+            /// <param name="node"></param>
+            /// <param name="value"></param>
+            public static void SimulateInput (TaskWebBrowser browser, GeckoNode node, string value)
             {
-                IAsyncResult result = browser.BeginInvoke (new Func<DomEventArgs> (() =>
+                // 输入字符
+                IAsyncResult result = browser.BeginInvoke (new Action (() =>
                 {
-                    // 获取事件
-                    DomMouseEventArgs args = GetMouseEvents (browser);
+                    // 获取文档事件
+                    DomUIEventArgs args = GetKeyboardEvents (browser);
 
-                    // 计算点击位置
-                    Rectangle rect = element.GetBoundingClientRect ();
-                    int clientX = rect.Left + rect.Width / 2;
-                    int clientY = rect.Top + rect.Height / 2;
-
-                    // 触发事件
-                    MouseEvent @event = new MouseEvent (element.Window, args.DomEvent as nsISupports);
-                    @event.InitMouseEvent ("mouseup", true, false, (nsIDOMWindow)browser.Window.DomWindow, 1, 0, 0, clientX, clientY, mouseInfo.CtrlKey, mouseInfo.AltKey, mouseInfo.ShiftKey, mouseInfo.MetaKey, (short)mouseInfo.KeyCode);
-                    while (mouseInfo.Count-- > 0)
+                    // 创建按键事件
+                    KeyEvent @event = new KeyEvent ((mozIDOMWindowProxy)browser.Window.DomWindow, args.DomEvent as nsISupports);
+                    foreach (char c in value.ToCharArray ())
                     {
-                        element.GetEventTarget ().DispatchEvent (args);
+                        @event.InitKeyEvent (
+                            "keypress",
+                            true,
+                            true,
+                            (nsIDOMWindow)browser.Window.DomWindow,
+                            false,
+                            false,
+                            false,
+                            false,
+                            c,
+                            c
+                        );
+                        node.GetEventTarget ().DispatchEvent (args);
                     }
-                    return args;
                 }));
 
-                return browser.EndInvoke (result) as DomEventArgs;
+                browser.EndInvoke (result);
             }
 
             /// <summary>
-            /// 获取键事件
+            /// 元素模拟按键按下
+            /// </summary>
+            /// <param name="browser"></param>
+            /// <param name="node"></param>
+            /// <param name="key"></param>
+            public static void KeyDown (TaskWebBrowser browser, GeckoNode node, KeyInfo key)
+            {
+                // 按下按键
+                IAsyncResult result = browser.BeginInvoke (new Action (() =>
+                {
+                    // 获取文档事件
+                    DomUIEventArgs args = GetKeyboardEvents (browser);
+
+                    // 创建按键事件
+                    KeyEvent @event = new KeyEvent ((mozIDOMWindowProxy)browser.Window.DomWindow, args.DomEvent as nsISupports);
+                    @event.InitKeyEvent (
+                            "keydown",
+                            true,
+                            false,
+                            (nsIDOMWindow)browser.Window.DomWindow,
+                            key.Control,
+                            key.Alt,
+                            key.Shift,
+                            key.Meta,
+                            (uint)key.Key
+                    );
+                    while (key.Count-- > 0)
+                    {
+                        node.GetEventTarget ().DispatchEvent (args);
+                    }
+                }));
+
+                browser.EndInvoke (result);
+            }
+
+            /// <summary>
+            /// 元素模拟按键松开
+            /// </summary>
+            /// <param name="browser"></param>
+            /// <param name="node"></param>
+            /// <param name="key"></param>
+            public static void KeyUp (TaskWebBrowser browser, GeckoNode node, KeyInfo key)
+            {
+                // 按下按键
+                IAsyncResult result = browser.BeginInvoke (new Action (() =>
+                {
+                    // 获取文档事件
+                    DomUIEventArgs args = GetKeyboardEvents (browser);
+
+                    // 创建按键事件
+                    KeyEvent @event = new KeyEvent ((mozIDOMWindowProxy)browser.Window.DomWindow, args.DomEvent as nsISupports);
+                    @event.InitKeyEvent (
+                            "keyup",
+                            true,
+                            false,
+                            (nsIDOMWindow)browser.Window.DomWindow,
+                            key.Control,
+                            key.Alt,
+                            key.Shift,
+                            key.Meta,
+                            (uint)key.Key
+                    );
+                    while (key.Count-- > 0)
+                    {
+                        node.GetEventTarget ().DispatchEvent (args);
+                    }
+                }));
+
+                browser.EndInvoke (result);
+            }
+
+            /// <summary>
+            /// 元素模拟按键按下并松开
+            /// </summary>
+            /// <param name="browser"></param>
+            /// <param name="element"></param>
+            /// <param name="keyInfo"></param>
+            /// <returns></returns>
+            public static void KeyPress (TaskWebBrowser browser, GeckoNode node, KeyInfo key)
+            {
+                // 按下按键
+                IAsyncResult result = browser.BeginInvoke (new Action (() =>
+                {
+                    // 获取文档事件
+                    DomUIEventArgs args = GetKeyboardEvents (browser);
+
+                    // 创建按键事件
+                    KeyEvent @event = new KeyEvent ((mozIDOMWindowProxy)browser.Window.DomWindow, args.DomEvent as nsISupports);
+                    @event.InitKeyEvent (
+                            "keypress",
+                            true,
+                            false,
+                            (nsIDOMWindow)browser.Window.DomWindow,
+                            key.Control,
+                            key.Alt,
+                            key.Shift,
+                            key.Meta,
+                            (uint)key.Key
+                    );
+                    while (key.Count-- > 0)
+                    {
+                        node.GetEventTarget ().DispatchEvent (args);
+                    }
+                }));
+
+                browser.EndInvoke (result);
+            }
+
+            ///// <summary>
+            ///// 将按键按下的操作输入到元素
+            ///// </summary>
+            ///// <param name="browser"></param>
+            ///// <param name="node"></param>
+            ///// <param name="keyInfo"></param>
+            ///// <returns></returns>
+            //public static DomEventArgs KeyDown (TaskWebBrowser browser, GeckoElement node, KeyInfo keyInfo)
+            //{
+            //    // 输入字符
+            //    IAsyncResult result = browser.BeginInvoke (new Func<DomEventArgs> (() =>
+            //    {
+            //        DomEventArgs args = GetKeyboardEvents (browser);
+            //        KeyEvent @event = new KeyEvent (node.Window, args.DomEvent as nsISupports);
+            //        uint keyCode = (uint)keyInfo.KeyCode;
+            //        @event.InitKeyEvent ("keydown", true, false, (nsIDOMWindow)browser.Window.DomWindow, keyInfo.CtrlKey, keyInfo.AltKey, keyInfo.ShiftKey, keyInfo.MetaKey, keyCode);
+            //        while (keyInfo.Count-- > 0)
+            //        {
+            //            node.GetEventTarget ().DispatchEvent (args);
+            //        }
+            //        return args;
+            //    }));
+
+            //    return browser.EndInvoke (result) as DomEventArgs;
+            //}
+
+            ///// <summary>
+            ///// 将按键松开的操作输入到元素
+            ///// </summary>
+            ///// <param name="browser"></param>
+            ///// <param name="node"></param>
+            ///// <param name="keyInfo"></param>
+            ///// <returns></returns>
+            //public static DomEventArgs KeyUp (TaskWebBrowser browser, GeckoElement node, KeyInfo keyInfo)
+            //{
+            //    // 输入字符
+            //    IAsyncResult result = browser.BeginInvoke (new Func<DomEventArgs> (() =>
+            //    {
+            //        DomEventArgs args = GetKeyboardEvents (browser);
+            //        KeyEvent @event = new KeyEvent (node.Window, args.DomEvent as nsISupports);
+            //        uint keyCode = (uint)keyInfo.KeyCode;
+            //        @event.InitKeyEvent ("keyup", true, false, (nsIDOMWindow)browser.Window.DomWindow, keyInfo.CtrlKey, keyInfo.AltKey, keyInfo.ShiftKey, keyInfo.MetaKey, keyCode);
+            //        while (keyInfo.Count-- > 0)
+            //        {
+            //            node.GetEventTarget ().DispatchEvent (args);
+            //        }
+            //        return args;
+            //    }));
+
+            //    return browser.EndInvoke (result) as DomEventArgs;
+            //}
+
+            ///// <summary>
+            ///// 将鼠标按键按下事件输入到元素
+            ///// </summary>
+            ///// <param name="browser"></param>
+            ///// <param name="node"></param>
+            ///// <returns></returns>
+            //public static DomEventArgs MouseDown (TaskWebBrowser browser, GeckoElement node, MouseInfo mouseInfo)
+            //{
+            //    IAsyncResult result = browser.BeginInvoke (new Func<DomEventArgs> (() =>
+            //    {
+            //        // 获取事件
+            //        DomMouseEventArgs args = GetMouseEvents (browser);
+
+            //        // 计算点击位置
+            //        Rectangle rect = node.GetBoundingClientRect ();
+            //        int clientX = rect.Left + rect.Width / 2;
+            //        int clientY = rect.Top + rect.Height / 2;
+
+            //        // 触发事件
+            //        MouseEvent @event = new MouseEvent (node.Window, args.DomEvent as nsISupports);
+            //        @event.InitMouseEvent ("mousedown", true, false, (nsIDOMWindow)browser.Window.DomWindow, 1, 0, 0, clientX, clientY, mouseInfo.CtrlKey, mouseInfo.AltKey, mouseInfo.ShiftKey, mouseInfo.MetaKey, (short)mouseInfo.KeyCode);
+            //        while (mouseInfo.Count-- > 0)
+            //        {
+            //            node.GetEventTarget ().DispatchEvent (args);
+            //        }
+            //        return args;
+            //    }));
+
+            //    return browser.EndInvoke (result) as DomEventArgs;
+            //}
+
+            ///// <summary>
+            ///// 将鼠标按键松开事件输入到元素
+            ///// </summary>
+            ///// <param name="browser"></param>
+            ///// <param name="node"></param>
+            ///// <returns></returns>
+            //public static DomEventArgs MouseUp (TaskWebBrowser browser, GeckoElement node, MouseInfo mouseInfo)
+            //{
+            //    IAsyncResult result = browser.BeginInvoke (new Func<DomEventArgs> (() =>
+            //    {
+            //        // 获取事件
+            //        DomMouseEventArgs args = GetMouseEvents (browser);
+
+            //        // 计算点击位置
+            //        Rectangle rect = node.GetBoundingClientRect ();
+            //        int clientX = rect.Left + rect.Width / 2;
+            //        int clientY = rect.Top + rect.Height / 2;
+
+            //        // 触发事件
+            //        MouseEvent @event = new MouseEvent (node.Window, args.DomEvent as nsISupports);
+            //        @event.InitMouseEvent ("mouseup", true, false, (nsIDOMWindow)browser.Window.DomWindow, 1, 0, 0, clientX, clientY, mouseInfo.CtrlKey, mouseInfo.AltKey, mouseInfo.ShiftKey, mouseInfo.MetaKey, (short)mouseInfo.KeyCode);
+            //        while (mouseInfo.Count-- > 0)
+            //        {
+            //            node.GetEventTarget ().DispatchEvent (args);
+            //        }
+            //        return args;
+            //    }));
+
+            //    return browser.EndInvoke (result) as DomEventArgs;
+            //}
+
+            /// <summary>
+            /// 获取键盘事件
             /// </summary>
             /// <param name="browser"></param>
             /// <returns></returns>
-            private static DomEventArgs GetKeyEvents (TaskWebBrowser browser)
+            private static DomUIEventArgs GetKeyboardEvents (TaskWebBrowser browser)
             {
-                return browser.Document.CreateEvent ("KeyEvents");
+                return browser.Document.CreateEvent ("KeyEvents") as DomUIEventArgs;
             }
 
             /// <summary>
@@ -419,17 +533,7 @@ namespace AutomaticWebBrowser.Controls
             /// <returns></returns>
             private static DomMouseEventArgs GetMouseEvents (TaskWebBrowser browser)
             {
-                return browser.Document.CreateEvent ("MouseEvents") as DomMouseEventArgs;
-            }
-
-            /// <summary>
-            /// 获取焦点事件
-            /// </summary>
-            /// <param name="browser"></param>
-            /// <returns></returns>
-            private static DomEventArgs GetFocusEvent (TaskWebBrowser browser)
-            {
-                return browser.Document.CreateEvent ("FocusEvent");
+                return browser.Document.CreateEvent ("MouseEvent") as DomMouseEventArgs;
             }
         }
 

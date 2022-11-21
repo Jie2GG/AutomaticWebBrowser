@@ -11,7 +11,7 @@ namespace AutomaticWebBrowser.Commands
     [OptionCommand (OptionType.Click)]
     public class ClickOptionCommand : OptionCommand
     {
-        public ClickOptionCommand (TaskWebBrowser webBrowser, GeckoElement element, Option option) : base (webBrowser, element, option)
+        public ClickOptionCommand (TaskWebBrowser webBrowser, GeckoNode node, Option option) : base (webBrowser, node, option)
         {
         }
 
@@ -22,7 +22,7 @@ namespace AutomaticWebBrowser.Commands
             {
                 count = this.Option.Value.Deserialize<int> (GlobalConfig.JsonSerializerOptions);
             }
-            TaskWebBrowser.Option.Click (this.Browser, this.Element, count);
+            TaskWebBrowser.Option.Click (this.Browser, this.Node, count);
         }
     }
 }

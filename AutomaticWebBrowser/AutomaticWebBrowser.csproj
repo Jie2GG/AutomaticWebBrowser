@@ -8,18 +8,26 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Geckofx60.64" Version="60.0.55" />
-		<PackageReference Include="Ookii.CommandLine" Version="2.4.0" />
-		<PackageReference Include="Ookii.Dialogs.WinForms" Version="4.0.0" />
-		<PackageReference Include="System.Text.Json" Version="6.0.0" />
+		<Compile Remove="Commands\MouseDownOptionCommand.cs" />
+		<Compile Remove="Commands\MouseUpOptionCommand.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Geckofx60.64" Version="60.0.55" />
+		<PackageReference Include="Ookii.CommandLine" Version="2.4.0" />
+		<PackageReference Include="Ookii.Dialogs.WinForms" Version="4.0.0" PrivateAssets="All" />
+		<PackageReference Include="System.Text.Json" Version="6.0.0" PrivateAssets="All" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="config-keyboard.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="config-mouse.json">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="config.json">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="lib\x64\AccessibleHandler.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -152,5 +160,9 @@
 		</None>
 	</ItemGroup>
 
-	<ProjectExtensions><VisualStudio><UserProperties config_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>	
+	<ProjectExtensions>
+		<VisualStudio>
+			<UserProperties config_1json__JsonSchema="" />
+		</VisualStudio>
+	</ProjectExtensions>
 </Project>

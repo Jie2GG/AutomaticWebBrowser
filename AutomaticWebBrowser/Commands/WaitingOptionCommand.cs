@@ -11,8 +11,7 @@ namespace AutomaticWebBrowser.Commands
     [OptionCommand (OptionType.Waiting)]
     public class WaitingOptionCommand : OptionCommand
     {
-        public WaitingOptionCommand (TaskWebBrowser webBrowser, GeckoElement element, Option option)
-            : base (webBrowser, element, option)
+        public WaitingOptionCommand (TaskWebBrowser webBrowser, GeckoNode node, Option option) : base (webBrowser, node, option)
         { }
 
         public override void Execute ()

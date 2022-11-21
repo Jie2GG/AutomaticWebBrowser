@@ -14,32 +14,28 @@
         /// </summary>
         Focus,
         /// <summary>
+        /// 点击
+        /// </summary>
+        Click,
+        /// <summary>
         /// 输入
         /// </summary>
         Input,
         /// <summary>
-        /// 按键点击
+        /// 按键输入
         /// </summary>
-        KeyPress,
+        KeypressInput,
         /// <summary>
         /// 按键按下
         /// </summary>
         KeyDown,
         /// <summary>
-        /// 按键弹起
+        /// 按键松开
         /// </summary>
         KeyUp,
         /// <summary>
-        /// 点击元素
+        /// 按键按下并松开
         /// </summary>
-        Click,
-        /// <summary>
-        /// 鼠标按键按下
-        /// </summary>
-        MouseDown,
-        /// <summary>
-        /// 鼠标按键弹起
-        /// </summary>
-        MouseUp,
+        KeyPress,
     }
 }

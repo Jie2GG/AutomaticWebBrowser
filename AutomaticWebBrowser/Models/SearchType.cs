@@ -14,8 +14,8 @@
         /// </summary>
         XPath,
         /// <summary>
-        /// 使用 ID 查找
+        /// 使用元素 ID
         /// </summary>
-        GetById
+        ElementId
     }
 }

@@ -17,9 +17,9 @@ namespace AutomaticWebBrowser.Controls
                     dialog.WindowTitle = "Error";
                     dialog.MainIcon = (TaskDialogIcon)0xFFF9;
                     dialog.MainInstruction = "自动化浏览器在运行过程中发生了一个错误";
-                    dialog.Content = $"错误信息: {exception.Message}";
+                    dialog.Content = exception.Message;
                     dialog.ButtonStyle = TaskDialogButtonStyle.CommandLinks;
-                    dialog.ExpandedInformation = exception.StackTrace;
+                    dialog.ExpandedInformation = exception.ToString ();
                     dialog.ExpandedControlText = "详细信息";
                     dialog.Footer = $"时间: {DateTime.Now}";
                     dialog.FooterIcon = TaskDialogIcon.Information;

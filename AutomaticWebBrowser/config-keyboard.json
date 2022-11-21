@@ -28,43 +28,40 @@
     // 任务信息
     "task-info": {
         // 任务地址
-        "url": "https://www.baidu.com/",
+        "url": "https://keyboard.bmcx.com/",
         // 任务包含的所有操作
         "actions": [
-            // 在首页搜索框输入内容并回车
             {
-                // 操作名称
-                "name": "搜索海绵宝宝",
-                // 操作执行条件
+                "name": "键盘测试",
                 "condition": {
                     "type": "ReadyState",
                     "value": "complete"
                 },
-                // 操作执行元素
                 "element": {
-                    "type": "ElementId",
-                    "value": "kw"
+                    "type": "DomDocument"
                 },
-                // 操作执行动作
                 "options": [
-                    {
-                        "type": "KeypressInput",
-                        "value": "海绵宝宝"
-                    },
-                    {
-                        "type": "Input",
-                        "value": "123"
-                    },
                     {
                         "type": "KeyDown",
                         "value": {
-                            "key": "Enter"
+                            "key": "A"
+                        }
+                    },
+                    {
+                        "type": "KeyUp",
+                        "value": {
+                            "key": "A"
+                        }
+                    },
+                    {
+                        "type": "KeyPress",
+                        "value": {
+                            "ctrl": true,
+                            "key": "B"
                         }
                     }
                 ]
             }
-            // 开始对搜索结果进行爬虫 
-
         ]
     }
 }
