@@ -74,6 +74,23 @@
                         "type": "Click"
                     }
                 ]
+            },
+            // 处理页面结果
+            {
+                "name": "处理结果",
+                "condition": {
+                    "type": "DocumentTitle",
+                    "value": "搜索引擎_百度搜索"
+                },
+                "element": {
+                    "type": "ElementId",
+                    "value": "content_left"
+                },
+                "options": [
+                    {
+                        "type": ""
+                    }
+                ]
             }
         ]
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -138,40 +139,43 @@ namespace AutomaticWebBrowser.Controls
                     }
 
                     // 查找 DOM 元素
-                    IAsyncResult result = webBrowser.BeginInvoke (new Func<GeckoNode> (() =>
+                    IAsyncResult result = webBrowser.BeginInvoke (new Func<GeckoNode[]> (() =>
                     {
                         switch (action.Element.SearchType)
                         {
                             case SearchType.DomDocument:
                                 {
-                                    return webBrowser.Document;
+                                    return new GeckoNode[] { webBrowser.Document };
                                 }
                             case SearchType.XPath:
                                 {
                                     string xpath = action.Element.Value.Deserialize<string> (GlobalConfig.JsonSerializerOptions);
                                     Gecko.DOM.XPathResult xPathResult = webBrowser.Document.EvaluateXPath (xpath);
-
-                                    return webBrowser.Document.SelectFirst (xpath);
+                                    return xPathResult.GetNodes ().ToArray ();
                                 }
                             case SearchType.ElementId:
                                 {
                                     string elementId = action.Element.Value.Deserialize<string> (GlobalConfig.JsonSerializerOptions);
-                                    return webBrowser.Document.GetElementById (elementId);
+                                    return new GeckoNode[] { webBrowser.Document.GetElementById (elementId) };
                                 }
                             default:
                                 throw new ConfigNodeException ($"Action: {actionName} 的 Node 中没有设置正确的元素搜索方式");
                         }
                     }));
-                    if (webBrowser.EndInvoke (result) is GeckoNode element)
+                    if (webBrowser.EndInvoke (result) is GeckoNode[] elements)
                     {
-                        // 对元素的执行操作
-                        foreach (Models.Option option in action.Options)
+                        // 遍历所有节点
+                        foreach (GeckoNode element in elements)
                         {
-                            OptionCommand.CreateCommand (webBrowser, element, option)
-                                .Execute ();
+                            // 对节点的执行操作
+                            foreach (Models.Option option in action.Options)
+                            {
+                                OptionCommand.CreateCommand (webBrowser, element, option)
+                                    .Execute ();
 
-                            // 延迟 1ms 作为缓冲
-                            Thread.Sleep (1);
+                                // 延迟 1ms 作为缓冲
+                                Thread.Sleep (1);
+                            }
                         }
                     }
 
