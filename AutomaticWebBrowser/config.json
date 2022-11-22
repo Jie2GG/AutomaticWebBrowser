@@ -28,7 +28,7 @@
             "format": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
             "level": "Debug",
             "path": "./logs",
-            "show-logs": true
+            "show-logs": false
         }
     },
     // 任务信息
@@ -74,9 +74,6 @@
                         "type": "Click"
                     }
                 ]
-            },
-            {
-
             }
         ]
     }

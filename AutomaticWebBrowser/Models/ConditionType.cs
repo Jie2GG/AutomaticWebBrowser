@@ -8,6 +8,10 @@
         /// <summary>
         /// 就绪状态
         /// </summary>
-        ReadyState
+        ReadyState,
+        /// <summary>
+        /// 文档标题
+        /// </summary>
+        DocumentTitle,
     }
 }

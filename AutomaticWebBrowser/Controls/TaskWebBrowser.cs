@@ -13,6 +13,7 @@ using AutomaticWebBrowser.Models;
 
 using Gecko;
 using Gecko.DOM;
+using Gecko.Events;
 using Gecko.WebIDL;
 
 using Serilog.Core;
@@ -94,33 +95,18 @@ namespace AutomaticWebBrowser.Controls
         protected override void OnReadyStateChange (DomEventArgs e)
         {
             base.OnReadyStateChange (e);
-            this.conditionSynchronous.Status (ConditionType.ReadyState, this.Document.ReadyState);
 
             this.Log.Information ($"ReadyState: {this.Document.ReadyState}");
+            this.conditionSynchronous.Status (ConditionType.ReadyState, this.Document.ReadyState);
         }
 
-        // DOM文档加载完成事件
-        protected override void OnDOMContentLoaded (DomEventArgs e)
+        // 文档标题改变事件
+        protected override void OnDocumentTitleChanged (EventArgs e)
         {
-            base.OnDOMContentLoaded (e);
+            base.OnDocumentTitleChanged (e);
 
-            this.Log.Information ($"DOMDocument: Loaded, Type: {e.Type}");
-        }
-
-        // DOM文档被改变事件
-        protected override void OnDomContentChanged (DomEventArgs e)
-        {
-            base.OnDomContentChanged (e);
-
-            this.Log.Information ($"DOMDocument: Changed, Type: {e.Type}");
-        }
-
-        // 监听HTTP请求事件
-        protected override void OnObserveHttpModifyRequest (GeckoObserveHttpModifyRequestEventArgs e)
-        {
-            base.OnObserveHttpModifyRequest (e);
-
-            //Debug.WriteLine ($"请求: {e.RequestMethod},  {e.Uri}");
+            this.Log.Information ($"DocumentTitle: {this.DocumentTitle}");
+            this.conditionSynchronous.Status (ConditionType.DocumentTitle, this.DocumentTitle);
         }
         #endregion
 
