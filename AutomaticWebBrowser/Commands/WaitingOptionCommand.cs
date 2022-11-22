@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Threading;
 
 using AutomaticWebBrowser.Controls;
 using AutomaticWebBrowser.Models;
@@ -17,7 +16,7 @@ namespace AutomaticWebBrowser.Commands
         public override void Execute ()
         {
             int value = this.Option.Value.Deserialize<int> (GlobalConfig.JsonSerializerOptions);
-            Thread.Sleep (value);
+            TaskWebBrowser.Option.Waiting (this.Browser, value);
         }
     }
 }

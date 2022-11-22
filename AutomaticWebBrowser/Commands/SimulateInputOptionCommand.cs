@@ -17,7 +17,7 @@ namespace AutomaticWebBrowser.Commands
         public override void Execute ()
         {
             string value = this.Option.Value.Deserialize<string> (GlobalConfig.JsonSerializerOptions);
-            TaskWebBrowser.Option.SimulateInput (this.Browser, this.Node, value);
+            TaskWebBrowser.Option.KeypressInput (this.Browser, this.Node, value);
         }
     }
 }

@@ -74,7 +74,7 @@ namespace AutomaticWebBrowser.Controls
             base.OnCreateWindow (e);
             e.WebBrowser = this;    // 将所有窗体重定向到自己
 
-            this.Log.Information ($"Browser: 重定向新建窗口");
+            this.Log.Information ($"Window: Create new window redirec to this");
         }
 
         // 状态文本改变事件
@@ -104,7 +104,7 @@ namespace AutomaticWebBrowser.Controls
         {
             base.OnDOMContentLoaded (e);
 
-            this.Log.Information ($"DOMDocument: 加载完成, {e.Type}");
+            this.Log.Information ($"DOMDocument: Loaded, Type: {e.Type}");
         }
 
         // DOM文档被改变事件
@@ -112,7 +112,7 @@ namespace AutomaticWebBrowser.Controls
         {
             base.OnDomContentChanged (e);
 
-            this.Log.Information ($"DOMDocument: 内容修改, {e.Type}");
+            this.Log.Information ($"DOMDocument: Changed, Type: {e.Type}");
         }
 
         // 监听HTTP请求事件
@@ -206,6 +206,17 @@ namespace AutomaticWebBrowser.Controls
         public static class Option
         {
             /// <summary>
+            /// 浏览器等待
+            /// </summary>
+            /// <param name="browser"></param>
+            /// <param name="value"></param>
+            public static void Waiting (TaskWebBrowser browser, int value)
+            {
+                browser.Log.Information ($"Option: Waiting {value} ms");
+                Thread.Sleep (value);
+            }
+
+            /// <summary>
             /// 元素获取焦点
             /// </summary>
             /// <param name="browser"></param>
@@ -217,6 +228,7 @@ namespace AutomaticWebBrowser.Controls
                     // 获取焦点
                     if (node is GeckoHtmlElement htmlElement)
                     {
+                        browser.Log.Information ($"Option: HtmlElement {htmlElement.NodeName} focus");
                         htmlElement.Focus ();
                     }
                 }));
@@ -237,6 +249,7 @@ namespace AutomaticWebBrowser.Controls
                     // 点击元素
                     if (node is GeckoHtmlElement htmlElement)
                     {
+                        browser.Log.Information ($"Option: HtmlElement {htmlElement.NodeName} clicks {count}");
                         while (count-- > 0)
                         {
                             htmlElement.Click ();
@@ -260,6 +273,7 @@ namespace AutomaticWebBrowser.Controls
                 {
                     if (node is GeckoInputElement inputElement)
                     {
+                        browser.Log.Information ($"Option: HtmlInputElement {inputElement.NodeName} set value {value}");
                         inputElement.Value = value;
                     }
                 }));
@@ -273,11 +287,13 @@ namespace AutomaticWebBrowser.Controls
             /// <param name="browser"></param>
             /// <param name="node"></param>
             /// <param name="value"></param>
-            public static void SimulateInput (TaskWebBrowser browser, GeckoNode node, string value)
+            public static void KeypressInput (TaskWebBrowser browser, GeckoNode node, string value)
             {
                 // 输入字符
                 IAsyncResult result = browser.BeginInvoke (new Action (() =>
                 {
+                    browser.Log.Information ($"Option: Node {node.NodeName} keypress input value {value}");
+
                     // 获取文档事件
                     DomUIEventArgs args = GetKeyboardEvents (browser);
 
@@ -315,6 +331,8 @@ namespace AutomaticWebBrowser.Controls
                 // 按下按键
                 IAsyncResult result = browser.BeginInvoke (new Action (() =>
                 {
+                    browser.Log.Information ($"Option: Node {node.NodeName} key [{key.Key}] down {key.Count} count, control: {key.Control}, alt: {key.Alt}, shift: {key.Shift}, meta: {key.Meta}");
+
                     // 获取文档事件
                     DomUIEventArgs args = GetKeyboardEvents (browser);
 
@@ -351,6 +369,8 @@ namespace AutomaticWebBrowser.Controls
                 // 按下按键
                 IAsyncResult result = browser.BeginInvoke (new Action (() =>
                 {
+                    browser.Log.Information ($"Option: Node {node.NodeName} key [{key.Key}] up {key.Count} count, control: {key.Control}, alt: {key.Alt}, shift: {key.Shift}, meta: {key.Meta}");
+
                     // 获取文档事件
                     DomUIEventArgs args = GetKeyboardEvents (browser);
 
@@ -388,6 +408,8 @@ namespace AutomaticWebBrowser.Controls
                 // 按下按键
                 IAsyncResult result = browser.BeginInvoke (new Action (() =>
                 {
+                    browser.Log.Information ($"Option: Node {node.NodeName} key [{key.Key}] press {key.Count} count, control: {key.Control}, alt: {key.Alt}, shift: {key.Shift}, meta: {key.Meta}");
+
                     // 获取文档事件
                     DomUIEventArgs args = GetKeyboardEvents (browser);
 
@@ -416,11 +438,13 @@ namespace AutomaticWebBrowser.Controls
             /// <summary>
             /// 元素模拟鼠标按键按下
             /// </summary>
-            public static void MouseDown (TaskWebBrowser browser, GeckoNode node, ButtonInfo butto)
+            public static void MouseDown (TaskWebBrowser browser, GeckoNode node, ButtonInfo button)
             {
                 // 按下按键
                 IAsyncResult result = browser.BeginInvoke (new Action (() =>
                 {
+                    browser.Log.Information ($"Option: Node {node.NodeName} mouse [{button.Button}] button down {button.Count} count, control: {button.Control}, alt: {button.Alt}, shift: {button.Shift}, meta: {button.Meta}");
+
                     // 获取文档事件
                     DomMouseEventArgs args = GetMouseEvents (browser);
 
@@ -436,13 +460,13 @@ namespace AutomaticWebBrowser.Controls
                         0,
                         0,
                         0,
-                        butto.Control,
-                        butto.Alt,
-                        butto.Shift,
-                        butto.Meta,
-                        (short)butto.Button);
+                        button.Control,
+                        button.Alt,
+                        button.Shift,
+                        button.Meta,
+                        (short)button.Button);
 
-                    while (butto.Count-- > 0)
+                    while (button.Count-- > 0)
                     {
                         node.GetEventTarget ().DispatchEvent (args);
                     }
@@ -463,6 +487,8 @@ namespace AutomaticWebBrowser.Controls
                 // 按下按键
                 IAsyncResult result = browser.BeginInvoke (new Action (() =>
                 {
+                    browser.Log.Information ($"Option: Node {node.NodeName} mouse [{button.Button}] button up {button.Count} count, control: {button.Control}, alt: {button.Alt}, shift: {button.Shift}, meta: {button.Meta}");
+
                     // 获取文档事件
                     DomMouseEventArgs args = GetMouseEvents (browser);
 
@@ -505,6 +531,8 @@ namespace AutomaticWebBrowser.Controls
                 // 按下按键
                 IAsyncResult result = browser.BeginInvoke (new Action (() =>
                 {
+                    browser.Log.Information ($"Option: Node {node.NodeName} mouse [{button.Button}] button click {button.Count} count, control: {button.Control}, alt: {button.Alt}, shift: {button.Shift}, meta: {button.Meta}");
+
                     // 获取文档事件
                     DomMouseEventArgs args = GetMouseEvents (browser);
 

@@ -7,6 +7,8 @@ using AutomaticWebBrowser.Models;
 
 using Gecko;
 
+using Serilog;
+
 namespace AutomaticWebBrowser.Commands
 {
     /// <summary>
@@ -25,6 +27,7 @@ namespace AutomaticWebBrowser.Commands
         public TaskWebBrowser Browser { get; }
         public GeckoNode Node { get; }
         public Option Option { get; }
+        public ILogger Log => this.Browser.Log;
         #endregion
 
         #region --构造函数--
