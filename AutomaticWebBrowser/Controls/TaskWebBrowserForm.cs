@@ -6,6 +6,10 @@ using AutomaticWebBrowser.Models;
 
 using Gecko;
 
+using Serilog;
+using Serilog.Core;
+using Serilog.Events;
+
 namespace AutomaticWebBrowser.Controls
 {
     /// <summary>
@@ -15,6 +19,7 @@ namespace AutomaticWebBrowser.Controls
     {
         #region --属性--
         public Configuration Config { get; }
+        public Logger Log { get; private set; }
         #endregion
 
         #region --构造函数--
@@ -33,14 +38,32 @@ namespace AutomaticWebBrowser.Controls
             this.StartPosition = FormStartPosition.CenterScreen;
         }
         #endregion
-        
+
         #region --公开方法--
         // 窗口加载事件
         protected override void OnLoad (EventArgs e)
         {
-            base.OnLoad (e);
+            #region 日志处理
+            string logPath = Path.Combine (Path.GetFullPath (this.Config.Setting.Log.Path), $"{DateTime.Now:yyyyMMdd}.log");
 
-            // 开始处理浏览器
+            // 创建日志
+            this.Log = new LoggerConfiguration ()
+#if DEBUG
+                .WriteTo.Debug (LogEventLevel.Verbose, this.Config.Setting.Log.Format)
+#else
+                .WriteTo.Trace (this.Config.Setting.Log.Level, this.Config.Setting.Log.Format)
+#endif
+                .WriteTo.File (logPath, this.Config.Setting.Log.Level, this.Config.Setting.Log.Format)
+                .CreateLogger ();
+
+            // 日志窗口
+            if (this.Config.Setting.Log.ShowLogs)
+            {
+                new TaskWebBrowserLogForm ().Show ();
+            }
+            #endregion
+
+            #region 浏览器处理
             if (Environment.Is64BitProcess)
             {
                 Xpcom.Initialize ("lib\\x64");
@@ -68,7 +91,7 @@ namespace AutomaticWebBrowser.Controls
             GeckoPreferences.User["privacy.donottrackheader.enabled"] = this.Config.Setting.Browser.EnableDoNotTrackHeader;
 
             // 创建浏览器
-            TaskWebBrowser webControl = new TaskWebBrowser (this.Config.TaskInfo)
+            TaskWebBrowser webControl = new TaskWebBrowser (this.Config.TaskInfo, this.Log)
             {
                 Dock = DockStyle.Fill,
                 Margin = Padding.Empty,
@@ -84,6 +107,7 @@ namespace AutomaticWebBrowser.Controls
 
             // 开始导航到任务首页
             webControl.Navigate (this.Config.TaskInfo.Url);
+            #endregion
         }
         #endregion
     }

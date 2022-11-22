@@ -23,15 +23,21 @@
             "enable-donottrackheader": true,
             // 启用上下文菜单
             "enable-context-menu": true
+        },
+        "log": {
+            "format": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
+            "level": "Debug",
+            "path": "./logs",
+            "show-logs": true
         }
     },
     // 任务信息
     "task-info": {
         // 任务地址
-        "url": "https://www.pptv.com/",
+        "url": "https://www.baidu.com/",
         // 任务包含的所有操作
         "actions": [
-            // 在首页搜索框输入内容并回车
+            // 在首页搜索框输入内容
             {
                 // 操作名称
                 "name": "输入搜索内容",
@@ -43,7 +49,7 @@
                 // 操作执行元素
                 "element": {
                     "type": "ElementId",
-                    "value": "cmspc-hserachtext"
+                    "value": "kw"
                 },
                 // 操作执行动作
                 "options": [
@@ -52,26 +58,26 @@
                     },
                     {
                         "type": "KeypressInput",
-                        "value": "长津湖"
+                        "value": "搜索引擎"
                     }
                 ]
             },
+            // 点击搜索按钮
             {
                 "name": "点击搜索",
                 "element": {
                     "type": "ElementId",
-                    "value": "doquanwangshou"
+                    "value": "su"
                 },
                 "options": [
                     {
-                        "type": "MouseDown",
-                        "value": {
-                            "button": "Left"
-                        }
+                        "type": "Click"
                     }
                 ]
-            }
+            },
+            {
 
+            }
         ]
     }
 }

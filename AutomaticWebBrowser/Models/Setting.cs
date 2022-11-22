@@ -18,5 +18,11 @@ namespace AutomaticWebBrowser.Models
         /// </summary>
         [JsonPropertyName ("browser")]
         public Browser Browser { get; set; } = new Browser ();
+
+        /// <summary>
+        /// 日志设置
+        /// </summary>
+        [JsonPropertyName ("log")]
+        public Log Log { get; set; } = new Log ();
     }
 }

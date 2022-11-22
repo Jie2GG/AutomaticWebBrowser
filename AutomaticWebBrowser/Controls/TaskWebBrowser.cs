@@ -15,6 +15,8 @@ using Gecko;
 using Gecko.DOM;
 using Gecko.WebIDL;
 
+using Serilog.Core;
+
 using Action = System.Action;
 
 namespace AutomaticWebBrowser.Controls
@@ -33,6 +35,7 @@ namespace AutomaticWebBrowser.Controls
         /// 获取要执行的任务
         /// </summary>
         public TaskInfo TaskInfo { get; }
+        public Logger Log { get; }
 
         /// <summary>
         /// 获取正在运行的任务
@@ -45,9 +48,10 @@ namespace AutomaticWebBrowser.Controls
         /// 初始化 <see cref="TaskWebBrowser"/> 类的新实例
         /// </summary>
         /// <param name="taskInfo"></param>
-        public TaskWebBrowser (TaskInfo taskInfo)
+        public TaskWebBrowser (TaskInfo taskInfo, Logger log)
         {
             this.TaskInfo = taskInfo;
+            this.Log = log;
             this.UseHttpActivityObserver = true;
 
             this.conditionSynchronous = new ConditionSynchronous ();
@@ -56,6 +60,7 @@ namespace AutomaticWebBrowser.Controls
             {
                 if (task.IsFaulted)
                 {
+                    this.Log.Error (task.Exception.InnerException, "自动化任务运行错误");
                     TaskMessage.ShowException ((Form)this.Parent, task.Exception.InnerException);
                 }
             }, TaskScheduler.FromCurrentSynchronizationContext ());
@@ -67,9 +72,9 @@ namespace AutomaticWebBrowser.Controls
         protected override void OnCreateWindow (GeckoCreateWindowEventArgs e)
         {
             base.OnCreateWindow (e);
-
-
             e.WebBrowser = this;    // 将所有窗体重定向到自己
+
+            this.Log.Information ($"Browser: 重定向新建窗口");
         }
 
         // 状态文本改变事件
@@ -90,7 +95,8 @@ namespace AutomaticWebBrowser.Controls
         {
             base.OnReadyStateChange (e);
             this.conditionSynchronous.Status (ConditionType.ReadyState, this.Document.ReadyState);
-            Debug.WriteLine ($"就绪: {this.Document.ReadyState}");
+
+            this.Log.Information ($"ReadyState: {this.Document.ReadyState}");
         }
 
         // DOM文档加载完成事件
@@ -98,7 +104,7 @@ namespace AutomaticWebBrowser.Controls
         {
             base.OnDOMContentLoaded (e);
 
-            Debug.WriteLine ("DOM 加载完成");
+            this.Log.Information ($"DOMDocument: 加载完成, {e.Type}");
         }
 
         // DOM文档被改变事件
@@ -106,7 +112,7 @@ namespace AutomaticWebBrowser.Controls
         {
             base.OnDomContentChanged (e);
 
-            Debug.WriteLine ("DOM 内容改变");
+            this.Log.Information ($"DOMDocument: 内容修改, {e.Type}");
         }
 
         // 监听HTTP请求事件
@@ -114,7 +120,7 @@ namespace AutomaticWebBrowser.Controls
         {
             base.OnObserveHttpModifyRequest (e);
 
-            //Debug.WriteLine ($"HTTP: {e.RequestMethod},  {e.Uri}");
+            //Debug.WriteLine ($"请求: {e.RequestMethod},  {e.Uri}");
         }
         #endregion
 
@@ -157,6 +163,8 @@ namespace AutomaticWebBrowser.Controls
                             case SearchType.XPath:
                                 {
                                     string xpath = action.Element.Value.Deserialize<string> (GlobalConfig.JsonSerializerOptions);
+                                    Gecko.DOM.XPathResult xPathResult = webBrowser.Document.EvaluateXPath (xpath);
+
                                     return webBrowser.Document.SelectFirst (xpath);
                                 }
                             case SearchType.ElementId:
@@ -192,6 +200,9 @@ namespace AutomaticWebBrowser.Controls
         #endregion
 
         #region --内部类--
+        /// <summary>
+        /// 浏览器操作类
+        /// </summary>
         public static class Option
         {
             /// <summary>
@@ -546,6 +557,9 @@ namespace AutomaticWebBrowser.Controls
             }
         }
 
+        /// <summary>
+        /// 条件检查同步类
+        /// </summary>
         private class ConditionSynchronous
         {
             private readonly AutoResetEvent waitChagneEvent = new AutoResetEvent (true);

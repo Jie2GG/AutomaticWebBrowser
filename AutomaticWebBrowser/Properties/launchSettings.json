@@ -2,7 +2,7 @@
     "profiles": {
         "AutomaticWebBrowser": {
             "commandName": "Project",
-            "commandLineArgs": "-config config-mouse.json",
+            "commandLineArgs": "-config config.json",
             "nativeDebugging": false
         }
     }
