@@ -16,6 +16,7 @@
         /// <summary>
         /// 使用元素 ID
         /// </summary>
-        ElementId
+        ElementId,
+        ElementIdChild,
     }
 }

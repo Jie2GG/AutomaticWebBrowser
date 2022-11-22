@@ -158,6 +158,11 @@ namespace AutomaticWebBrowser.Controls
                                     string elementId = action.Element.Value.Deserialize<string> (GlobalConfig.JsonSerializerOptions);
                                     return new GeckoNode[] { webBrowser.Document.GetElementById (elementId) };
                                 }
+                            case SearchType.ElementIdChild:
+                                {
+                                    string elementId = action.Element.Value.Deserialize<string> (GlobalConfig.JsonSerializerOptions);
+                                    return webBrowser.Document.GetElementById (elementId).ChildNodes.ToArray ();
+                                }
                             default:
                                 throw new ConfigNodeException ($"Action: {actionName} 的 Node 中没有设置正确的元素搜索方式");
                         }
