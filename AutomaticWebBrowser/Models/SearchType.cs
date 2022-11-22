@@ -6,7 +6,7 @@
     public enum SearchType
     {
         /// <summary>
-        /// DOM文档
+        /// DOM 文档
         /// </summary>
         DomDocument,
         /// <summary>
@@ -14,9 +14,12 @@
         /// </summary>
         XPath,
         /// <summary>
-        /// 使用元素 ID
+        /// 使用元素 Id
         /// </summary>
         ElementId,
-        ElementIdChild,
+        /// <summary>
+        /// 使用元素 Id 下的所有子节点
+        /// </summary>
+        ElementIdAllChild,
     }
 }

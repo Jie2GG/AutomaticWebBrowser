@@ -158,7 +158,7 @@ namespace AutomaticWebBrowser.Controls
                                     string elementId = action.Element.Value.Deserialize<string> (GlobalConfig.JsonSerializerOptions);
                                     return new GeckoNode[] { webBrowser.Document.GetElementById (elementId) };
                                 }
-                            case SearchType.ElementIdChild:
+                            case SearchType.ElementIdAllChild:
                                 {
                                     string elementId = action.Element.Value.Deserialize<string> (GlobalConfig.JsonSerializerOptions);
                                     return webBrowser.Document.GetElementById (elementId).ChildNodes.ToArray ();
