@@ -405,7 +405,7 @@ namespace AutomaticWebBrowser.Controls
             /// <summary>
             /// 元素模拟鼠标按键按下
             /// </summary>
-            public static void MouseDown (TaskWebBrowser browser, GeckoNode node, MouseKeyInfo mouseKey)
+            public static void MouseDown (TaskWebBrowser browser, GeckoNode node, ButtonInfo butto)
             {
                 // 按下按键
                 IAsyncResult result = browser.BeginInvoke (new Action (() =>
@@ -425,13 +425,13 @@ namespace AutomaticWebBrowser.Controls
                         0,
                         0,
                         0,
-                        mouseKey.Control,
-                        mouseKey.Alt,
-                        mouseKey.Shift,
-                        mouseKey.Meta,
-                        (short)mouseKey.Button);
+                        butto.Control,
+                        butto.Alt,
+                        butto.Shift,
+                        butto.Meta,
+                        (short)butto.Button);
 
-                    while (mouseKey.Count-- > 0)
+                    while (butto.Count-- > 0)
                     {
                         node.GetEventTarget ().DispatchEvent (args);
                     }
@@ -446,8 +446,8 @@ namespace AutomaticWebBrowser.Controls
             /// </summary>
             /// <param name="browser"></param>
             /// <param name="node"></param>
-            /// <param name="mouseKey"></param>
-            public static void MouseUp (TaskWebBrowser browser, GeckoNode node, MouseKeyInfo mouseKey)
+            /// <param name="button"></param>
+            public static void MouseUp (TaskWebBrowser browser, GeckoNode node, ButtonInfo button)
             {
                 // 按下按键
                 IAsyncResult result = browser.BeginInvoke (new Action (() =>
@@ -467,13 +467,13 @@ namespace AutomaticWebBrowser.Controls
                         0,
                         0,
                         0,
-                        mouseKey.Control,
-                        mouseKey.Alt,
-                        mouseKey.Shift,
-                        mouseKey.Meta,
-                        (short)mouseKey.Button);
+                        button.Control,
+                        button.Alt,
+                        button.Shift,
+                        button.Meta,
+                        (short)button.Button);
 
-                    while (mouseKey.Count-- > 0)
+                    while (button.Count-- > 0)
                     {
                         node.GetEventTarget ().DispatchEvent (args);
                     }
@@ -488,8 +488,8 @@ namespace AutomaticWebBrowser.Controls
             /// </summary>
             /// <param name="browser"></param>
             /// <param name="node"></param>
-            /// <param name="mouseKey"></param>
-            public static void MouseClick (TaskWebBrowser browser, GeckoNode node, MouseKeyInfo mouseKey)
+            /// <param name="button"></param>
+            public static void MouseClick (TaskWebBrowser browser, GeckoNode node, ButtonInfo button)
             {
                 // 按下按键
                 IAsyncResult result = browser.BeginInvoke (new Action (() =>
@@ -509,13 +509,13 @@ namespace AutomaticWebBrowser.Controls
                         0,
                         0,
                         0,
-                        mouseKey.Control,
-                        mouseKey.Alt,
-                        mouseKey.Shift,
-                        mouseKey.Meta,
-                        (short)mouseKey.Button);
+                        button.Control,
+                        button.Alt,
+                        button.Shift,
+                        button.Meta,
+                        (short)button.Button);
 
-                    while (mouseKey.Count-- > 0)
+                    while (button.Count-- > 0)
                     {
                         node.GetEventTarget ().DispatchEvent (args);
                     }

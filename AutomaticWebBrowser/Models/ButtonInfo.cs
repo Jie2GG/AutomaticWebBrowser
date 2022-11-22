@@ -7,7 +7,7 @@ namespace AutomaticWebBrowser.Models
     /// <summary>
     /// 鼠标键信息
     /// </summary>
-    public class MouseKeyInfo
+    public class ButtonInfo
     {
         /// <summary>
         /// 按下 Control 键

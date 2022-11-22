@@ -16,7 +16,7 @@ namespace AutomaticWebBrowser.Commands
 
         public override void Execute ()
         {
-            MouseKeyInfo mouseKeyInfo = this.Option.Value.Deserialize<MouseKeyInfo> (GlobalConfig.JsonSerializerOptions);
+            ButtonInfo mouseKeyInfo = this.Option.Value.Deserialize<ButtonInfo> (GlobalConfig.JsonSerializerOptions);
             TaskWebBrowser.Option.MouseClick (this.Browser, this.Node, mouseKeyInfo);
         }
     }

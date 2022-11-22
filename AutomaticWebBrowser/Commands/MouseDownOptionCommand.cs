@@ -17,7 +17,7 @@ namespace AutomaticWebBrowser.Commands
 
         public override void Execute ()
         {
-            MouseKeyInfo mouseKeyInfo = this.Option.Value.Deserialize<MouseKeyInfo> ();
+            ButtonInfo mouseKeyInfo = this.Option.Value.Deserialize<ButtonInfo> ();
             TaskWebBrowser.Option.MouseDown (this.Browser, this.Node, mouseKeyInfo);
         }
     }

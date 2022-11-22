@@ -28,7 +28,7 @@
     // 任务信息
     "task-info": {
         // 任务地址
-        "url": "https://cps-check.com/cn/mouse-buttons-test",
+        "url": "http://cps-test.bchrt.com/",
         // 任务包含的所有操作
         "actions": [
             {
@@ -38,13 +38,15 @@
                     "value": "complete"
                 },
                 "element": {
-                    "type": "DomDocument"
+                    "type": "ElementId",
+                    "value": "addbtn"
                 },
                 "options": [
                     {
-                        "type": "MouseDown",
+                        "type": "MouseClick",
                         "value": {
-                            "key-code": "Left"
+                            "button": "Left",
+                            "count": 10000
                         }
                     }
                 ]
