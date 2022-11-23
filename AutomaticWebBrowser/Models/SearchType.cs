@@ -10,16 +10,16 @@
         /// </summary>
         DomDocument,
         /// <summary>
-        /// 使用 XPath
+        /// 评估 XPath
         /// </summary>
-        XPath,
+        EvaluateXPath,
         /// <summary>
-        /// 使用元素 Id
+        /// 通过 Id 获取元素
         /// </summary>
-        ElementId,
+        GetElementById,
         /// <summary>
-        /// 使用元素 Id 下的所有子节点
+        /// 通过 Id 获取子元素
         /// </summary>
-        ElementIdAllChild,
+        GetChildElementById,
     }
 }

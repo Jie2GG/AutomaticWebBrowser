@@ -48,11 +48,11 @@
                 },
                 // 操作执行元素
                 "element": {
-                    "type": "ElementId",
+                    "type": "GetElementById",
                     "value": "kw"
                 },
                 // 操作执行动作
-                "options": [
+                "operations": [
                     {
                         "type": "Focus"
                     },
@@ -66,10 +66,10 @@
             {
                 "name": "点击搜索",
                 "element": {
-                    "type": "ElementId",
+                    "type": "GetElementById",
                     "value": "su"
                 },
-                "options": [
+                "operations": [
                     {
                         "type": "Click"
                     }
@@ -83,12 +83,21 @@
                     "value": "搜索引擎_百度搜索"
                 },
                 "element": {
-                    "type": "ElementId",
-                    "value": "content_left"
+                    "type": "EvaluateXPath",
+                    "value": "//*[@id=\"content_left\"]/div[@id]"
                 },
-                "options": [
+                "operations": [
                     {
-                        "type": ""
+                        "type": "GetDomElement",
+                        "value": {
+                            "type": "EvaluateXPath",
+                            "value": "./div/div[1]/div/div/div[1]//a"
+                        },
+                        "sub-operations": [
+                            {
+                                "type": "Click"
+                            }
+                        ]
                     }
                 ]
             }

@@ -29,7 +29,7 @@ namespace AutomaticWebBrowser.Models
         /// <summary>
         /// 操作信息组
         /// </summary>
-        [JsonPropertyName ("options")]
-        public Option[] Options { get; set; } = Array.Empty<Option> ();
+        [JsonPropertyName ("operations")]
+        public Operation[] Operations { get; set; } = Array.Empty<Operation> ();
     }
 }

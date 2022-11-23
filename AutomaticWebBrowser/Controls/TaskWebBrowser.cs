@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-using AutomaticWebBrowser.Commands;
+using AutomaticWebBrowser.Commands.DomSearchCommands;
+using AutomaticWebBrowser.Commands.OperationCommands;
 using AutomaticWebBrowser.Exceptions;
 using AutomaticWebBrowser.Models;
 
@@ -141,31 +142,9 @@ namespace AutomaticWebBrowser.Controls
                     // 查找 DOM 元素
                     IAsyncResult result = webBrowser.BeginInvoke (new Func<GeckoNode[]> (() =>
                     {
-                        switch (action.Element.SearchType)
-                        {
-                            case SearchType.DomDocument:
-                                {
-                                    return new GeckoNode[] { webBrowser.Document };
-                                }
-                            case SearchType.XPath:
-                                {
-                                    string xpath = action.Element.Value.Deserialize<string> (GlobalConfig.JsonSerializerOptions);
-                                    Gecko.DOM.XPathResult xPathResult = webBrowser.Document.EvaluateXPath (xpath);
-                                    return xPathResult.GetNodes ().ToArray ();
-                                }
-                            case SearchType.ElementId:
-                                {
-                                    string elementId = action.Element.Value.Deserialize<string> (GlobalConfig.JsonSerializerOptions);
-                                    return new GeckoNode[] { webBrowser.Document.GetElementById (elementId) };
-                                }
-                            case SearchType.ElementIdAllChild:
-                                {
-                                    string elementId = action.Element.Value.Deserialize<string> (GlobalConfig.JsonSerializerOptions);
-                                    return webBrowser.Document.GetElementById (elementId).ChildNodes.ToArray ();
-                                }
-                            default:
-                                throw new ConfigNodeException ($"Action: {actionName} 的 Node 中没有设置正确的元素搜索方式");
-                        }
+                        SearchCommand searchCommand = SearchCommand.CreateCommand (webBrowser, webBrowser.Document, action.Element);
+                        searchCommand.Execute ();
+                        return searchCommand.SearchResult;
                     }));
                     if (webBrowser.EndInvoke (result) is GeckoNode[] elements)
                     {
@@ -173,9 +152,9 @@ namespace AutomaticWebBrowser.Controls
                         foreach (GeckoNode element in elements)
                         {
                             // 对节点的执行操作
-                            foreach (Models.Option option in action.Options)
+                            foreach (Models.Operation option in action.Operations)
                             {
-                                OptionCommand.CreateCommand (webBrowser, element, option)
+                                OperationCommand.CreateCommand (webBrowser, element, option)
                                     .Execute ();
 
                                 // 延迟 1ms 作为缓冲
@@ -631,6 +610,9 @@ namespace AutomaticWebBrowser.Controls
                         {
                             // 就绪状态的比较
                             case ConditionType.ReadyState:
+                                result = string.Equals (this.condition.Value.GetString (), (string)value);
+                                break;
+                            case ConditionType.DocumentTitle:
                                 result = string.Equals (this.condition.Value.GetString (), (string)value);
                                 break;
                         }

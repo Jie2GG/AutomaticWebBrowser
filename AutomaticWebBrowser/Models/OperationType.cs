@@ -3,7 +3,7 @@
     /// <summary>
     /// 操作类型
     /// </summary>
-    public enum OptionType
+    public enum OperationType
     {
         /// <summary>
         /// 等待
@@ -49,5 +49,9 @@
         /// 鼠标按键按下并松开
         /// </summary>
         MouseClick,
+        /// <summary>
+        /// 获取 DOM 元素
+        /// </summary>
+        GetDomElement,
     }
 }

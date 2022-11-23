@@ -6,19 +6,25 @@ namespace AutomaticWebBrowser.Models
     /// <summary>
     /// 操作类
     /// </summary>
-    public class Option
+    public class Operation
     {
         /// <summary>
         /// 操作类型
         /// </summary>
         [JsonPropertyName ("type")]
         [JsonConverter (typeof (JsonStringEnumConverter))]
-        public OptionType Type { get; set; }
+        public OperationType Type { get; set; }
 
         /// <summary>
-        /// 操作附加的值
+        /// 相关的值
         /// </summary>
         [JsonPropertyName ("value")]
         public JsonElement Value { get; set; }
+
+        /// <summary>
+        /// 子操作列表
+        /// </summary>
+        [JsonPropertyName ("sub-operations")]
+        public Operation[] SubOperations { get; set; } = null;
     }
 }
