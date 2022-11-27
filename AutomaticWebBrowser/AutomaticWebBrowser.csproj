@@ -23,6 +23,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="config-new.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="config-keyboard.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

@@ -1,0 +1,50 @@
+{
+    "browser": {
+        // 浏览器窗口信息
+        "window": {
+            "style": "default", // default, maximize
+            "size": {
+                "width": 1000,
+                "height": 800
+            }
+        },
+        // 浏览器缓存路径 (相对路径或绝对路径)
+        "profile": "./profile",
+        // 浏览器默认语言
+        "language": "zh-CN,zh;q=0.9,en;q=0.8",
+        // 浏览器用户标识
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0",
+        // 启用浏览器字体渲染
+        "enable-font-rendering": true,
+        // 启用浏览器不被追踪
+        "enable-donottrackheader": true,
+        // 启用上下文菜单
+        "enable-context-menu": true
+    },
+    "log": {
+        // 日志窗口信息
+        "window": {
+            "hidden": true
+        },
+        // 日志输出格式
+        "format": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
+        // 日志等级
+        "level": "Debug",
+        // 日志持久化路径
+        "path": "./logs"
+    },
+    "task": {
+        "url": "https://www.baidu.com",
+        // 任务包含的所有操作
+        "actions": [
+            {
+                // 操作开始条件
+                "condition": {},
+                // 操作的元素
+                "element": {},
+                // 操作工作列表
+                "jobs": []
+            }
+        ]
+    }
+}
