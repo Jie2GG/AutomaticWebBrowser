@@ -42,6 +42,8 @@ namespace AutomaticWebBrowser.Controls
 
         #region --属性--
         public Logger Log { get; set; }
+
+        public Form Form { get; set; }
         #endregion
 
         #region --构造函数--
@@ -157,10 +159,7 @@ namespace AutomaticWebBrowser.Controls
         // 状态文本改变事件
         protected override void OnStatusTextChanged (EventArgs e)
         {
-            if (this.Parent is Form form)
-            {
-                form.BeginInvoke (new Action (() => form.Text = this.StatusText));
-            }
+            this.Form.BeginInvoke (new Action (() => this.Form.Text = this.StatusText));
         }
 
         // 就绪状态改变事件

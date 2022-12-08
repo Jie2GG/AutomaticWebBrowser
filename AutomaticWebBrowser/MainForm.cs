@@ -148,6 +148,7 @@ namespace AutomaticWebBrowser
             this.Visible = this.Config.Browser.Window.Visible;
             // …Ë÷√‰Ø¿¿∆˜»’÷æ
             this.webView.Log = this.Log;
+            this.webView.Form = this;
         }
         #endregion
 
