@@ -29,7 +29,7 @@
         // 日志输出格式
         "format": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
         // 日志等级
-        "level": "Debug",
+        "level": "Verbose",
         // 日志持久化路径
         "save-path": "./logs"
     },
@@ -49,13 +49,19 @@
                 },
                 // 作业列表
                 "jobs": [
+                    // 输入字符
                     {
                         "type": "InputKeypressValue",
                         "value": "123"
                     },
+                    // 按下回车
                     {
                         "type": "KeyPress",
                         "value": { "key": "Enter" }
+                    },
+                    // 获取条目
+                    {
+                        
                     }
                 ]
             }

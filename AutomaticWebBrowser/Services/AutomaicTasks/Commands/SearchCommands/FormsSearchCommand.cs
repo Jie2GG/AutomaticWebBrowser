@@ -3,18 +3,19 @@ using System.Linq;
 using System.Text.Json;
 
 using AutomaticWebBrowser.Commands.DomSearchCommands;
-using AutomaticWebBrowser.Controls;
 using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Gecko;
+
+using Serilog.Core;
 
 namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.SearchCommands
 {
     [SearchCommand (SearchMode.Forms)]
     internal class FormsSearchCommand : SearchCommand
     {
-        public FormsSearchCommand (WebView webView, GeckoNode sourceNode, Configuration.Models.Element element)
-            : base (webView, sourceNode, element)
+        public FormsSearchCommand (GeckoWebBrowser webView, GeckoNode sourceNode, Configuration.Models.Element element, Logger log)
+            : base (webView, sourceNode, element, log)
         { }
 
         public override GeckoNode[] Execute ()

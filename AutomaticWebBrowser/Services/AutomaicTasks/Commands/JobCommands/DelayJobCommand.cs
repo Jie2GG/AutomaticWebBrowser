@@ -3,18 +3,19 @@ using System.Text.Json;
 using System.Threading;
 
 using AutomaticWebBrowser.Commands.DomSearchCommands;
-using AutomaticWebBrowser.Controls;
 using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Gecko;
+
+using Serilog.Core;
 
 namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
 {
     [JobCommand (JobType.Delay)]
     class DelayJobCommand : JobCommand
     {
-        public DelayJobCommand (WebView webView, GeckoNode node, Job job)
-            : base (webView, node, job)
+        public DelayJobCommand (GeckoWebBrowser webView, GeckoNode node, Job job, Logger log)
+            : base (webView, node, job, log)
         { }
 
         public override bool Execute ()

@@ -1,21 +1,21 @@
 ﻿using System;
-using System.ComponentModel.Design;
 using System.Linq;
 using System.Text.Json;
 
 using AutomaticWebBrowser.Commands.DomSearchCommands;
-using AutomaticWebBrowser.Controls;
 using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Gecko;
+
+using Serilog.Core;
 
 namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.SearchCommands
 {
     [SearchCommand (SearchMode.EvaluateXPath)]
     class EvaluateXPathSearchCommand : SearchCommand
     {
-        public EvaluateXPathSearchCommand (WebView webView, GeckoNode sourceNode, Configuration.Models.Element element)
-            : base (webView, sourceNode, element)
+        public EvaluateXPathSearchCommand (GeckoWebBrowser webView, GeckoNode sourceNode, Configuration.Models.Element element, Logger log)
+            : base (webView, sourceNode, element, log)
         { }
 
         public override GeckoNode[] Execute ()

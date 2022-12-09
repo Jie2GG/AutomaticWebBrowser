@@ -22,38 +22,39 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
         #endregion
 
         #region --属性--
-        public WebView WebView { get; }
+        public GeckoWebBrowser WebView { get; }
 
         public GeckoNode Node { get; }
 
         public Job Job { get; }
 
-        public Logger Log => this.WebView.Log;
+        public Logger Log { get; }
         #endregion
 
         #region --构造函数--
-        protected JobCommand (WebView webView, GeckoNode node, Job job)
+        protected JobCommand (GeckoWebBrowser webView, GeckoNode node, Job job, Logger log)
         {
             this.WebView = webView ?? throw new ArgumentNullException (nameof (webView));
             this.Node = node ?? throw new ArgumentNullException (nameof (node));
             this.Job = job ?? throw new ArgumentNullException (nameof (job));
+            this.Log = log;
         }
         #endregion
 
         #region --公开方法--
         public abstract bool Execute ();
 
-        public static JobCommand CreateCommand (WebView webView, GeckoNode node, Job job)
+        public static JobCommand CreateCommand (GeckoWebBrowser webView, GeckoNode node, Job job, Logger log)
         {
             foreach (Type commandType in typeEnumerable)
             {
                 JobCommandAttribute attribute = commandType.GetCustomAttribute<JobCommandAttribute> ();
                 if (attribute != null && attribute.Type == job.Type)
                 {
-                    return (JobCommand)Activator.CreateInstance (commandType, new object[] { webView, node, job });
+                    return (JobCommand)Activator.CreateInstance (commandType, new object[] { webView, node, job, log });
                 }
             }
-            return new DefaultJobCommand (webView, node, job);
+            return new DefaultJobCommand (webView, node, job, log);
         }
         #endregion
     }

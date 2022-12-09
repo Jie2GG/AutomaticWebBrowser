@@ -1,24 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 using AutomaticWebBrowser.Commands.DomSearchCommands;
-using AutomaticWebBrowser.Controls;
 using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Gecko;
 using Gecko.WebIDL;
+
+using Serilog.Core;
 
 namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
 {
     [JobCommand (JobType.MouseUp)]
     class MouseUpJobCommand : JobCommand
     {
-        public MouseUpJobCommand (WebView webView, GeckoNode node, Job job)
-            : base (webView, node, job)
+        public MouseUpJobCommand (GeckoWebBrowser webView, GeckoNode node, Job job, Logger log)
+            : base (webView, node, job, log)
         { }
 
         public override bool Execute ()
@@ -32,12 +29,12 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
                         Mouse mouse = this.Job.Value.Deserialize<Mouse> (Global.JsonSerializerOptions);
 
                         // 创建鼠标输入事件
-                        DomEventArgs eventArgs = this.WebView.DomDocument.CreateEvent (WebView.DOM_MOUSE_EVENT);
+                        DomEventArgs eventArgs = this.WebView.DomDocument.CreateEvent (Global.DOM.DOM_MOUSE_EVENT);
 
                         // 按键事件
                         MouseEvent mouseEvent = new (this.WebView.Window.DomWindow as mozIDOMWindowProxy, eventArgs.DomEvent as nsISupports);
                         mouseEvent.InitMouseEvent (
-                            WebView.EVENT_MOUSE_UP,
+                            Global.DOM.EVENT_MOUSE_UP,
                             true,
                             false,
                             this.WebView.Window.DomWindow as nsIDOMWindow,
@@ -57,7 +54,7 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
                         {
                             this.Node.GetEventTarget ().DispatchEvent (eventArgs);
                         }
-                        this.Log.Information ($"JobCommand executed “mouseUp” job of node “{this.Node.NodeName}”, step: {WebView.EVENT_MOUSE_UP}, key: {(mouse.Control ? "ctrl+" : string.Empty)}{(mouse.Alt ? "alt+" : string.Empty)}{(mouse.Shift ? "shift+" : string.Empty)}{(mouse.Meta ? "meta+" : string.Empty)}, mouse: {mouse.Button}, count: {mouse.Count}.");
+                        this.Log.Information ($"JobCommand executed “mouseUp” job of node “{this.Node.NodeName}”, step: {Global.DOM.EVENT_MOUSE_UP}, key: {(mouse.Control ? "ctrl+" : string.Empty)}{(mouse.Alt ? "alt+" : string.Empty)}{(mouse.Shift ? "shift+" : string.Empty)}{(mouse.Meta ? "meta+" : string.Empty)}, mouse: {mouse.Button}, count: {mouse.Count}.");
                         return true;
 
                     }

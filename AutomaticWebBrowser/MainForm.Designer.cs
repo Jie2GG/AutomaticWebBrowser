@@ -31,7 +31,7 @@
             this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.mainToolStrip = new System.Windows.Forms.ToolStrip();
             this.logToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.webView = new AutomaticWebBrowser.Controls.WebView();
+            this.webViewTabControls = new AutomaticWebBrowser.Controls.WebViewTabControls();
             this.mainTableLayoutPanel.SuspendLayout();
             this.mainToolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -41,7 +41,7 @@
             this.mainTableLayoutPanel.ColumnCount = 1;
             this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainTableLayoutPanel.Controls.Add(this.mainToolStrip, 0, 0);
-            this.mainTableLayoutPanel.Controls.Add(this.webView, 0, 1);
+            this.mainTableLayoutPanel.Controls.Add(this.webViewTabControls, 0, 1);
             this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.mainTableLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -76,17 +76,16 @@
             this.logToolStripButton.Text = "日志";
             this.logToolStripButton.Click += new System.EventHandler(this.LogToolStripButtonClickEventHandler);
             // 
-            // webView
+            // webViewTabControls
             // 
-            this.webView.ConsoleMessageEventReceivesConsoleLogCalls = true;
-            this.webView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webView.FrameEventsPropagateToMainWindow = false;
-            this.webView.Location = new System.Drawing.Point(3, 31);
-            this.webView.Log = null;
-            this.webView.Name = "webView";
-            this.webView.Size = new System.Drawing.Size(794, 416);
-            this.webView.TabIndex = 1;
-            this.webView.UseHttpActivityObserver = false;
+            this.webViewTabControls.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webViewTabControls.Location = new System.Drawing.Point(0, 28);
+            this.webViewTabControls.Log = null;
+            this.webViewTabControls.Margin = new System.Windows.Forms.Padding(0);
+            this.webViewTabControls.Name = "webViewTabControls";
+            this.webViewTabControls.SelectedIndex = 0;
+            this.webViewTabControls.Size = new System.Drawing.Size(800, 422);
+            this.webViewTabControls.TabIndex = 1;
             // 
             // MainForm
             // 
@@ -110,6 +109,6 @@
         private System.Windows.Forms.TableLayoutPanel mainTableLayoutPanel;
         private System.Windows.Forms.ToolStrip mainToolStrip;
         private System.Windows.Forms.ToolStripButton logToolStripButton;
-        private Controls.WebView webView;
+        private Controls.WebViewTabControls webViewTabControls;
     }
 }

@@ -24,14 +24,14 @@ namespace AutomaticWebBrowser.Services.Configuration.Models
         /// 任务配置
         /// </summary>
         [JsonPropertyName ("task")]
-        public AutomaticTask Task { get; set; }
+        public AutomaticTask Tasks { get; set; }
 
         /// <summary>
         /// 检查配置文件内容的合理性
         /// </summary>
         public void Check ()
         {
-            if (this.Task == null)
+            if (this.Tasks == null)
             {
                 throw new ProviderException ("未找到自动化任务的配置描述信息, 属性名: “task”");
             }

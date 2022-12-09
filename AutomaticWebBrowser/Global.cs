@@ -5,7 +5,7 @@ using Serilog.Core;
 
 namespace AutomaticWebBrowser
 {
-    public static class Global
+    static class Global
     {
         public static readonly JsonSerializerOptions JsonSerializerOptions = new ()
         {
@@ -22,5 +22,23 @@ namespace AutomaticWebBrowser
             // 忽略 Null 值
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
+
+        public static class DOM
+        {
+            #region --常量--
+            public const string DOM_KEY_EVENTS = "KeyEvents";
+            public const string DOM_MOUSE_EVENT = "MouseEvent";
+
+            public const string EVENT_FOCUS = "focus";
+            public const string EVENT_BLUR = "blur";
+            public const string EVENT_KEY_PRESS = "keypress";
+            public const string EVENT_KEY_DOWN = "keydown";
+            public const string EVENT_KEY_UP = "keyup";
+            public const string EVENT_MOUSE_DOWN = "mousedown";
+            public const string EVENT_MOUSE_UP = "mouseup";
+            public const string EVENT_CLICK = "click";
+            public const string EVENT_DBLCLICK = "dblclick";
+            #endregion
+        }
     }
 }

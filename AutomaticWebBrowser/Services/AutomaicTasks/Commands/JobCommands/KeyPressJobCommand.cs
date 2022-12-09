@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Text.Json;
-using System.Windows.Forms;
 
 using AutomaticWebBrowser.Commands.DomSearchCommands;
-using AutomaticWebBrowser.Controls;
 using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Gecko;
 using Gecko.WebIDL;
+
+using Serilog.Core;
 
 namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
 {
     [JobCommand (JobType.KeyPress)]
     class KeyPressJobCommand : JobCommand
     {
-        public KeyPressJobCommand (WebView webView, GeckoNode node, Job job)
-            : base (webView, node, job)
+        public KeyPressJobCommand (GeckoWebBrowser webView, GeckoNode node, Job job, Logger log)
+            : base (webView, node, job, log)
         { }
 
         public override bool Execute ()
@@ -29,12 +29,12 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
                         Keyboard keyboard = this.Job.Value.Deserialize<Keyboard> (Global.JsonSerializerOptions);
 
                         // 创建键盘输入事件
-                        DomEventArgs eventArgs = this.WebView.DomDocument.CreateEvent (WebView.DOM_KEY_EVENTS);
+                        DomEventArgs eventArgs = this.WebView.DomDocument.CreateEvent (Global.DOM.DOM_KEY_EVENTS);
 
                         // 按键事件
                         KeyEvent keyEvent = new (this.WebView.Window.DomWindow as mozIDOMWindowProxy, eventArgs.DomEvent as nsISupports);
                         keyEvent.InitKeyEvent (
-                            WebView.EVENT_KEY_PRESS,
+                            Global.DOM.EVENT_KEY_PRESS,
                             true,
                             false,
                             this.WebView.Window.DomWindow as nsIDOMWindow,
@@ -49,7 +49,7 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
                         {
                             this.Node.GetEventTarget ().DispatchEvent (eventArgs);
                         }
-                        this.Log.Information ($"JobCommand executed “keyPress” job of node “{this.Node.NodeName}”, step: {WebView.EVENT_KEY_PRESS}, key: {(keyboard.Control ? "ctrl+" : string.Empty)}{(keyboard.Alt ? "alt+" : string.Empty)}{(keyboard.Shift ? "shift+" : string.Empty)}{(keyboard.Meta ? "meta+" : string.Empty)}{keyboard.Key}, count: {keyboard.Count}.");
+                        this.Log.Information ($"JobCommand executed “keyPress” job of node “{this.Node.NodeName}”, step: {Global.DOM.EVENT_KEY_PRESS}, key: {(keyboard.Control ? "ctrl+" : string.Empty)}{(keyboard.Alt ? "alt+" : string.Empty)}{(keyboard.Shift ? "shift+" : string.Empty)}{(keyboard.Meta ? "meta+" : string.Empty)}{keyboard.Key}, count: {keyboard.Count}.");
                         return true;
                     }
                     catch (JsonException e)

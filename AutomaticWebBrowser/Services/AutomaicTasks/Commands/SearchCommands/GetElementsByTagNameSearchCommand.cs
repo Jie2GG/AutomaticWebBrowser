@@ -8,13 +8,15 @@ using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Gecko;
 
+using Serilog.Core;
+
 namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.SearchCommands
 {
     [SearchCommand (SearchMode.GetElementsByTagName)]
     class GetElementsByTagNameSearchCommand : SearchCommand
     {
-        public GetElementsByTagNameSearchCommand (WebView webView, GeckoNode sourceNode, Configuration.Models.Element element)
-            : base (webView, sourceNode, element)
+        public GetElementsByTagNameSearchCommand (GeckoWebBrowser webView, GeckoNode sourceNode, Configuration.Models.Element element, Logger log)
+            : base (webView, sourceNode, element, log)
         { }
 
         public override GeckoNode[] Execute ()

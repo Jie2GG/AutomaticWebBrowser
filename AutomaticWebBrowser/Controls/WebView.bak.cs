@@ -17,7 +17,7 @@ using Action = System.Action;
 
 namespace AutomaticWebBrowser.Controls
 {
-    class WebView : GeckoWebBrowser
+    class WebView1 : GeckoWebBrowser
     {
         #region --常量--
         public const string DOM_KEY_EVENTS = "KeyEvents";
@@ -47,7 +47,7 @@ namespace AutomaticWebBrowser.Controls
         #endregion
 
         #region --构造函数--
-        public WebView ()
+        public WebView1 ()
         {
             this.conditionSynchronous = new ConditionSynchronous ();
         }
@@ -91,7 +91,7 @@ namespace AutomaticWebBrowser.Controls
         #region --私有方法--
         private bool ExecuteTask (object obj)
         {
-            if (obj is WebView webView)
+            if (obj is WebView1 webView)
             {
                 foreach (AutomaticTask task in webView.tasks)
                 {
@@ -121,7 +121,7 @@ namespace AutomaticWebBrowser.Controls
                         // 执行元素查找
                         IAsyncResult asyncResult = webView.BeginInvoke (new Func<Services.Configuration.Models.Element, GeckoNode[]> ((element) =>
                         {
-                            return SearchCommand.CreateCommand (webView, webView.DomDocument, element).Execute ();
+                            return SearchCommand.CreateCommand (webView, webView.DomDocument, element, webView.Log).Execute ();
                         }), action.Element);
 
                         webView.Log.Information ($"AutomaticTask starts action “{actionSerialNumber}”");
@@ -136,7 +136,7 @@ namespace AutomaticWebBrowser.Controls
                                 {
                                     jobSerialNumber += 1;
 
-                                    if (!JobCommand.CreateCommand (webView, node, job).Execute ())
+                                    if (!JobCommand.CreateCommand (webView, node, job, webView.Log).Execute ())
                                     {
                                         IAsyncResult asyncResult1 = webView.BeginInvoke (() =>
                                         {
@@ -185,7 +185,7 @@ namespace AutomaticWebBrowser.Controls
         #endregion
 
         #region 导航类事件
-        // 浏览器地址导航事件
+        
         protected override void OnNavigating (GeckoNavigatingEventArgs e)
         {
             this.Log.Information ($"Browser navigating: {e.Uri}.");

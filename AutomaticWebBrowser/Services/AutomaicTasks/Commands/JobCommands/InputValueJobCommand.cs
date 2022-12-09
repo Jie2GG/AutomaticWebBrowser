@@ -2,19 +2,20 @@
 using System.Text.Json;
 
 using AutomaticWebBrowser.Commands.DomSearchCommands;
-using AutomaticWebBrowser.Controls;
 using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Gecko;
 using Gecko.DOM;
+
+using Serilog.Core;
 
 namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
 {
     [JobCommand (JobType.InputValue)]
     class InputValueJobCommand : JobCommand
     {
-        public InputValueJobCommand (WebView webView, GeckoNode node, Job job)
-            : base (webView, node, job)
+        public InputValueJobCommand (GeckoWebBrowser webView, GeckoNode node, Job job, Logger log)
+            : base (webView, node, job, log)
         { }
 
         public override bool Execute ()

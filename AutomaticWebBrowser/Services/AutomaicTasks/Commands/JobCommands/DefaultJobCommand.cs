@@ -1,16 +1,17 @@
 ﻿using System;
 
-using AutomaticWebBrowser.Controls;
 using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Gecko;
+
+using Serilog.Core;
 
 namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
 {
     class DefaultJobCommand : JobCommand
     {
-        public DefaultJobCommand (WebView webView, GeckoNode node, Job job)
-            : base (webView, node, job)
+        public DefaultJobCommand (GeckoWebBrowser webView, GeckoNode node, Job job, Logger log)
+            : base (webView, node, job, log)
         { }
 
         public override bool Execute ()

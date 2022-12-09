@@ -3,20 +3,21 @@ using System.Text.Json;
 using System.Windows.Forms;
 
 using AutomaticWebBrowser.Commands.DomSearchCommands;
-using AutomaticWebBrowser.Controls;
 using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Gecko;
 using Gecko.DOM;
 using Gecko.WebIDL;
 
+using Serilog.Core;
+
 namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
 {
     [JobCommand (JobType.InputKeypressValue)]
     class InputKeypressValueJobCommand : JobCommand
     {
-        public InputKeypressValueJobCommand (WebView webView, GeckoNode node, Job job)
-            : base (webView, node, job)
+        public InputKeypressValueJobCommand (GeckoWebBrowser webView, GeckoNode node, Job job, Logger log)
+            : base (webView, node, job, log)
         { }
 
         public override bool Execute ()
@@ -30,21 +31,21 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
                     if (this.Node is GeckoInputElement inputElement)
                     {
                         // 创建键盘输入事件
-                        DomEventArgs eventArgs = this.WebView.DomDocument.CreateEvent (WebView.DOM_KEY_EVENTS);
+                        DomEventArgs eventArgs = this.WebView.DomDocument.CreateEvent (Global.DOM.DOM_KEY_EVENTS);
 
                         // DOM事件
                         Event domEvent = new (this.WebView.Window.DomWindow as mozIDOMWindowProxy, eventArgs.DomEvent as nsISupports);
                         // 获取焦点
-                        domEvent.InitEvent (WebView.EVENT_FOCUS, true, false);
+                        domEvent.InitEvent (Global.DOM.EVENT_FOCUS, true, false);
                         inputElement.GetEventTarget ().DispatchEvent (eventArgs);
-                        this.Log.Information ($"JobCommand executed “inputKeypressValue” job of node “{this.Node.NodeName}”, step: {WebView.EVENT_FOCUS}.");
+                        this.Log.Information ($"JobCommand executed “inputKeypressValue” job of node “{this.Node.NodeName}”, step: {Global.DOM.EVENT_FOCUS}.");
 
                         // 按键事件
                         KeyEvent keyEvent = new (this.WebView.Window.DomWindow as mozIDOMWindowProxy, eventArgs.DomEvent as nsISupports);
                         foreach (char c in inputValue.ToCharArray ())
                         {
                             keyEvent.InitKeyEvent (
-                                WebView.EVENT_KEY_PRESS,
+                                Global.DOM.EVENT_KEY_PRESS,
                                 true,
                                 false,
                                 this.WebView.Window.DomWindow as nsIDOMWindow,
@@ -57,12 +58,12 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
                             );
                             inputElement.GetEventTarget ().DispatchEvent (eventArgs);
                         }
-                        this.Log.Information ($"JobCommand executed “inputKeypressValue” job of node “{this.Node.NodeName}”, step: {WebView.EVENT_KEY_PRESS}, value is “{inputValue}”.");
+                        this.Log.Information ($"JobCommand executed “inputKeypressValue” job of node “{this.Node.NodeName}”, step: {Global.DOM.EVENT_KEY_PRESS}, value is “{inputValue}”.");
 
                         // 失去焦点
-                        domEvent.InitEvent (WebView.EVENT_BLUR, true, false);
+                        domEvent.InitEvent (Global.DOM.EVENT_BLUR, true, false);
                         inputElement.GetEventTarget ().DispatchEvent (eventArgs);
-                        this.Log.Information ($"JobCommand executed “inputKeypressValue” job of node “{this.Node.NodeName}”, step: {WebView.EVENT_BLUR}.");
+                        this.Log.Information ($"JobCommand executed “inputKeypressValue” job of node “{this.Node.NodeName}”, step: {Global.DOM.EVENT_BLUR}.");
 
                         // 处理事件
                         Application.DoEvents ();

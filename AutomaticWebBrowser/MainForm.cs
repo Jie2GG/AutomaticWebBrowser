@@ -146,9 +146,6 @@ namespace AutomaticWebBrowser
             this.Size = this.Config.Browser.Window.Size ?? WindowSize.MainFormSize;
             // 设置窗口是否显示
             this.Visible = this.Config.Browser.Window.Visible;
-            // 设置浏览器日志
-            this.webView.Log = this.Log;
-            this.webView.Form = this;
         }
         #endregion
 
@@ -158,10 +155,11 @@ namespace AutomaticWebBrowser
         {
             // 处理事件
             Application.DoEvents ();
+            this.Log.Information ($"Browser window shown.");
 
             // 创建任务
-            this.webView.CreateTask (this.Config.Task);
-            this.webView.RunningTask ();
+            this.webViewTabControls.Log = this.Log;
+            this.webViewTabControls.RunTask (this.Config.Tasks);
         }
 
         // 日志按钮点击事件
