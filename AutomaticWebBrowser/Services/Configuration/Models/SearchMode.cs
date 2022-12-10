@@ -6,6 +6,10 @@
     enum SearchMode
     {
         /// <summary>
+        /// 不搜索元素
+        /// </summary>
+        None,
+        /// <summary>
         /// 通过 id 查找 HTML 元素
         /// </summary>
         GetElementById,

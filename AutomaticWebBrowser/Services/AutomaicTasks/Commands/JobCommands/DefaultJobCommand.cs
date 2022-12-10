@@ -1,5 +1,6 @@
 ﻿using System;
 
+using AutomaticWebBrowser.Commands.DomSearchCommands;
 using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Gecko;
@@ -8,6 +9,7 @@ using Serilog.Core;
 
 namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
 {
+    [JobCommand (JobType.None)]
     class DefaultJobCommand : JobCommand
     {
         public DefaultJobCommand (GeckoWebBrowser webView, GeckoNode node, Job job, Logger log)

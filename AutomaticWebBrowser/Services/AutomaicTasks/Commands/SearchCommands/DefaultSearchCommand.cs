@@ -1,11 +1,15 @@
 ﻿using System;
 
+using AutomaticWebBrowser.Commands.DomSearchCommands;
+using AutomaticWebBrowser.Services.Configuration.Models;
+
 using Gecko;
 
 using Serilog.Core;
 
 namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.SearchCommands
 {
+    [SearchCommand (SearchMode.None)]
     class DefaultSearchCommand : SearchCommand
     {
         public DefaultSearchCommand (GeckoWebBrowser webView, GeckoNode sourceNode, Configuration.Models.Element element, Logger log)

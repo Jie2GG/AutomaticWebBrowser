@@ -6,6 +6,10 @@
     enum JobType
     {
         /// <summary>
+        /// 无操作
+        /// </summary>
+        None,
+        /// <summary>
         /// 延迟
         /// </summary>
         Delay,
@@ -57,6 +61,6 @@
         /// 对 HTML 元素发送 MouseDoubleClick
         /// </summary>
         MouseDoubleClick,
-        
+
     }
 }
