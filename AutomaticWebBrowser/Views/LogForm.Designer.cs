@@ -42,7 +42,7 @@
             this.logRichTextBox.Name = "logRichTextBox";
             this.logRichTextBox.ReadOnly = true;
             this.logRichTextBox.ShortcutsEnabled = false;
-            this.logRichTextBox.Size = new System.Drawing.Size(784, 261);
+            this.logRichTextBox.Size = new System.Drawing.Size(1568, 522);
             this.logRichTextBox.TabIndex = 0;
             this.logRichTextBox.TabStop = false;
             this.logRichTextBox.Text = "";
@@ -50,10 +50,10 @@
             // 
             // LogForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(784, 261);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(1568, 522);
             this.Controls.Add(this.logRichTextBox);
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.MaximizeBox = false;
             this.Name = "LogForm";
             this.ShowIcon = false;

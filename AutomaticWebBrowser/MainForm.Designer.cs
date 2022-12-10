@@ -47,9 +47,9 @@
             this.mainTableLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
             this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
             this.mainTableLayoutPanel.RowCount = 2;
-            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 56F));
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.mainTableLayoutPanel.Size = new System.Drawing.Size(800, 450);
+            this.mainTableLayoutPanel.Size = new System.Drawing.Size(1600, 900);
             this.mainTableLayoutPanel.TabIndex = 0;
             // 
             // mainToolStrip
@@ -57,42 +57,41 @@
             this.mainToolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.mainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.logToolStripButton});
-            this.mainToolStrip.Location = new System.Drawing.Point(1, 3);
-            this.mainToolStrip.Margin = new System.Windows.Forms.Padding(1, 3, 1, 1);
+            this.mainToolStrip.Location = new System.Drawing.Point(2, 6);
+            this.mainToolStrip.Margin = new System.Windows.Forms.Padding(2, 6, 2, 2);
             this.mainToolStrip.Name = "mainToolStrip";
-            this.mainToolStrip.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
-            this.mainToolStrip.Size = new System.Drawing.Size(798, 24);
+            this.mainToolStrip.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
+            this.mainToolStrip.Size = new System.Drawing.Size(1596, 37);
             this.mainToolStrip.TabIndex = 0;
             this.mainToolStrip.Text = "ToolStrip";
             // 
             // logToolStripButton
             // 
-            this.logToolStripButton.AutoSize = false;
             this.logToolStripButton.Image = global::AutomaticWebBrowser.Properties.Resources.icon_logs;
             this.logToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.logToolStripButton.Margin = new System.Windows.Forms.Padding(0);
             this.logToolStripButton.Name = "logToolStripButton";
-            this.logToolStripButton.Size = new System.Drawing.Size(56, 23);
+            this.logToolStripButton.Size = new System.Drawing.Size(90, 35);
             this.logToolStripButton.Text = "日志";
             this.logToolStripButton.Click += new System.EventHandler(this.LogToolStripButtonClickEventHandler);
             // 
             // webViewTabControls
             // 
             this.webViewTabControls.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webViewTabControls.Location = new System.Drawing.Point(0, 28);
+            this.webViewTabControls.Location = new System.Drawing.Point(0, 56);
             this.webViewTabControls.Log = null;
             this.webViewTabControls.Margin = new System.Windows.Forms.Padding(0);
             this.webViewTabControls.Name = "webViewTabControls";
             this.webViewTabControls.SelectedIndex = 0;
-            this.webViewTabControls.Size = new System.Drawing.Size(800, 422);
+            this.webViewTabControls.Size = new System.Drawing.Size(1600, 844);
             this.webViewTabControls.TabIndex = 1;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(1600, 900);
             this.Controls.Add(this.mainTableLayoutPanel);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "MainForm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
