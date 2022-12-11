@@ -239,7 +239,7 @@ namespace AutomaticWebBrowser.Controls
                 // 有条件才进行阻塞
                 if (this.condition != null)
                 {
-                    if (this.condition.Type == ConditionType.Timeout && this.condition.Value.ValueKind == JsonValueKind.Number)
+                    if (this.condition.Type == ConditionType.Delay && this.condition.Value.ValueKind == JsonValueKind.Number)
                     {
                         // 获取等待的时间
                         int time = this.condition.Value.Deserialize<int> ();

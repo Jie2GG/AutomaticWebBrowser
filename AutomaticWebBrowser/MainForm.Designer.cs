@@ -31,7 +31,7 @@
             this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.mainToolStrip = new System.Windows.Forms.ToolStrip();
             this.logToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.webViewTabControls = new AutomaticWebBrowser.Controls.WebViewTabControls();
+            this.webViewTabControls = new AutomaticWebBrowser.Controls.WebViewTabControl();
             this.mainTableLayoutPanel.SuspendLayout();
             this.mainToolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -108,6 +108,6 @@
         private System.Windows.Forms.TableLayoutPanel mainTableLayoutPanel;
         private System.Windows.Forms.ToolStrip mainToolStrip;
         private System.Windows.Forms.ToolStripButton logToolStripButton;
-        private Controls.WebViewTabControls webViewTabControls;
+        private Controls.WebViewTabControl webViewTabControls;
     }
 }

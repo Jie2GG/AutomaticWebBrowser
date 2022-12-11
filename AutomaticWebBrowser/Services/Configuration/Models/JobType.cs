@@ -61,6 +61,9 @@
         /// 对 HTML 元素发送 MouseDoubleClick
         /// </summary>
         MouseDoubleClick,
-
+        /// <summary>
+        /// 打开 A 元素中的链接
+        /// </summary>
+        OpenLink,
     }
 }

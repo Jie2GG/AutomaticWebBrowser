@@ -130,7 +130,7 @@ namespace AutomaticWebBrowser.Controls
                             {
                                 jobSerialNumber += 1;
 
-                                if (!JobCommand.CreateCommand (page.WebView, node, job, page.Log).Execute ())
+                                if (!JobCommand.CreateCommand (page.WebView, node, job, page.Log).SetTabControl (page.Parent as WebViewTabControl).Execute ())
                                 {
                                     IAsyncResult asyncResult1 = page.WebView.BeginInvoke (() =>
                                     {
@@ -198,20 +198,21 @@ namespace AutomaticWebBrowser.Controls
         // 创建窗口事件
         private void WebViewCreateWindowEventHandler (object sender, GeckoCreateWindowEventArgs e)
         {
-            this.Log.Information ($"Browser create new window redirection to new tab.");
+            e.WebBrowser = this.WebView;
+            this.Log.Information ($"Browser create new window redirection to self window.");
 
-            if (this.Parent is WebViewTabControls tabControls)
-            {
-                // 创建新的标签
-                WebViewTabPage page = new (this.Log);
-                tabControls.TabPages.Add (page);
-                tabControls.SelectTab (page);
+            //if (this.Parent is WebViewTabControls tabControls)
+            //{
+            //    // 创建新的标签
+            //    WebViewTabPage page = new (this.Log);
+            //    tabControls.TabPages.Add (page);
+            //    tabControls.SelectTab (page);
 
-                // 将浏览器导航到新的标签页
-                e.WebBrowser = page.WebView;
+            //    // 将浏览器导航到新的标签页
+            //    e.WebBrowser = page.WebView;
 
-                // TODO: 继续处理任务
-            }
+            //    // TODO: 继续处理任务
+            //}
         }
         #endregion
 
@@ -248,7 +249,7 @@ namespace AutomaticWebBrowser.Controls
                 // 有条件才进行阻塞
                 if (this.condition != null)
                 {
-                    if (this.condition.Type == ConditionType.Timeout && this.condition.Value.ValueKind == JsonValueKind.Number)
+                    if (this.condition.Type == ConditionType.Delay && this.condition.Value.ValueKind == JsonValueKind.Number)
                     {
                         // 获取等待的时间
                         int time = this.condition.Value.Deserialize<int> ();

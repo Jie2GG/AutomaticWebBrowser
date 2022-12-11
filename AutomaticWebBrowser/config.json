@@ -58,10 +58,24 @@
                     {
                         "type": "KeyPress",
                         "value": { "key": "Enter" }
-                    },
-                    // 获取条目
+                    }
+                ]
+            },
+            {
+                "condition": {
+                    "type": "Delay",
+                    "value": 5000
+                },
+                "element": {
+                    "search-mode": "EvaluateXPath",
+                    "search-value": "//div[@id=\"content_left\"]/div[@id]//h3/a"
+                },
+                "jobs": [
                     {
-                        
+                        "type": "OpenLink",
+                        "value": [
+
+                        ]
                     }
                 ]
             }

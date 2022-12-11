@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using AutomaticWebBrowser.Services.Configuration.Models;
@@ -8,7 +7,7 @@ using Serilog.Core;
 
 namespace AutomaticWebBrowser.Controls
 {
-    class WebViewTabControls : TabControl
+    class WebViewTabControl : TabControl
     {
         #region --属性--
         public Logger Log { get; set; }

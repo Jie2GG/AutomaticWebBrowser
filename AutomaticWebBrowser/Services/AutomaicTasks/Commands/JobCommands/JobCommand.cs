@@ -29,6 +29,7 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
         public Job Job { get; }
 
         public Logger Log { get; }
+        public WebViewTabControl TabConrol { get; private set; }
         #endregion
 
         #region --构造函数--
@@ -42,6 +43,12 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
         #endregion
 
         #region --公开方法--
+        public JobCommand SetTabControl (WebViewTabControl tabControls)
+        {
+            this.TabConrol = tabControls ?? throw new ArgumentNullException (nameof (tabControls));
+            return this;
+        }
+
         public abstract bool Execute ();
 
         public static JobCommand CreateCommand (GeckoWebBrowser webView, GeckoNode node, Job job, Logger log)

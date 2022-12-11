@@ -10,8 +10,8 @@
         /// </summary>
         Ready,
         /// <summary>
-        /// 以超时时间作为当前条件判断的依据
+        /// 以延迟时间作为当前条件判断的依据
         /// </summary>
-        Timeout,
+        Delay,
     }
 }
