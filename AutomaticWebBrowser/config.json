@@ -74,7 +74,11 @@
                     {
                         "type": "OpenLink",
                         "value": [
-
+                            {
+                                "condition": {
+                                    "type": "Ready"
+                                }
+                            }
                         ]
                     }
                 ]

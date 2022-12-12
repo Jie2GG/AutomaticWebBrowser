@@ -162,6 +162,11 @@ namespace AutomaticWebBrowser
             this.webViewTabControls.RunTask (this.Config.Tasks);
         }
 
+        protected override void OnClosed (EventArgs e)
+        {
+            this.LogForm.Close ();
+        }
+
         // 日志按钮点击事件
         private void LogToolStripButtonClickEventHandler (object sender, EventArgs e)
         {

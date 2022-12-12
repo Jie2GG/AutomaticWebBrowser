@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 using AutomaticWebBrowser.Commands.DomSearchCommands;
 using AutomaticWebBrowser.Services.Configuration.Models;
@@ -20,30 +19,39 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
 
         public override bool Execute ()
         {
-            IAsyncResult asyncResult = this.WebView.BeginInvoke (new Func<bool> (() =>
+            if (this.Job.Value.ValueKind == JsonValueKind.String)
             {
-                if (this.Job.Value.ValueKind == JsonValueKind.String)
+                try
                 {
                     string inputValue = this.Job.Value.Deserialize<string> (Global.JsonSerializerOptions);
+
                     if (this.Node is GeckoInputElement inputElement)
                     {
-                        inputElement.Value = inputValue;
-                        this.Log.Information ($"JobCommand executed “inputValue” job of node “{this.Node.NodeName}”, value is “{inputValue}”.");
-                        return true;
+                        bool result = (bool)this.WebView.Invoke (() =>
+                        {
+                            inputElement.Value = inputValue;
+                            this.Log.Information ($"JobCommand executed “inputValue” job of node “{this.Node.NodeName}”, value is “{inputValue}”.");
+                            return true;
+                        });
+
+                        return result;
                     }
                     else
                     {
-                        this.Log.Warning ($"JobCommand executed “inputValue” job of node “{this.Node.NodeName}”, but node is not “InputElement”.");
+                        this.Log.Warning ($"JobCommand executed “inputValue” job of node “{this.NodeName}”, but node is not “InputElement”.");
                     }
                 }
-                else
+                catch (JsonException e)
                 {
-                    this.Log.Warning ($"JobCommand executed “inputValue” job of node “{this.Node.NodeName}”, but job value type is not string.");
+                    this.Log.Error (e, $"JobCommand executed “inputValue” job of node “{this.NodeName}”, but value deserialize to “String” type fail.");
                 }
+            }
+            else
+            {
+                this.Log.Warning ($"JobCommand executed “inputValue” job of node “{this.NodeName}”, but job value type is not “String”.");
+            }
 
-                return false;
-            }));
-            return this.WebView.EndInvoke (asyncResult) as bool? ?? false;
+            return false;
         }
     }
 }

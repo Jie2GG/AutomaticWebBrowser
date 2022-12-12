@@ -98,13 +98,6 @@ namespace AutomaticWebBrowser.Controls
                 {
                     actionSerialNumber += 1;
 
-                    // 元素查找器判断
-                    if (action.Element == null)
-                    {
-                        page.Log.Warning ($"AutomaticTask config in action “{actionSerialNumber}” not found “element” field.");
-                        return false;
-                    }
-
                     // 条件同步器
                     if (action.Condition != null)
                     {
@@ -112,32 +105,36 @@ namespace AutomaticWebBrowser.Controls
                         this.conditionSynchronous.WaitOne ();
                     }
 
-                    // 执行元素查找
-                    IAsyncResult asyncResult = page.WebView.BeginInvoke (new Func<Services.Configuration.Models.Element, GeckoNode[]> ((element) =>
+                    // 元素查找器判断
+                    if (action.Element != null)
                     {
-                        return SearchCommand.CreateCommand (page.WebView, page.WebView.DomDocument, element, page.Log).Execute ();
-                    }), action.Element);
-
-                    page.Log.Information ($"AutomaticTask starts action “{actionSerialNumber}”");
-
-                    // 执行操作
-                    if (page.WebView.EndInvoke (asyncResult) is GeckoNode[] nodes)
-                    {
-                        foreach (GeckoNode node in nodes)
+                        // 执行元素查找
+                        IAsyncResult asyncResult = page.WebView.BeginInvoke (new Func<Services.Configuration.Models.Element, GeckoNode[]> ((element) =>
                         {
-                            int jobSerialNumber = 0;
-                            foreach (Job job in action.Jobs)
-                            {
-                                jobSerialNumber += 1;
+                            return SearchCommand.CreateCommand (page.WebView, page.WebView.DomDocument, element, page.Log).Execute ();
+                        }), action.Element);
 
-                                if (!JobCommand.CreateCommand (page.WebView, node, job, page.Log).SetTabControl (page.Parent as WebViewTabControl).Execute ())
+                        page.Log.Information ($"AutomaticTask starts action “{actionSerialNumber}”");
+
+                        // 执行操作
+                        if (page.WebView.EndInvoke (asyncResult) is GeckoNode[] nodes)
+                        {
+                            foreach (GeckoNode node in nodes)
+                            {
+                                int jobSerialNumber = 0;
+                                foreach (Job job in action.Jobs)
                                 {
-                                    IAsyncResult asyncResult1 = page.WebView.BeginInvoke (() =>
+                                    jobSerialNumber += 1;
+
+                                    if (!JobCommand.CreateCommand (page.WebView, node, job, page.Log).SetTabControl (page.Parent as WebViewTabControl).Execute ())
                                     {
-                                        page.Log.Warning ($"AutomaticTask action “{actionSerialNumber}” the job “{jobSerialNumber}” on node “{node.NodeName}” a fails to be executed.");
-                                    });
-                                    page.WebView.EndInvoke (asyncResult1);
-                                    return false;
+                                        IAsyncResult asyncResult1 = page.WebView.BeginInvoke (() =>
+                                        {
+                                            page.Log.Warning ($"AutomaticTask action “{actionSerialNumber}” the job “{jobSerialNumber}” on node “{node.NodeName}” a fails to be executed.");
+                                        });
+                                        page.WebView.EndInvoke (asyncResult1);
+                                        return false;
+                                    }
                                 }
                             }
                         }

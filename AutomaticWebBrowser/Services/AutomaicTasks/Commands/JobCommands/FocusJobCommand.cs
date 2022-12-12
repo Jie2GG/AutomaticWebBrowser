@@ -23,12 +23,12 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
                 if (this.Node is GeckoHtmlElement htmlElement)
                 {
                     htmlElement.Focus ();
-                    this.Log.Information ($"JobCommand executed “focus” job of node “{this.Node.NodeName}”.");
+                    this.Log.Information ($"JobCommand executed “focus” job of node “{this.NodeName}”.");
                     return true;
                 }
                 else
                 {
-                    this.Log.Warning ($"JobCommand executed “focus” job of node “{this.Node.NodeName}”, but node is not “HtmlDocument”.");
+                    this.Log.Warning ($"JobCommand executed “focus” job of node “{this.NodeName}”, but node is not “HtmlDocument”.");
                 }
 
                 return false;

@@ -20,7 +20,6 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.SearchCommands
 
         public override GeckoNode[] Execute ()
         {
-
             IAsyncResult asyncResult = WebView.BeginInvoke (new Func<GeckoNode[]> (() =>
             {
                 if (this.Element.SearchValue.ValueKind == JsonValueKind.String)
