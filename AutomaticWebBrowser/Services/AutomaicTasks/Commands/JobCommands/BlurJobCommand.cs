@@ -23,12 +23,12 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
                 if (this.Node is GeckoHtmlElement htmlElement)
                 {
                     htmlElement.Blur ();
-                    this.Log.Information ($"JobCommand executed “blur” job of node “{this.Node.NodeName}”.");
+                    this.Log.Information ($"JobCommand executed “blur” job of node “{this.NodeName}”.");
                     return true;
                 }
                 else
                 {
-                    this.Log.Warning ($"JobCommand executed “blur” job of node “{this.Node.NodeName}”, but node is not “HtmlElement”.");
+                    this.Log.Warning ($"JobCommand executed “blur” job of node “{this.NodeName}”, but node is not “HtmlElement”.");
                 }
 
                 return false;

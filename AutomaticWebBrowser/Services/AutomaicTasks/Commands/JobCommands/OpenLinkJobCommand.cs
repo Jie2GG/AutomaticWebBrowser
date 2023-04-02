@@ -21,43 +21,58 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
 
         public override bool Execute ()
         {
-            //// 创建新标签
-            //WebViewTabPage page = new (this.Log);
+            if (this.Job.Value.ValueKind == JsonValueKind.Array)
+            {
+                try
+                {
+                    Configuration.Models.Action[] actions = this.Job.Value.Deserialize<Configuration.Models.Action[]> (Global.JsonSerializerOptions);
 
-            //IAsyncResult asyncResult = this.WebView.BeginInvoke (new Func<bool> (() =>
-            //{
-            //    if (this.Node is GeckoAnchorElement anchorElement)
-            //    {
-            //        this.TabConrol.TabPages.Add (page);
-            //        this.TabConrol.SelectTab (page);
+                    if (this.Node is GeckoAnchorElement anchorElement)
+                    {
+                        // 创建新标签
+                        WebViewTabPage page = new (this.Log);
 
-            //        page.WebView.Navigate (anchorElement.Href);
-            //    }
-            //    else
-            //    {
-            //        this.Log.Warning ($"JobCommand executed “openLink” job of node “{this.Node.NodeName}”, but node is not “AnchorElement”.");
-            //    }
+                        // 显示标签页
+                        this.WebView.Invoke (() =>
+                        {
+                            this.TabConrol.TabPages.Add (page);
+                            this.TabConrol.SelectTab (page);
 
-            //    if (this.Job.Value.ValueKind == JsonValueKind.Array)
-            //    {
-            //        try
-            //        {
-            //            Configuration.Models.Action[] actions = this.Job.Value.Deserialize<Configuration.Models.Action[]> (Global.JsonSerializerOptions);
+                            page.WebView.Navigate (anchorElement.Href);
+                            this.Log.Information ($"JobCommand executed “openLink” job of node “{this.NodeName}”, new tab navigate to {anchorElement.Href}");
+                        });
 
-            //        }
-            //        catch (JsonException e)
-            //        {
-            //            this.Log.Error (e, $"JobCommand executed “openLink” job of node “{this.Node.NodeName}”, but value deserialize to “Action[]” type fail.");
-            //        }
-            //    }
-            //    else
-            //    {
-            //        this.Log.Warning ($"JobCommand executed “openLink” job of node “{this.Node.NodeName}”, but job value type is not “Array”.");
-            //    }
+                        // 创建新任务
+                        page.CreateTask (actions);
+                        page.RunTask ();
 
-            //    return false;
-            //}));
-            //bool result = this.WebView.EndInvoke (asyncResult) as bool? ?? false;
+                        // 移除标签页
+                        this.WebView.Invoke (() =>
+                        {
+                            this.TabConrol.SelectTab (0);
+                            this.TabConrol.TabPages.Remove (page);
+                            this.Log.Information ($"JobCommand executed “openLink” job of node “{this.NodeName}”, new tab navigate to {anchorElement.Href}");
+
+                            // 释放浏览器, 防止卡住进程
+                            page.Dispose ();
+                        });
+                    }
+                    else
+                    {
+                        this.Log.Warning ($"JobCommand executed “openLink” job of node “{this.NodeName}”, but node is not “AnchorElement”.");
+                    }
+
+                    return true;
+                }
+                catch (JsonException e)
+                {
+                    this.Log.Error (e, $"JobCommand executed “openLink” job of node “{this.NodeName}”, but value deserialize to “Action[]” type fail.");
+                }
+            }
+            else
+            {
+                this.Log.Warning ($"JobCommand executed “openLink” job of node “{this.NodeName}”, but job value type is not “Array”.");
+            }
 
             return false;
         }

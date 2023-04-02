@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 
 using AutomaticWebBrowser.Commands.DomSearchCommands;
 using AutomaticWebBrowser.Controls;
@@ -26,9 +27,12 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
 
         public GeckoNode Node { get; }
 
+        public string NodeName { get; private set; }
+
         public Job Job { get; }
 
         public Logger Log { get; }
+
         public WebViewTabControl TabConrol { get; private set; }
         #endregion
 
@@ -39,6 +43,11 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
             this.Node = node ?? throw new ArgumentNullException (nameof (node));
             this.Job = job ?? throw new ArgumentNullException (nameof (job));
             this.Log = log;
+
+            this.WebView.Invoke (() =>
+            {
+                this.NodeName = this.Node.NodeName;
+            });
         }
         #endregion
 

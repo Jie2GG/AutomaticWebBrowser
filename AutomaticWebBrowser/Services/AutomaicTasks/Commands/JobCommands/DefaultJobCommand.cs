@@ -20,7 +20,7 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
         {
             IAsyncResult asyncResult = this.WebView.BeginInvoke (new Func<bool> (() =>
             {
-                this.Log.Information ($"JobCommand executed “default” job of node “{this.Node.NodeName}”.");
+                this.Log.Information ($"JobCommand executed “default” job of node “{this.NodeName}”.");
                 return true;
             }));
             return this.WebView.EndInvoke (asyncResult) as bool? ?? false;
