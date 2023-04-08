@@ -30,7 +30,7 @@ namespace AutomaticWebBrowser.Services.Configuration.Models
         /// <summary>
         /// 窗口初始位置
         /// </summary>
-        [JsonPropertyName ("start-position")]
+        [JsonPropertyName ("position")]
         [JsonConverter (typeof (JsonStringEnumConverter))]
         public FormStartPosition StartPosition { get; set; } = FormStartPosition.CenterParent;
     }

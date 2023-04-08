@@ -132,17 +132,7 @@ namespace AutomaticWebBrowser
                         foreach (AutomaticTask task in config.Tasks)
                         {
                             // 创建浏览器窗体
-                            BrowserForm browserForm = new BrowserForm (log)
-                            {
-                                // 设置窗体状态
-                                WindowState = config.Browser.Window.State,
-                                // 设置窗体位置
-                                Location = config.Browser.Window.Location ?? WindowLocation.Empty,
-                                // 设置窗体客户区大小
-                                Size = config.Browser.Window.Size ?? WindowSize.MainFormSize,
-                                // 设置窗体初始位置
-                                StartPosition = config.Browser.Window.StartPosition,
-                            };
+                            BrowserForm browserForm = new BrowserForm (config, log);
 
                             // 显示窗口
                             browserForm.SafeShow (logForm);

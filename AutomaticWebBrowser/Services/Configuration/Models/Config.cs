@@ -9,16 +9,16 @@ namespace AutomaticWebBrowser.Services.Configuration.Models
     class Config
     {
         /// <summary>
-        /// 浏览器配置
-        /// </summary>
-        [JsonPropertyName ("browser")]
-        public Browser Browser { get; set; } = new Browser ();
-
-        /// <summary>
         /// 日志配置
         /// </summary>
         [JsonPropertyName ("log")]
         public Log Log { get; set; } = new Log ();
+
+        /// <summary>
+        /// 浏览器配置
+        /// </summary>
+        [JsonPropertyName ("browser")]
+        public Browser Browser { get; set; } = new Browser ();
 
         /// <summary>
         /// 任务配置

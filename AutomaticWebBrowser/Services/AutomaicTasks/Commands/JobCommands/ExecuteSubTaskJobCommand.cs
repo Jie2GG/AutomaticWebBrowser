@@ -37,7 +37,7 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
                             anchorElement.Target = "_blank";
 
                             // 创建浏览器窗体
-                            this.Form.BrowserWaitHandle = new BrowserWaitHandle (new BrowserForm (this.Log));
+                            this.Form.BrowserWaitHandle = new BrowserWaitHandle (new BrowserForm (this.Form.Config, this.Log, true));
                             this.Form.BrowserWaitHandle.Reset ();
 
                             // 点击链接触发新窗体事件

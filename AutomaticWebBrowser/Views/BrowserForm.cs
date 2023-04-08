@@ -32,6 +32,11 @@ namespace AutomaticWebBrowser.Views
 
         #region --属性--
         /// <summary>
+        /// 配置
+        /// </summary>
+        public Config Config { get; }
+
+        /// <summary>
         /// 日志
         /// </summary>
         public Logger Log { get; }
@@ -48,14 +53,26 @@ namespace AutomaticWebBrowser.Views
         #endregion
 
         #region --构造函数--
-        public BrowserForm (Logger log)
+        public BrowserForm (Config config, Logger log, bool childForm = false)
         {
             // 赋值
             this.conditionSynchronous = new ConditionSynchronous ();
+            this.Config = config ?? throw new ArgumentNullException (nameof (config));
             this.Log = log ?? throw new ArgumentNullException (nameof (log));
 
             // 初始化控件
             this.InitializeComponent ();
+            if (!(childForm && !this.Config.Browser.ApplyToChildWindow))
+            {
+                // 设置窗体状态
+                this.WindowState = this.Config.Browser.Window.State;
+                // 设置窗体位置
+                this.Location = this.Config.Browser.Window.Location ?? WindowLocation.Empty;
+                // 设置窗体客户区大小
+                this.Size = this.Config.Browser.Window.Size ?? WindowSize.MainFormSize;
+                // 设置窗体初始位置
+                this.StartPosition = this.Config.Browser.Window.StartPosition;
+            }
         }
         #endregion
 

@@ -1,17 +1,31 @@
 {
+    // 日志配置
+    "log": {
+        // 日志输出格式
+        "format": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
+        // 日志等级
+        "level": "Verbose",
+        // 日志持久化路径
+        "save-path": "./logs"
+    },
+    // 浏览器配置
     "browser": {
-        // 浏览器窗口信息
+        // 窗体配置
         "window": {
-            "state": "Normal", // default, maximize
+            // 窗体状态 (参考: System.Windows.Forms.FormWindowState 枚举)
+            "state": "Normal",
+            // 窗体起点 (参考: System.Drawing.Point 结构)
             "location": {
                 "x": 0,
                 "y": 0
             },
+            // 窗体大小 (参考: System.Drawing.Size 结构)
             "size": {
                 "width": 1200,
                 "height": 900
             },
-            "start-position": "CenterScreen"
+            // 窗体位置 (参考: System.Windows.Forms.FormStartPosition 枚举)
+            "position": "CenterScreen"
         },
         // 浏览器缓存路径 (相对路径或绝对路径)
         "profile": "./profile",
@@ -24,15 +38,9 @@
         // 启用浏览器不被追踪
         "enable-donottrackheader": true,
         // 启用上下文菜单
-        "enable-context-menu": true
-    },
-    "log": {
-        // 日志输出格式
-        "format": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
-        // 日志等级
-        "level": "Verbose",
-        // 日志持久化路径
-        "save-path": "./logs"
+        "enable-context-menu": true,
+        // 应用到子窗体
+        "apply-to-child-window": true
     },
     "task": [
         {
@@ -76,7 +84,7 @@
                         {
                             "type": "ExecuteSubTask",
                             "value": {
-                                
+
                                 "actions": [
                                     {
                                         "condition": {

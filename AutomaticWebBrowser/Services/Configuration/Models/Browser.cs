@@ -55,5 +55,11 @@ namespace AutomaticWebBrowser.Services.Configuration.Models
         /// </summary>
         [JsonPropertyName ("enable-context-menu")]
         public bool EnableContextMenu { get; set; } = true;
+
+        /// <summary>
+        /// 应用到子窗口
+        /// </summary>
+        [JsonPropertyName ("apply-to-child-window")]
+        public bool ApplyToChildWindow { get; set; } = true;
     }
 }
