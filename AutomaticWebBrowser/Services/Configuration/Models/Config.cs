@@ -24,7 +24,7 @@ namespace AutomaticWebBrowser.Services.Configuration.Models
         /// 任务配置
         /// </summary>
         [JsonPropertyName ("task")]
-        public AutomaticTask Tasks { get; set; }
+        public AutomaticTask[] Tasks { get; set; }
 
         /// <summary>
         /// 检查配置文件内容的合理性

@@ -29,18 +29,18 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.SearchCommands
                         GeckoNode searchNode = domDocument.GetElementById (searchValue);
                         if (searchNode != null)
                         {
-                            this.Log.Information ($"SearchCommand executed “getElementById” command of source node “{this.SourceNode.NodeName}”, search value is “{searchValue}” and the search is successful.");
+                            this.Log.Information ($"自动化任务 --> 在节点: {this.SourceNode.NodeName} 执行 “getElementById” 搜索, 搜索值是 {searchValue}");
                             return new GeckoNode[] { searchNode };
                         }
                     }
                     else
                     {
-                        this.Log.Warning ($"SearchCommand executed “getElementById” command of source node “{this.SourceNode.NodeName}”, but search value type is not string.");
+                        this.Log.Warning ($"自动化任务 --> 在节点: {this.SourceNode.NodeName} 执行 “getElementById” 搜索, 但搜索值不是 string 类型");
                     }
                 }
                 else
                 {
-                    this.Log.Warning ($"SearchCommand executed “getElementById” command of source node “{this.SourceNode.NodeName}”, but source node type is not “Document”.");
+                    this.Log.Warning ($"自动化任务 --> 在节点: {this.SourceNode.NodeName} 执行 “getElementById” 搜索, 但源节点不是 Document 类型");
                 }
 
                 return null;

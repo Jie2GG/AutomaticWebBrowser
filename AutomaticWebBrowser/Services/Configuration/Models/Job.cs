@@ -9,6 +9,12 @@ namespace AutomaticWebBrowser.Services.Configuration.Models
     class Job
     {
         /// <summary>
+        /// 作业名称
+        /// </summary>
+        [JsonPropertyName ("name")]
+        public string Name { get; set; } = null;
+
+        /// <summary>
         /// 作业类型
         /// </summary>
         [JsonPropertyName ("type")]

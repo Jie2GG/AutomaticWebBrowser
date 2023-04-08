@@ -29,17 +29,17 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.SearchCommands
                     if (xPathResult.GetResultType () == Gecko.DOM.XPathResultType.UnorderedNodeIterator || xPathResult.GetResultType () == Gecko.DOM.XPathResultType.OrderedNodeIterator)
                     {
                         GeckoNode[] result = xPathResult.GetNodes ().ToArray ();
-                        this.Log.Information ($"SearchCommand executed “evaluate” command of source node “{this.SourceNode.NodeName}”, search value is “{searchValue}”, result count is “{result.Length}”.");
+                        this.Log.Information ($"自动化任务 --> 在节点: {this.SourceNode.NodeName} 执行 “evaluateXPath” 搜索, 搜索值是 “{searchValue}”, 搜索到 {result.Length} 个结果");
                         return result;
                     }
                     else
                     {
-                        this.Log.Warning ($"SearchCommand executed “evaluate” command of source node “{this.SourceNode.NodeName}”, search value is “{searchValue}”, but result type is not node iterator.");
+                        this.Log.Warning ($"自动化任务 --> 在节点: {this.SourceNode.NodeName} 执行 “evaluateXPath” 搜索, 搜索值是 “{searchValue}”, 但搜索结果不可遍历");
                     }
                 }
                 else
                 {
-                    this.Log.Warning ($"SearchCommand executed “evaluate” command of source node “{this.SourceNode.NodeName}”, but search value type is not string.");
+                    this.Log.Warning ($"自动化任务 --> 在节点: {this.SourceNode.NodeName} 执行 “evaluateXPath” 搜索, 但用于搜索的值不是 string 类型");
                 }
 
                 return null;

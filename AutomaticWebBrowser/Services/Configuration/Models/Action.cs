@@ -8,6 +8,12 @@ namespace AutomaticWebBrowser.Services.Configuration.Models
     class Action
     {
         /// <summary>
+        /// 操作名称
+        /// </summary>
+        [JsonPropertyName ("name")]
+        public string Name { get; set; } = null;
+
+        /// <summary>
         /// 执行条件
         /// </summary>
         [JsonPropertyName ("condition")]

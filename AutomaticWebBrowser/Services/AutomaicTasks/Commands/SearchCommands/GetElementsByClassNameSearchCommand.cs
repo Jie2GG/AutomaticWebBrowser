@@ -28,17 +28,17 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.SearchCommands
                     {
                         string searchValue = this.Element.SearchValue.GetString ();
                         GeckoNode[] result = domDocument.GetElementsByClassName (searchValue).ToArray ();
-                        this.Log.Information ($"SearchCommand executed “getElementsByClassName” command of source node “{this.SourceNode.NodeName}”, search value is “{searchValue}”, result count is “{result.Length}”");
+                        this.Log.Information ($"自动化任务 --> 在节点: {this.SourceNode.NodeName} 执行 “getElementsByClassName” 搜索, 搜索值是 {searchValue}, 返回数量: {result.Length}");
                         return result;
                     }
                     else
                     {
-                        this.Log.Warning ($"SearchCommand executed “getElementsByClassName” command of source node “{this.SourceNode.NodeName}”, but search value type is not string.");
+                        this.Log.Warning ($"自动化任务 --> 在节点: {this.SourceNode.NodeName} 执行 “getElementsByClassName” 搜索, 但搜索值不是 string 类型");
                     }
                 }
                 else
                 {
-                    this.Log.Warning ($"SearchCommand executed “getElementsByClassName” command of source node “{this.SourceNode.NodeName}”, but source node type is not “Document”.");
+                    this.Log.Warning ($"自动化任务 --> 在节点: {this.SourceNode.NodeName} 执行 “getElementsByClassName” 搜索, 但源节点不是 Document 类型");
                 }
 
                 return null;

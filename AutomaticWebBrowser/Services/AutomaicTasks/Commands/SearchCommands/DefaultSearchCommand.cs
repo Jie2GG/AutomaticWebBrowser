@@ -20,7 +20,7 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.SearchCommands
         {
             IAsyncResult asyncResult = this.WebView.BeginInvoke (new Func<GeckoNode[]> (() =>
             {
-                this.Log.Information ($"SearchCommand executed “default” command of source node “{this.SourceNode.NodeName}”.");
+                this.Log.Information ($"自动化任务 --> 在节点: {this.SourceNode.NodeName} 执行 “default” 搜索");
                 return null;
             }));
             return this.WebView.EndInvoke (asyncResult) as GeckoNode[];

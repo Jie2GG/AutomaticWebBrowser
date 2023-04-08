@@ -8,7 +8,7 @@ namespace AutomaticWebBrowser.Services.Configuration
     /// <summary>
     /// 配置项服务
     /// </summary>
-    internal static class ConfigurationService
+    static class ConfigurationService
     {
         /// <summary>
         /// 从指定的文件加载

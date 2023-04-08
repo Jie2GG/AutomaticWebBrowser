@@ -3,6 +3,7 @@ using System.Text.Json;
 
 using AutomaticWebBrowser.Commands.DomSearchCommands;
 using AutomaticWebBrowser.Services.Configuration.Models;
+using AutomaticWebBrowser.Views;
 
 using Gecko;
 using Gecko.WebIDL;
@@ -14,8 +15,8 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
     [JobCommand (JobType.MouseClick)]
     class MouseClickJobCommand : JobCommand
     {
-        public MouseClickJobCommand (GeckoWebBrowser webView, GeckoNode node, Job job, Logger log)
-            : base (webView, node, job, log)
+        public MouseClickJobCommand (BrowserForm form, GeckoNode node, Job job, Logger log)
+            : base (form, node, job, log)
         { }
 
         public override bool Execute ()
@@ -26,20 +27,20 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
                 {
                     Mouse mouse = this.Job.Value.Deserialize<Mouse> (Global.JsonSerializerOptions);
 
-                    bool result = (bool)this.WebView.Invoke (() =>
+                    IAsyncResult asyncResult = this.Browser.BeginInvoke (new Func<bool> (() =>
                     {
                         try
                         {
                             // 创建鼠标输入事件
-                            DomEventArgs eventArgs = this.WebView.DomDocument.CreateEvent (Global.DOM.DOM_MOUSE_EVENT);
+                            DomEventArgs eventArgs = this.Browser.DomDocument.CreateEvent (Global.DOM.DOM_MOUSE_EVENT);
 
                             // 按键事件
-                            MouseEvent mouseEvent = new (this.WebView.Window.DomWindow as mozIDOMWindowProxy, eventArgs.DomEvent as nsISupports);
+                            MouseEvent mouseEvent = new MouseEvent (this.Browser.Window.DomWindow as mozIDOMWindowProxy, eventArgs.DomEvent as nsISupports);
                             mouseEvent.InitMouseEvent (
                                 Global.DOM.EVENT_CLICK,
                                 true,
                                 false,
-                                this.WebView.Window.DomWindow as nsIDOMWindow,
+                                this.Browser.Window.DomWindow as nsIDOMWindow,
                                 1,
                                 0,
                                 0,
@@ -56,25 +57,25 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
                             {
                                 this.Node.GetEventTarget ().DispatchEvent (eventArgs);
                             }
-                            this.Log.Information ($"JobCommand executed “mouseClick” job of node “{this.NodeName}”, key: {(mouse.Control ? "ctrl+" : string.Empty)}{(mouse.Alt ? "alt+" : string.Empty)}{(mouse.Shift ? "shift+" : string.Empty)}{(mouse.Meta ? "meta+" : string.Empty)}, mouse: {mouse.Button}, count: {mouse.Count}.");
+                            this.Log.Information ($"自动化任务 --> 在节点 {this.Node.NodeName} 执行 “mouseClick” 作业, 键: {(mouse.Control ? "ctrl+" : string.Empty)}{(mouse.Alt ? "alt+" : string.Empty)}{(mouse.Shift ? "shift+" : string.Empty)}{(mouse.Meta ? "meta+" : string.Empty)}, mouse: {mouse.Button}, 次数: {mouse.Count}");
                             return true;
                         }
                         catch (Exception e)
                         {
-                            this.Log.Error (e, $"JobCommand executed “mouseClick” job of node “{this.NodeName}”, but something went error the execution.");
+                            this.Log.Error (e, $"自动化任务 --> 在节点 {this.Node.NodeName} 执行 “mouseClick” 作业, 但在执行过程中出现了异常");
                             return false;
                         }
-                    });
-                    return result;
+                    }));
+                    return this.Browser.EndInvoke (asyncResult) as bool? ?? false;
                 }
                 catch (JsonException e)
                 {
-                    this.Log.Error (e, $"JobCommand executed “mouseClick” job of node “{this.NodeName}”, but value deserialize to “Mouse” type fail.");
+                    this.Log.Error (e, $"自动化任务 --> 在节点 {this.Node.NodeName} 执行 “mouseClick” 作业, 但作业值反序列化为 Mouse 类型时失败");
                 }
             }
             else
             {
-                this.Log.Warning ($"JobCommand executed “mouseClick” job of node “{this.NodeName}”, but job value type is not “Mouse”.");
+                this.Log.Warning ($"自动化任务 --> 在节点 {this.Node.NodeName} 执行 “mouseClick” 作业, 但作业值不是 Mouse 类型");
             }
 
             return false;

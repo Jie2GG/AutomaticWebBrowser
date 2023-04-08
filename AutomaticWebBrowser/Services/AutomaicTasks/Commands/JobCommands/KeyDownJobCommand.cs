@@ -3,6 +3,7 @@ using System.Text.Json;
 
 using AutomaticWebBrowser.Commands.DomSearchCommands;
 using AutomaticWebBrowser.Services.Configuration.Models;
+using AutomaticWebBrowser.Views;
 
 using Gecko;
 using Gecko.WebIDL;
@@ -14,8 +15,8 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
     [JobCommand (JobType.KeyDown)]
     class KeyDownJobCommand : JobCommand
     {
-        public KeyDownJobCommand (GeckoWebBrowser webView, GeckoNode node, Job job, Logger log)
-            : base (webView, node, job, log)
+        public KeyDownJobCommand (BrowserForm form, GeckoNode node, Job job, Logger log)
+            : base (form, node, job, log)
         { }
 
         public override bool Execute ()
@@ -26,20 +27,20 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
                 {
                     Keyboard keyboard = this.Job.Value.Deserialize<Keyboard> (Global.JsonSerializerOptions);
 
-                    bool result = (bool)this.WebView.Invoke (() =>
+                    IAsyncResult asyncResult = this.Browser.BeginInvoke (new Func<bool> (() =>
                     {
                         try
                         {
                             // 创建键盘输入事件
-                            DomEventArgs eventArgs = this.WebView.DomDocument.CreateEvent (Global.DOM.DOM_KEY_EVENTS);
+                            DomEventArgs eventArgs = this.Browser.DomDocument.CreateEvent (Global.DOM.DOM_KEY_EVENTS);
 
                             // 按键事件
-                            KeyEvent keyEvent = new (this.WebView.Window.DomWindow as mozIDOMWindowProxy, eventArgs.DomEvent as nsISupports);
+                            KeyEvent keyEvent = new KeyEvent (this.Browser.Window.DomWindow as mozIDOMWindowProxy, eventArgs.DomEvent as nsISupports);
                             keyEvent.InitKeyEvent (
                                 Global.DOM.EVENT_KEY_DOWN,
                                 true,
                                 false,
-                                this.WebView.Window.DomWindow as nsIDOMWindow,
+                                this.Browser.Window.DomWindow as nsIDOMWindow,
                                 keyboard.Control,
                                 keyboard.Alt,
                                 keyboard.Shift,
@@ -51,26 +52,26 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
                             {
                                 this.Node.GetEventTarget ().DispatchEvent (eventArgs);
                             }
-                            this.Log.Information ($"JobCommand executed “keyDown” job of node “{this.NodeName}”, key: {(keyboard.Control ? "ctrl+" : string.Empty)}{(keyboard.Alt ? "alt+" : string.Empty)}{(keyboard.Shift ? "shift+" : string.Empty)}{(keyboard.Meta ? "meta+" : string.Empty)}{keyboard.Key}, count: {keyboard.Count}.");
+                            this.Log.Information ($"自动化任务 --> 在节点 {this.Node.NodeName} 执行 “keyDown” 作业, 键: {(keyboard.Control ? "ctrl+" : string.Empty)}{(keyboard.Alt ? "alt+" : string.Empty)}{(keyboard.Shift ? "shift+" : string.Empty)}{(keyboard.Meta ? "meta+" : string.Empty)}{keyboard.Key}, 次数: {keyboard.Count}");
                             return true;
                         }
                         catch (Exception e)
                         {
-                            this.Log.Error (e, $"JobCommand executed “keyDown” job of node “{this.NodeName}”, but something went error the execution.");
+                            this.Log.Error (e, $"自动化任务 --> 在节点 {this.Node.NodeName} 执行 “keyDown” 作业, 但在执行过程中出现了异常");
                             return false;
                         }
-                    });
+                    }));
 
-                    return result;
+                    return this.Browser.EndInvoke (asyncResult) as bool? ?? false;
                 }
                 catch (JsonException e)
                 {
-                    this.Log.Error (e, $"JobCommand executed “keyDown” job of node “{this.NodeName}”, but value deserialize to “Keyboard” type fail.");
+                    this.Log.Error (e, $"自动化任务 --> 在节点 {this.Node.NodeName} 执行 “keyDown” 作业, 但作业值反序列化为 Keyboard 类型时失败");
                 }
             }
             else
             {
-                this.Log.Warning ($"JobCommand executed “keyDown” job of node “{this.NodeName}”, but job value type is not “Keyboard”.");
+                this.Log.Warning ($"自动化任务 --> 在节点 {this.Node.NodeName} 执行 “keyDown” 作业, 但作业值不是 Keyboard 类型");
             }
 
             return false;

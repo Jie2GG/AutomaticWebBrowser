@@ -16,15 +16,22 @@ namespace AutomaticWebBrowser.Services.Configuration.Models
         public FormWindowState State { get; set; } = FormWindowState.Normal;
 
         /// <summary>
+        /// 窗口位置
+        /// </summary>
+        [JsonPropertyName ("location")]
+        public WindowLocation Location { get; set; }
+
+        /// <summary>
         /// 窗口大小
         /// </summary>
         [JsonPropertyName ("size")]
         public WindowSize Size { get; set; }
 
         /// <summary>
-        /// 是否显示窗口
+        /// 窗口初始位置
         /// </summary>
-        [JsonPropertyName ("visible")]
-        public bool Visible { get; set; } = true;
+        [JsonPropertyName ("start-position")]
+        [JsonConverter (typeof (JsonStringEnumConverter))]
+        public FormStartPosition StartPosition { get; set; } = FormStartPosition.CenterParent;
     }
 }

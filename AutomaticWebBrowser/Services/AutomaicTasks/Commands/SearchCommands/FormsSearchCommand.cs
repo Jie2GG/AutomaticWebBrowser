@@ -30,24 +30,24 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.SearchCommands
                         uint index = this.Element.SearchValue.GetUInt32 ();
                         if (document.Forms.Length > 0)
                         {
-                            this.Log.Information ($"SearchCommand executed “forms” command of source node “{this.SourceNode.NodeName}”, forms count is “{document.Forms.Length}”, return to the “{index}th”.");
+                            this.Log.Information ($"自动化任务 --> 在节点: {this.SourceNode.NodeName} 执行 “forms” 搜索, 表单数量: {document.Forms.Length}, 返回第{index}个");
                             return new GeckoNode[] { document.Forms[index] };
                         }
                     }
                     else if (this.Element.SearchValue.ValueKind == JsonValueKind.Undefined || this.Element.SearchValue.ValueKind == JsonValueKind.Null)
                     {
                         // 获取所有表单
-                        this.Log.Information ($"SearchCommand executed “forms” command of source node “{this.SourceNode.NodeName}”, document forms count is “{document.Forms.Length}”, return all.");
+                        this.Log.Information ($"自动化任务 --> 在节点: {this.SourceNode.NodeName} 执行 “forms” 搜索, 表单数量: {document.Forms.Length}, 返回所有");
                         return document.Forms.ToArray ();
                     }
                     else
                     {
-                        this.Log.Warning ($"SearchCommand executed “forms” command of source node “{this.SourceNode.NodeName}”, but search value type is not integer or nullable.");
+                        this.Log.Warning ($"自动化任务 --> 在节点: {this.SourceNode.NodeName} 执行 “forms” 搜索, 但搜索值参数不是 integer 或 nullable 类型");
                     }
                 }
                 else
                 {
-                    this.Log.Warning ($"SearchCommand executed “forms” command of source node “{this.SourceNode.NodeName}”, but source node type is not “Document”.");
+                    this.Log.Warning ($"自动化任务 --> 在节点: {this.SourceNode.NodeName} 执行 “forms” 搜索, 但源节点不是 Document 类型");
                 }
 
                 return null;

@@ -62,8 +62,8 @@
         /// </summary>
         MouseDoubleClick,
         /// <summary>
-        /// 打开 A 元素中的链接
+        /// 对 HTML 元素发送 Click, 并使用子窗体打开, 并在子窗体中执行一系列子任务
         /// </summary>
-        OpenLink,
+        ExecuteSubTask,
     }
 }

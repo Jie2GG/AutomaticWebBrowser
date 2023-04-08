@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 
 using AutomaticWebBrowser.Commands.DomSearchCommands;
-using AutomaticWebBrowser.Controls;
 
 using Gecko;
 

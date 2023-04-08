@@ -4,6 +4,7 @@ using System.Threading;
 
 using AutomaticWebBrowser.Commands.DomSearchCommands;
 using AutomaticWebBrowser.Services.Configuration.Models;
+using AutomaticWebBrowser.Views;
 
 using Gecko;
 
@@ -14,8 +15,8 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
     [JobCommand (JobType.Delay)]
     class DelayJobCommand : JobCommand
     {
-        public DelayJobCommand (GeckoWebBrowser webView, GeckoNode node, Job job, Logger log)
-            : base (webView, node, job, log)
+        public DelayJobCommand (BrowserForm form, GeckoNode node, Job job, Logger log)
+            : base (form, node, job, log)
         { }
 
         public override bool Execute ()
@@ -26,17 +27,17 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
                 if (TimeSpan.TryParse (timeFormat, out TimeSpan duration))
                 {
                     Thread.Sleep (duration);
-                    this.Log.Information ($"JobCommand executed “delay” job of node “{this.NodeName}”, duration: {duration}.");
+                    this.Log.Information ($"自动化任务 --> 在节点 {this.Node.NodeName} 执行 “delay” 作业, 持续时间: {duration}");
                     return true;
                 }
                 else
                 {
-                    this.Log.Warning ($"JobCommand execute “dealy” job of node “{this.NodeName}”, but job value format error(delay job value format is HH:mm:ss).");
+                    this.Log.Warning ($"自动化任务 --> 在节点 {this.Node.NodeName} 执行 “delay” 作业, 但作业值格式错误 (格式: HH:mm:ss)");
                 }
             }
             else
             {
-                this.Log.Warning ($"JobCommand execute “dealy” job of node “{this.Node.NodeName}”, but job value type is not string.");
+                this.Log.Warning ($"自动化任务 --> 在节点 {this.Node.NodeName} 执行 “delay” 作业, 但作业值类型不是 string 类型");
             }
 
             return false;

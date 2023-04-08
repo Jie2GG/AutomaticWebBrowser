@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net462</TargetFramework>
+		<TargetFramework>net48</TargetFramework>
 		<UseWindowsForms>true</UseWindowsForms>
-		<LangVersion>10.0</LangVersion>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 	</PropertyGroup>
 
@@ -14,8 +14,6 @@
 		<PackageReference Include="System.Text.Json" Version="6.0.0" PrivateAssets="All" />
 		<!--启动参数-->
 		<PackageReference Include="Ookii.CommandLine" Version="2.4.0" />
-		<!--任务对话框-->
-		<PackageReference Include="Ookii.Dialogs.WinForms" Version="4.0.0" PrivateAssets="All" />
 		<!--日志框架-->
 		<PackageReference Include="Serilog" Version="2.12.0" />
 		<PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
@@ -24,24 +22,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Reference Include="System.Configuration" />
-		<Reference Include="System.Web" />
+	  <Reference Include="System.Configuration" />
+	  <Reference Include="System.Web" />
 	</ItemGroup>
-	
-	<ItemGroup>
-		<Compile Update="Properties\Resources.Designer.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>Resources.resx</DependentUpon>
-		</Compile>	</ItemGroup>
-	
-	<ItemGroup>
-		<EmbeddedResource Update="Properties\Resources.resx">
-			<Generator>ResXFileCodeGenerator</Generator>
-			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
-	</ItemGroup>
-	
+
 	<ItemGroup>
 	  <None Update="config.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -170,4 +154,5 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
+
 </Project>

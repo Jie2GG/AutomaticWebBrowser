@@ -3,10 +3,15 @@
         // 浏览器窗口信息
         "window": {
             "state": "Normal", // default, maximize
+            "location": {
+                "x": 0,
+                "y": 0
+            },
             "size": {
                 "width": 1200,
                 "height": 900
-            }
+            },
+            "start-position": "CenterScreen"
         },
         // 浏览器缓存路径 (相对路径或绝对路径)
         "profile": "./profile",
@@ -22,10 +27,6 @@
         "enable-context-menu": true
     },
     "log": {
-        // 日志窗口信息
-        "window": {
-            "visible": false
-        },
         // 日志输出格式
         "format": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
         // 日志等级
@@ -33,56 +34,68 @@
         // 日志持久化路径
         "save-path": "./logs"
     },
-    "task": {
-        "url": "https://www.baidu.com/",
-        // 任务包含的所有操作
-        "actions": [
-            {
-                // 开始条件
-                "condition": {
-                    "type": "Ready"
-                },
-                // 操作元素
-                "element": {
-                    "search-mode": "GetElementById",
-                    "search-value": "kw"
-                },
-                // 作业列表
-                "jobs": [
-                    // 输入字符
-                    {
-                        "type": "InputKeypressValue",
-                        "value": "123"
+    "task": [
+        {
+            "url": "https://www.baidu.com/",
+            // 任务包含的所有操作
+            "actions": [
+                {
+                    // 开始条件
+                    "condition": {
+                        "type": "Ready"
                     },
-                    // 按下回车
-                    {
-                        "type": "KeyPress",
-                        "value": { "key": "Enter" }
-                    }
-                ]
-            },
-            {
-                "condition": {
-                    "type": "Delay",
-                    "value": 5000
+                    // 操作元素
+                    "element": {
+                        "search-mode": "GetElementById",
+                        "search-value": "kw"
+                    },
+                    // 作业列表
+                    "jobs": [
+                        // 输入字符
+                        {
+                            "type": "InputKeypressValue",
+                            "value": "123"
+                        },
+                        // 按下回车
+                        {
+                            "type": "KeyPress",
+                            "value": { "key": "Enter" }
+                        }
+                    ]
                 },
-                "element": {
-                    "search-mode": "EvaluateXPath",
-                    "search-value": "//div[@id=\"content_left\"]/div[@id]//h3/a"
-                },
-                "jobs": [
-                    {
-                        "type": "OpenLink",
-                        "value": [
-                            {
-                                "condition": {
-                                    "type": "Ready"
-                                }
+                {
+                    "condition": {
+                        "type": "Delay",
+                        "value": 5000
+                    },
+                    "element": {
+                        "search-mode": "EvaluateXPath",
+                        "search-value": "//div[@id=\"content_left\"]/div[@id]//h3/a"
+                    },
+                    "jobs": [
+                        {
+                            "type": "ExecuteSubTask",
+                            "value": {
+                                
+                                "actions": [
+                                    {
+                                        "condition": {
+                                            "type": "Ready"
+                                        },
+                                        "element": {
+                                            "search-mode": "GetElementById",
+                                            "search-value": ""
+                                        },
+                                        "jobs": [
+
+                                        ]
+                                    }
+                                ]
                             }
-                        ]
-                    }
-                ]
-            }
-        ]
-    }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }

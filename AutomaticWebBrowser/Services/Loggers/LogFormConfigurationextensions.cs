@@ -11,7 +11,7 @@ using Serilog.Formatting.Display;
 
 namespace AutomaticWebBrowser.Services.Loggers
 {
-    static class LogFormConfigurationextensions
+    static class LogFormConfigurationExtensions
     {
         const string DefaultOutputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
@@ -27,7 +27,7 @@ namespace AutomaticWebBrowser.Services.Loggers
                 throw new ArgumentNullException (nameof (logForm));
             }
 
-            MessageTemplateTextFormatter formatter = new (outputTemplate, formatProvider);
+            MessageTemplateTextFormatter formatter = new MessageTemplateTextFormatter (outputTemplate, formatProvider);
             return LogForm (sinkConfiguration, logForm, formatter, restrictedToMinimumLevel, levelSwitch);
         }
 

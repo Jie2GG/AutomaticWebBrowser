@@ -1,13 +1,11 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using Serilog.Core;
-
 namespace AutomaticWebBrowser
 {
     static class Global
     {
-        public static readonly JsonSerializerOptions JsonSerializerOptions = new ()
+        public static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions ()
         {
             // 设置字符编码器
             Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,

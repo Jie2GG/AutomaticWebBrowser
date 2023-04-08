@@ -9,8 +9,8 @@ namespace AutomaticWebBrowser.Services.Configuration.Models
     class WindowSize
     {
         #region --常量--
-        public static readonly WindowSize MainFormSize = new (1200, 900);
-        public static readonly WindowSize LogFormSize = new (800, 300);
+        public static readonly WindowSize MainFormSize = new WindowSize (1200, 900);
+        public static readonly WindowSize LogFormSize = new WindowSize (800, 300);
         #endregion
 
         #region --属性--

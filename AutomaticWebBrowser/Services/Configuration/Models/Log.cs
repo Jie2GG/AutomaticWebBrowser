@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using System.Windows.Forms;
 
 using Serilog.Events;
 
@@ -15,8 +16,10 @@ namespace AutomaticWebBrowser.Services.Configuration.Models
         [JsonPropertyName ("window")]
         public Window Window { get; set; } = new Window ()
         {
+            State = FormWindowState.Normal,
+            Location = new WindowLocation (0, 0),
             Size = new WindowSize (800, 300),
-            Visible = false
+            StartPosition = FormStartPosition.Manual
         };
 
         /// <summary>

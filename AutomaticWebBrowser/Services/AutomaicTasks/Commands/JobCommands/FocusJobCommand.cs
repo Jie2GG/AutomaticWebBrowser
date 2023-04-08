@@ -2,6 +2,7 @@
 
 using AutomaticWebBrowser.Commands.DomSearchCommands;
 using AutomaticWebBrowser.Services.Configuration.Models;
+using AutomaticWebBrowser.Views;
 
 using Gecko;
 
@@ -12,28 +13,28 @@ namespace AutomaticWebBrowser.Services.AutomaicTasks.Commands.JobCommands
     [JobCommand (JobType.Focus)]
     class FocusJobCommand : JobCommand
     {
-        public FocusJobCommand (GeckoWebBrowser webView, GeckoNode node, Job job, Logger log)
-            : base (webView, node, job, log)
+        public FocusJobCommand (BrowserForm form, GeckoNode node, Job job, Logger log)
+            : base (form, node, job, log)
         { }
 
         public override bool Execute ()
         {
-            IAsyncResult asyncResult = this.WebView.BeginInvoke (new Func<bool> (() =>
+            IAsyncResult asyncResult = this.Browser.BeginInvoke (new Func<bool> (() =>
             {
                 if (this.Node is GeckoHtmlElement htmlElement)
                 {
                     htmlElement.Focus ();
-                    this.Log.Information ($"JobCommand executed “focus” job of node “{this.NodeName}”.");
+                    this.Log.Information ($"自动化任务 --> 在节点 {this.Node.NodeName} 执行 “focus” 作业");
                     return true;
                 }
                 else
                 {
-                    this.Log.Warning ($"JobCommand executed “focus” job of node “{this.NodeName}”, but node is not “HtmlDocument”.");
+                    this.Log.Warning ($"自动化任务 --> 在节点 {this.Node.NodeName} 执行 “focus” 作业, 但节点不是 HtmlElement 类型");
                 }
 
                 return false;
             }));
-            return this.WebView.EndInvoke (asyncResult) as bool? ?? false;
+            return this.Browser.EndInvoke (asyncResult) as bool? ?? false;
         }
     }
 }

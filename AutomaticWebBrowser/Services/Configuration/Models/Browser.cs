@@ -15,8 +15,9 @@ namespace AutomaticWebBrowser.Services.Configuration.Models
         public Window Window { get; set; } = new Window ()
         {
             State = FormWindowState.Normal,
+            Location = new WindowLocation (0, 0),
             Size = new WindowSize (1200, 900),
-            Visible = true,
+            StartPosition = FormStartPosition.CenterParent
         };
 
         /// <summary>

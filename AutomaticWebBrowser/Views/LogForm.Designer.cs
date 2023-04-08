@@ -33,28 +33,27 @@
             // 
             // logRichTextBox
             // 
-            this.logRichTextBox.AcceptsTab = true;
-            this.logRichTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.logRichTextBox.BackColor = System.Drawing.Color.White;
             this.logRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.logRichTextBox.Cursor = System.Windows.Forms.Cursors.Default;
             this.logRichTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logRichTextBox.Location = new System.Drawing.Point(0, 0);
             this.logRichTextBox.Margin = new System.Windows.Forms.Padding(0);
             this.logRichTextBox.Name = "logRichTextBox";
             this.logRichTextBox.ReadOnly = true;
-            this.logRichTextBox.ShortcutsEnabled = false;
             this.logRichTextBox.Size = new System.Drawing.Size(1568, 522);
             this.logRichTextBox.TabIndex = 0;
-            this.logRichTextBox.TabStop = false;
             this.logRichTextBox.Text = "";
             this.logRichTextBox.WordWrap = false;
             // 
             // LogForm
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(192F, 192F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1568, 522);
             this.Controls.Add(this.logRichTextBox);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "LogForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
