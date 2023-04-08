@@ -1,5 +1,6 @@
 using System;
 using System.Configuration.Provider;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -51,9 +52,6 @@ namespace AutomaticWebBrowser
                     {
                         Size = config.Log.Window.Size ?? WindowSize.LogFormSize
                     };
-
-                    // 激活窗体
-                    logForm.Activate ();
 
                     // 初始化框架
                     string logPath = Path.Combine (Path.GetFullPath (config.Log.SavePath), $"{DateTime.Now:yyyyMMdd}.log");
@@ -149,7 +147,6 @@ namespace AutomaticWebBrowser
                         log?.Information ($"任务管理器 --> 任务执行完毕");
                     });
                 };
-
                 Application.Run (logForm);
             }
         }

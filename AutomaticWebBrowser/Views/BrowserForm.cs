@@ -155,7 +155,14 @@ namespace AutomaticWebBrowser.Views
                     {
                         foreach (Job job in action.Jobs)
                         {
-                            if (!JobCommand.CreateCommand (this, node, job, this.Log).Execute ())
+                            if (JobCommand.CreateCommand (this, node, job, this.Log).Execute ())
+                            {
+                                this.AutomaticWebBrowser.Invoke (new System.Action (() =>
+                                {
+                                    this.Log.Information ($"自动化任务 --> 在节点 {node.NodeName} 执行动作 {action.Name} 的作业 {job.Name} 成功");
+                                }));
+                            }
+                            else
                             {
                                 this.AutomaticWebBrowser.Invoke (new System.Action (() =>
                                 {
