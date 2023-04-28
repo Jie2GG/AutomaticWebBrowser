@@ -4,7 +4,7 @@
         // 日志输出格式
         "format": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
         // 日志等级
-        "level": "Verbose",
+        "level": "Debug",
         // 日志持久化路径
         "save-path": "./logs"
     },
@@ -12,93 +12,49 @@
     "browser": {
         // 窗体配置
         "window": {
-            // 窗体状态 (参考: System.Windows.Forms.FormWindowState 枚举)
+            // 窗体状态 (参考: System.Windows.WindowState 枚举)
             "state": "Normal",
-            // 窗体起点 (参考: System.Drawing.Point 结构)
-            "location": {
-                "x": 0,
-                "y": 0
-            },
-            // 窗体大小 (参考: System.Drawing.Size 结构)
-            "size": {
-                "width": 1200,
-                "height": 900
-            },
-            // 窗体位置 (参考: System.Windows.Forms.FormStartPosition 枚举)
-            "position": "CenterScreen"
+            // 窗体位置 (参考: System.Windows.WindowStartupLocation 枚举)
+            "startup-location": "CenterScreen",
+            "width": 1200,
+            "height": 900
         },
-        // 浏览器缓存路径 (相对路径或绝对路径)
-        "profile": "./profile",
-        // 浏览器默认语言
-        "language": "zh-CN,zh;q=0.9,en;q=0.8",
-        // 浏览器用户标识
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0",
-        // 启用浏览器字体渲染
-        "enable-font-rendering": true,
-        // 启用浏览器不被追踪
-        "enable-donottrackheader": true,
+        // 数据路径
+        "data-path": "./data",
+        // 启用跟踪防护功能
+        "enable-tracking-prevention": true,
+        // 启用 javascript
+        "enable-javascript": true,
+        // 启用密码自动保存
+        "enable-password-autosave": false,
+        // 启用开发者工具
+        "enable-dev-tools": true,
         // 启用上下文菜单
-        "enable-context-menu": true,
-        // 应用到子窗体
-        "apply-to-child-window": true
+        "enable-context-menu": true
     },
+    // 任务配置
     "task": [
         {
-            "url": "https://www.baidu.com/",
-            // 任务包含的所有操作
-            "actions": [
+            "url": "https://www.fulimama.com/keyboardtest/",
+            "url-reload-count": 1,
+            "url-reload-delay": 1000,
+            "auto-close": false,
+            "jobs": [
                 {
-                    // 开始条件
                     "condition": {
                         "type": "Ready"
                     },
-                    // 操作元素
                     "element": {
-                        "search-mode": "GetElementById",
-                        "search-value": "kw"
+                        "type": "GetElementById",
+                        "value": "anjian_test"
                     },
-                    // 作业列表
-                    "jobs": [
-                        // 输入字符
+                    "actions": [
                         {
-                            "type": "InputKeypressValue",
-                            "value": "123"
-                        },
-                        // 按下回车
-                        {
-                            "type": "KeyPress",
-                            "value": { "key": "Enter" }
-                        }
-                    ]
-                },
-                {
-                    "condition": {
-                        "type": "Delay",
-                        "value": 5000
-                    },
-                    "element": {
-                        "search-mode": "EvaluateXPath",
-                        "search-value": "//div[@id=\"content_left\"]/div[@id]//h3/a"
-                    },
-                    "jobs": [
-                        {
-                            "type": "ExecuteSubTask",
+                            "type": "KeyDown",
                             "value": {
-
-                                "actions": [
-                                    {
-                                        "condition": {
-                                            "type": "Ready"
-                                        },
-                                        "element": {
-                                            "search-mode": "GetElementById",
-                                            "search-value": ""
-                                        },
-                                        "jobs": [
-
-                                        ]
-                                    }
-                                ]
+                                "code": "Digit0",
+                                "count": 5,
+                                "delay": 1000
                             }
                         }
                     ]

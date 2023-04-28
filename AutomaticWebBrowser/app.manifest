@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
-	<compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
-		<System.Windows.Forms.ApplicationConfigurationSection>
-			<add key="DpiAwareness" value="PerMonitorV2" />
-			<add key="EnableWindowsFormsHighDpiAutoResizing" value="false" />
-		</System.Windows.Forms.ApplicationConfigurationSection>
-	</compatibility>
-</assembly>
