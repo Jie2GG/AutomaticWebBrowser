@@ -35,7 +35,7 @@
     // 任务配置
     "task": [
         {
-            "url": "https://www.fulimama.com/keyboardtest/",
+            "url": "https://cps-check.com/cn/mouse-buttons-test",
             "url-reload-count": 1,
             "url-reload-delay": 1000,
             "auto-close": false,
@@ -46,13 +46,13 @@
                     },
                     "element": {
                         "type": "GetElementById",
-                        "value": "anjian_test"
+                        "value": "mouse-container"
                     },
                     "actions": [
                         {
-                            "type": "KeyDown",
+                            "type": "MouseDown",
                             "value": {
-                                "code": "Digit0",
+                                "buttons": "Left",
                                 "count": 5,
                                 "delay": 1000
                             }

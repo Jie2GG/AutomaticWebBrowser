@@ -15,6 +15,9 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands.Keyboard
     abstract class KeyboardActionCommand : ActionCommand
     {
         #region --属性--
+        /// <summary>
+        /// 事件类型参数
+        /// </summary>
         protected abstract string TypeArg { get; }
         #endregion
 
@@ -49,8 +52,9 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands.Keyboard
                         if (keyAttribute != null)
                         {
                             string script = $@"
-function {this.VariableName}_ActionCommand_Keyboard_{this.TypeArg}_Func () {{
+async function {this.VariableName}_ActionCommand_Keyboard_{this.TypeArg}_Func () {{
     const log = chrome.webview.hostObjects.log;
+    const wait = chrome.webview.hostObjects.wait;
     const sleep = function (seconds) {{
         return new Promise(resolve => {{
             setTimeout(resolve, seconds);
@@ -69,27 +73,29 @@ function {this.VariableName}_ActionCommand_Keyboard_{this.TypeArg}_Func () {{
         keyCode: {(int)keyAttribute.KeyCode},
         repeat: false
     }});
-    let aw_count = 0;
-    {this.VariableName}.forEach(async element => {{
-        for (let i = 0; i < {keyboard.Count}; i++) {{
+
+    for (let i = 0; i <= {this.VariableName}.length; i++) {{
+        let element = {this.VariableName}[i];
+        for (let j = 1; j <= {keyboard.Count}; j++) {{
             try {{
                 element.dispatchEvent (aw_event);
-                aw_count = aw_count + 1;
-                if (aw_count === 1) {{
+                if (j === 1) {{
                     aw_event.repeat = true;
                 }}
-                log.Info (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令成功, 次数: ${{aw_count}}`);
+                log.Info (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令成功, 次数: ${{j}}`);
             }} catch (e) {{
                 log.Error (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
             }} finally {{
                 await sleep ({keyboard.Delay});
             }}
         }}
-    }});
+    }}
+    wait.Set ();
 }}
 {this.VariableName}_ActionCommand_Keyboard_{this.TypeArg}_Func ();
 ".Trim ();
                             this.WebView.SafeExecuteScriptAsync (script).Wait ();
+                            this.WebView.WaitHostScript.WaitOne ();
                         }
                         else
                         {

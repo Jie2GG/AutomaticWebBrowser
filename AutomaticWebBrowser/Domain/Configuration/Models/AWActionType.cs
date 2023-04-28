@@ -12,18 +12,42 @@
         /// <summary>
         /// 设置元素 value 属性
         /// </summary>
-        SetValue,
+        SetValue = 1,
         /// <summary>
         /// 设置元素的 value 属性, 并触发元素的 input 事件
         /// </summary>
-        InputValue,
+        InputValue = 2,
         /// <summary>
         /// 调用元素的 click 函数
         /// </summary>
-        Click,
+        Click = 3,
         /// <summary>
         /// 触发元素 keydown 事件
         /// </summary>
-        KeyDown,
+        KeyDown = 4,
+        /// <summary>
+        /// 触发元素 keyup 事件
+        /// </summary>
+        KeyUp = 5,
+        /// <summary>
+        /// 触发元素 keypress 事件
+        /// </summary>
+        KeyPress = 6,
+        /// <summary>
+        /// 触发元素 mousedown 事件
+        /// </summary>
+        MouseDown = 7,
+        /// <summary>
+        /// 触发 mouseup 事件
+        /// </summary>
+        MouseUp = 8,
+        /// <summary>
+        /// 触发 click 事件
+        /// </summary>
+        MouseClick = 9,
+        /// <summary>
+        /// 触发 dbclick 事件
+        /// </summary>
+        MouseDbClick = 10,
     }
 }

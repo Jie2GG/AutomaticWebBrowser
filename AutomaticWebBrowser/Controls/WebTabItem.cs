@@ -29,6 +29,8 @@ namespace AutomaticWebBrowser.Controls
         public Logger Log { get; }
 
         public WebView2 WebView { get; }
+
+        AsyncWaitHostScript IWebView.WaitHostScript => new ();
         #endregion
 
         #region --构造函数--
@@ -198,6 +200,10 @@ namespace AutomaticWebBrowser.Controls
             // 注册 JavaSciprt 回调对象
             this.WebView.CoreWebView2.AddHostObjectToScript ("log", new LoggerHostScript (this.Log));
             this.Log.Information ($"浏览器 --> 注入 log 宿主对象");
+
+            // 注册 JavaScript 异步等待对象
+            this.WebView.CoreWebView2.AddHostObjectToScript ("wait", ((IWebView)this).WaitHostScript);
+            this.Log.Information ($"浏览器 --> 注入 wait 宿主对象");
         }
 
         // 浏览器导航完成

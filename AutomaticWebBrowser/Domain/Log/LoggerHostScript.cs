@@ -4,6 +4,9 @@ using Serilog.Core;
 
 namespace AutomaticWebBrowser.Domain.Log
 {
+    /// <summary>
+    /// 日志宿主脚本对象
+    /// </summary>
     [ComVisible (true)]
     public class LoggerHostScript
     {
@@ -12,6 +15,10 @@ namespace AutomaticWebBrowser.Domain.Log
         #endregion
 
         #region --构造函数--
+        /// <summary>
+        /// 初始化 <see cref="LoggerHostScript"/> 类的新实例
+        /// </summary>
+        /// <param name="logger"></param>
         public LoggerHostScript (Logger logger)
         {
             this.logger = logger;
