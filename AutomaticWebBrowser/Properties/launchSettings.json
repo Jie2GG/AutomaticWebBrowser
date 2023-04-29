@@ -1,9 +1,8 @@
 {
-    "profiles": {
-        "AutomaticWebBrowser": {
-            "commandName": "Project",
-            "commandLineArgs": "-config config.json",
-            "nativeDebugging": false
-        }
+  "profiles": {
+    "AutomaticWebBrowser": {
+      "commandName": "Project",
+      "commandLineArgs": "-config config.json"
     }
+  }
 }

@@ -1,0 +1,80 @@
+﻿<hc:Window x:Name="mainView"
+           x:Class="AutomaticWebBrowser.Views.MainView"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:local="clr-namespace:AutomaticWebBrowser.Views"
+           xmlns:prism="http://prismlibrary.com/"
+           xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
+           xmlns:viewmodels="clr-namespace:AutomaticWebBrowser.ViewModels"
+           xmlns:hc="https://handyorg.github.io/handycontrol"
+           mc:Ignorable="d"
+           Title="{Binding Title}"
+           Height="450"
+           Width="800"
+           ShowTitle="False"
+           ShowNonClientArea="True"
+           d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+           prism:ViewModelLocator.AutoWireViewModel="True">
+    <!--图标-->
+    <Window.Icon>
+        <DrawingImage>
+            <DrawingImage.Drawing>
+                <GeometryDrawing Geometry="{DynamicResource BrowserGeometry}"
+                                 Brush="{hc:DynamicColor PrimaryTextBrush}" />
+            </DrawingImage.Drawing>
+        </DrawingImage>
+    </Window.Icon>
+
+    <!--非客户区-->
+    <hc:Window.NonClientAreaContent>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <!--左侧菜单-->
+            <Menu Grid.Column="0"
+                  Margin="10 0 0 0">
+                <MenuItem Height="29"
+                          Header="帮助">
+                    <MenuItem Header="Github"
+                              Command="hc:ControlCommands.OpenLink"
+                              CommandParameter="https://github.com/Jie2GG/AutomaticWebBrowser" />
+                    <Separator />
+                    <MenuItem Header="关于" />
+                </MenuItem>
+            </Menu>
+            <!--右侧图标-->
+            <Button Grid.Column="2"
+                    Margin="0 0 6 0"
+                    Foreground="{hc:DynamicColor PrimaryTextBrush}"
+                    Style="{DynamicResource ButtonIcon}"
+                    hc:IconElement.Geometry="{StaticResource LoggerGeometry}"
+                    Command="{Binding ShowLog}">
+
+            </Button>
+        </Grid>
+    </hc:Window.NonClientAreaContent>
+
+    <!--客户区-->
+    <hc:Window.Content>
+        <hc:SimplePanel>
+            <!--浏览器标签-->
+            <hc:TabControl ShowOverflowButton="False"
+                           IsAnimationEnabled="True"
+                           ItemsSource="{Binding BrowserTabs}"
+                           SelectedIndex="{Binding BrowserTabIndex, Mode=TwoWay}" />
+        </hc:SimplePanel>
+    </hc:Window.Content>
+
+    <!--事件绑定-->
+    <behavior:Interaction.Triggers>
+        <behavior:EventTrigger EventName="Loaded">
+            <behavior:InvokeCommandAction Command="{Binding InitializeCommand}"
+                                          CommandParameter="{Binding ElementName=mainView}" />
+        </behavior:EventTrigger>
+    </behavior:Interaction.Triggers>
+</hc:Window>
