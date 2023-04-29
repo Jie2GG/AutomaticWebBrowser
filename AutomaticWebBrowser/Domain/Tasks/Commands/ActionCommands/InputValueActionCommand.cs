@@ -36,7 +36,7 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands
                     string value = this.Action.Value?.Deserialize<string> (Global.DefaultJsonSerializerOptions)!;
 
                     string script = $@"
-function {this.VariableName}_ActionCommand_SetValue_Func () {{
+function {this.VariableName}_ActionCommand_InputValue_Func () {{
     const log = chrome.webview.hostObjects.log;
     let aw_event = new InputEvent('input', {{
         inputType: 'insertText',
@@ -54,7 +54,7 @@ function {this.VariableName}_ActionCommand_SetValue_Func () {{
         }}
     }});
 }}
-{this.VariableName}_ActionCommand_SetValue_Func ();
+{this.VariableName}_ActionCommand_InputValue_Func ();
 ".Trim ();
                     this.WebView.SafeExecuteScriptAsync (script).Wait ();
                 }
