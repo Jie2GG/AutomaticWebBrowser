@@ -28,26 +28,27 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ElementCommands
         {
             string script = $@"
 const {this.Result} = [];
-function {this.Result}_ElementCommand_GetElementById_Func () {{
+function {this.Result}_ElementCommand_{this.Element.Type}_Func () {{
     const log = chrome.webview.hostObjects.log;
     try {{
         let result = this.document.getElementById ('{this.Element.Value}');
         if (result != null && result != undefined) {{
             {this.Result}.push (result);
         }}
-        return {this.Result}.length > 0;
+        return {this.Result}.length;
     }} catch (e) {{
         log.Error (`自动化任务 --> 执行 Element({this.Element.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
         return false;
     }}
 }}
-{this.Result}_ElementCommand_GetElementById_Func ();
+{this.Result}_ElementCommand_{this.Element.Type}_Func ();
 ".Trim ();
 
             // 执行 javascript 代码
             string result = this.WebView.SafeExecuteScriptAsync (script).Result;
-            if ("true".Equals (result))
+            if (int.TryParse (result, out int count) && count > 0)
             {
+                this.Result = count;
                 this.Log.Information ($"自动化任务 --> 执行 Element({this.Element.Type}) 命令成功, 值: {this.Element.Value}");
                 return true;
             }
@@ -57,7 +58,7 @@ function {this.Result}_ElementCommand_GetElementById_Func () {{
             }
 
             return false;
-        } 
+        }
         #endregion
     }
 }

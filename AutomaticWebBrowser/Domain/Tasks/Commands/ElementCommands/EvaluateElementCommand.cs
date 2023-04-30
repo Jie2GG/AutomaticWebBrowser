@@ -28,7 +28,7 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ElementCommands
         {
             string script = $@"
 const {this.Result} = [];
-function {this.Result}_ElementCommand_Evaluate_Func () {{
+function {this.Result}_ElementCommand_{this.Element.Type}_Func () {{
     const log = chrome.webview.hostObjects.log;
     try {{
         let result = this.document.evaluate ('{this.Element.Value}', this.document);
@@ -46,13 +46,14 @@ function {this.Result}_ElementCommand_Evaluate_Func () {{
         return 0;
     }}
 }}
-{this.Result}_ElementCommand_Evaluate_Func ();
+{this.Result}_ElementCommand_{this.Element.Type}_Func ();
 ".Trim ();
 
             // 执行 javascript 代码
             string result = this.WebView.SafeExecuteScriptAsync (script).Result;
             if (int.TryParse (result, out int count) && count > 0)
             {
+                this.Result = count;
                 this.Log.Information ($"自动化任务 --> 执行 Element({this.Element.Type}) 命令成功, 值: {this.Element.Value}, 结果: {count}");
                 return true;
             }

@@ -28,13 +28,22 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ElementCommands
             // 合成 javascript 代码
             string script = $@"
 const {this.Result} = [];
+function {this.Result}_ElementCommand_Default_Func () {{
+    return {this.Result}.length;
+}}
+{this.Result}_ElementCommand_Default_Func ();
 ".Trim ();
 
             // 执行 javascript 代码
-            this.WebView.SafeExecuteScriptAsync (script).Wait ();
-            this.Log.Warning ($"自动化任务 --> 执行 Element(Default) 命令, 原因: 未找到指定类型的 {nameof (ElementCommand)} 或使用了未知的 {nameof (AWElementType)}");
-            return true;
-        } 
+            string result = this.WebView.SafeExecuteScriptAsync (script).Result;
+            if (int.TryParse (result, out int count) && count > 0)
+            {
+                this.Result = count;
+                this.Log.Warning ($"自动化任务 --> 执行 Element(Default) 命令, 原因: 未找到指定类型的 {nameof (ElementCommand)} 或使用了未知的 {nameof (AWElementType)}");
+                return true;
+            }
+            return false;
+        }
         #endregion
     }
 }

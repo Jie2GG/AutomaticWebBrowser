@@ -11,13 +11,18 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ElementCommands
     /// <summary>
     /// 元素查找命令
     /// </summary>
-    abstract class ElementCommand : ICommand<string?>
+    abstract class ElementCommand : ICommand<int>
     {
         #region --属性--
         /// <summary>
         /// 返回值
         /// </summary>
-        public string? Result { get; }
+        public int Result { get; protected set; }
+
+        /// <summary>
+        /// 变量名
+        /// </summary>
+        public string VariableName { get; }
 
         /// <summary>
         /// WebView2
@@ -45,9 +50,9 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ElementCommands
             this.Log = log ?? throw new ArgumentNullException (nameof (log));
             this.Element = element ?? throw new ArgumentNullException (nameof (element));
 
+            this.Result = 0;
             // 创建临时变量
-            this.Result = $@"aw_{Guid.NewGuid ():N}";
-            Debug.WriteLine ($"变量名: {this.Result}");
+            this.VariableName = $@"aw_{Guid.NewGuid ():N}";
         }
         #endregion
 
