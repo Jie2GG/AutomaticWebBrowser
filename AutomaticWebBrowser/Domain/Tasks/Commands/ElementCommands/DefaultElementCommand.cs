@@ -27,11 +27,10 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ElementCommands
         {
             // 合成 javascript 代码
             string script = $@"
-const {this.Result} = [];
-function {this.Result}_ElementCommand_Default_Func () {{
-    return {this.Result}.length;
-}}
-{this.Result}_ElementCommand_Default_Func ();
+const {this.VariableName} = [];
+(function () {{
+    return {this.VariableName}.length;
+}}) ();
 ".Trim ();
 
             // 执行 javascript 代码

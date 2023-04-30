@@ -50,7 +50,7 @@
                     },
                     "actions": [
                         {
-                            "type": "MouseDown",
+                            "type": "MouseClick",
                             "value": {
                                 "buttons": "Left",
                                 "count": 5,

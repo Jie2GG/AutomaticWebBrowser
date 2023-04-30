@@ -28,12 +28,11 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ElementCommands
         {
             // 合成 javascript 代码
             string script = $@"
-const {this.Result} = [];
-function {this.Result}_ElementCommand_{this.Element.Type}_Func () {{
-    {this.Result}.push (this.window);
-    return {this.Result}.length;
-}}
-{this.Result}_ElementCommand_{this.Element.Type}_Func ();
+const {this.VariableName} = [];
+(function () {{
+    {this.VariableName}.push (this.window);
+    return {this.VariableName}.length;
+}}) ();
 ".Trim ();
             // 执行 javascript 代码
             string result = this.WebView.SafeExecuteScriptAsync (script).Result;

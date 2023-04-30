@@ -57,5 +57,9 @@
         /// 调用元素的 pause 函数
         /// </summary>
         Pause = 12,
+        /// <summary>
+        /// 等待元素引发 ended 事件
+        /// </summary>
+        WaitEndedEvent = 13,
     }
 }

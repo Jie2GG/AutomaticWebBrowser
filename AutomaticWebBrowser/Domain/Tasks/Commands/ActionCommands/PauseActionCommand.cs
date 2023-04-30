@@ -8,8 +8,8 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands
     [ActionCommand (AWActionType.Pause)]
     class PauseActionCommand : ActionCommand
     {
-        public PauseActionCommand (IWebView webView, Logger log, AWAction action, string? variableName)
-            : base (webView, log, action, variableName)
+        public PauseActionCommand (IWebView webView, Logger log, AWAction action, string? variableName, int? index) 
+            : base (webView, log, action, variableName, index)
         { }
 
         public override bool Execute ()
@@ -17,18 +17,16 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands
             if (this.VariableName is not null)
             {
                 string script = $@"
-function {this.VariableName}_ActionCommand_Pause_Func () {{
+(function () {{
     const log = chrome.webview.hostObjects.log;
-    {this.VariableName}.forEach(element => {{
-        try {{
-            element.pause ();
-            log.Info (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令成功`);
-        }} catch (e) {{
-            log.Error (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
-        }}
-    }});
-}}
-{this.VariableName}_ActionCommand_Pause_Func ();
+    const element = {this.VariableName}[{this.Index}];
+    try {{
+        element.pause ();
+        log.Info (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令成功`);
+    }} catch (e) {{
+        log.Error (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
+    }}
+}}) ();
 ".Trim ();
                 this.WebView.SafeExecuteScriptAsync (script).Wait ();
 

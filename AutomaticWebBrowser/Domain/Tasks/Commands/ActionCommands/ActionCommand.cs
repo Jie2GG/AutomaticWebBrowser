@@ -32,18 +32,24 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands
         /// 变量名
         /// </summary>
         public string? VariableName { get; }
+
+        /// <summary>
+        /// 索引
+        /// </summary>
+        public int? Index { get; }
         #endregion
 
         #region --构造函数--
         /// <summary>
         /// 初始化 <see cref="ActionCommand"/> 类的新实例
         /// </summary>
-        protected ActionCommand (IWebView webView, Logger log, AWAction action, string? variableName)
+        protected ActionCommand (IWebView webView, Logger log, AWAction action, string? variableName, int? index)
         {
             this.WebView = webView ?? throw new ArgumentNullException (nameof (webView));
             this.Log = log ?? throw new ArgumentNullException (nameof (log));
             this.Action = action ?? throw new ArgumentNullException (nameof (action));
             this.VariableName = variableName;
+            this.Index = index;
         }
         #endregion
 

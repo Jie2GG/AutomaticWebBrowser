@@ -137,26 +137,25 @@ namespace AutomaticWebBrowser.Controls
                         ElementCommand elementCommand = ElementCommandDispatcher.Dispatcher (this, this.Log, job.Element);
                         if (elementCommand.Execute ())
                         {
-                            RunAction (elementCommand.Result, job.Actions);
-                        }
-                        else
-                        {
-                            // TODO: 任务中断
+                            for (int i = 0; i < elementCommand.Result; i++)
+                            {
+                                RunActions (elementCommand.VariableName, i, job.Actions);
+                            }
                         }
                     }
                     else
                     {
-                        RunAction (null, job.Actions);
+                        RunActions (null, null, job.Actions);
                     }
 
                 }
             });
 
-            void RunAction (string? variableName, AWAction[] actions)
+            void RunActions (string? variableName, int? index, AWAction[] actions)
             {
                 foreach (AWAction action in actions)
                 {
-                    ActionCommand actionCommand = ActionCommandDispatcher.Dispatcher (this, this.Log, action, variableName);
+                    ActionCommand actionCommand = ActionCommandDispatcher.Dispatcher (this, this.Log, action, variableName, index);
                     if (!actionCommand.Execute ())
                     {
                         // TODO: 任务中断

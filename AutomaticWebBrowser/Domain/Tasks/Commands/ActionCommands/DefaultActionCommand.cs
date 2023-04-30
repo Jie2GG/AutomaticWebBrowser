@@ -18,8 +18,8 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands
         /// <param name="log"></param>
         /// <param name="action"></param>
         /// <param name="variableName"></param>
-        public DefaultActionCommand (IWebView webView, Logger log, AWAction action, string? variableName)
-            : base (webView, log, action, variableName)
+        public DefaultActionCommand (IWebView webView, Logger log, AWAction action, string? variableName, int? index)
+            : base (webView, log, action, variableName, index)
         { }
         #endregion
 
@@ -29,13 +29,11 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands
             if (this.VariableName is not null)
             {
                 string script = $@"
-function {this.VariableName}_ActionCommand_Default_Func () {{
+(function () {{
     const log = chrome.webview.hostObjects.log;
-    {this.VariableName}.forEach(element => {{
-        log.Warning (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令, 原因: 未找到指定类型的 {nameof (ActionCommand)} 或使用了未知的 {nameof (AWActionType)}`);
-    }});
-}}
-{this.VariableName}_ActionCommand_Default_Func ();
+    const element = {this.VariableName}[{this.Index}];
+    log.Warning (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令, 原因: 未找到指定类型的 {nameof (ActionCommand)} 或使用了未知的 {nameof (AWActionType)}`);
+}}) ();
 ".Trim ();
                 this.WebView.SafeExecuteScriptAsync (script).Wait ();
 
@@ -43,7 +41,7 @@ function {this.VariableName}_ActionCommand_Default_Func () {{
             }
 
             return false;
-        } 
+        }
         #endregion
     }
 }

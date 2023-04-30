@@ -27,25 +27,23 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ElementCommands
         public override bool Execute ()
         {
             string script = $@"
-const {this.Result} = [];
-function {this.Result}_ElementCommand_{this.Element.Type}_Func () {{
+const {this.VariableName} = [];
+(function () {{
     const log = chrome.webview.hostObjects.log;
     try {{
         let result = this.document.getElementsByTagNameNS ('{this.Element.Value}');
         if (result != null && result != undefined) {{
             result.forEach (element => {{
-                {this.Result}.push (result);
+                {this.VariableName}.push (result);
             }})
         }}
-        return {this.Result}.length;
+        return {this.VariableName}.length;
     }} catch (e) {{
         log.Error (`自动化任务 --> 执行 Element({this.Element.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
         return false;
     }}
-}}
-{this.Result}_ElementCommand_{this.Element.Type}_Func ();
+}}) ();
 ".Trim ();
-
             // 执行 javascript 代码
             string result = this.WebView.SafeExecuteScriptAsync (script).Result;
             if (int.TryParse (result, out int count) && count > 0)

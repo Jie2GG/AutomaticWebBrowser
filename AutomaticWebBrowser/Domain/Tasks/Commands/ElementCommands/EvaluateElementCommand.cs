@@ -27,8 +27,8 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ElementCommands
         public override bool Execute ()
         {
             string script = $@"
-const {this.Result} = [];
-function {this.Result}_ElementCommand_{this.Element.Type}_Func () {{
+const {this.VariableName} = [];
+(function () {{
     const log = chrome.webview.hostObjects.log;
     try {{
         let result = this.document.evaluate ('{this.Element.Value}', this.document);
@@ -36,17 +36,16 @@ function {this.Result}_ElementCommand_{this.Element.Type}_Func () {{
             while (true) {{
                 let item = result.iterateNext ();
                 if (item == null) {{
-                    {this.Result}.push (item);
+                    {this.VariableName}.push (item);
                 }}
             }}
         }}
-        return {this.Result}.length;
+        return {this.VariableName}.length;
     }} catch (e) {{
         log.Error (`自动化任务 --> 执行 Element({this.Element.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
         return 0;
     }}
-}}
-{this.Result}_ElementCommand_{this.Element.Type}_Func ();
+}}) ();
 ".Trim ();
 
             // 执行 javascript 代码

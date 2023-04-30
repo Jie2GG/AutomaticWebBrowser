@@ -23,8 +23,8 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands.Keyboard
         /// <param name="log"></param>
         /// <param name="action"></param>
         /// <param name="variableName"></param>
-        public KeyUpActionCommand (IWebView webView, Logger log, AWAction action, string? variableName)
-            : base (webView, log, action, variableName)
+        public KeyUpActionCommand (IWebView webView, Logger log, AWAction action, string? variableName, int? index) 
+            : base (webView, log, action, variableName, index)
         { } 
         #endregion
     }

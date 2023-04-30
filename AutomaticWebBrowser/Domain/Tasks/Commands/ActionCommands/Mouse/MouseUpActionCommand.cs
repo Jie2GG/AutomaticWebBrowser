@@ -24,8 +24,8 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands.Mouse
         /// <param name="log"></param>
         /// <param name="action"></param>
         /// <param name="variableName"></param>
-        public MouseUpActionCommand (IWebView webView, Logger log, AWAction action, string? variableName)
-            : base (webView, log, action, variableName)
+        public MouseUpActionCommand (IWebView webView, Logger log, AWAction action, string? variableName, int? index) 
+            : base (webView, log, action, variableName, index)
         { }
         #endregion
 

@@ -29,8 +29,8 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands.Keyboard
         /// <param name="log"></param>
         /// <param name="action"></param>
         /// <param name="variableName"></param>
-        protected KeyboardActionCommand (IWebView webView, Logger log, AWAction action, string? variableName)
-            : base (webView, log, action, variableName)
+        protected KeyboardActionCommand (IWebView webView, Logger log, AWAction action, string? variableName, int? index)
+            : base (webView, log, action, variableName, index)
         { }
         #endregion
 
@@ -52,7 +52,7 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands.Keyboard
                         if (keyAttribute != null)
                         {
                             string script = $@"
-async function {this.VariableName}_ActionCommand_Keyboard_{this.TypeArg}_Func () {{
+(async function () {{
     const log = chrome.webview.hostObjects.log;
     const wait = chrome.webview.hostObjects.wait;
     const sleep = function (seconds) {{
@@ -73,26 +73,22 @@ async function {this.VariableName}_ActionCommand_Keyboard_{this.TypeArg}_Func ()
         keyCode: {(int)keyAttribute.KeyCode},
         repeat: false
     }});
-
-    for (let i = 0; i <= {this.VariableName}.length; i++) {{
-        let element = {this.VariableName}[i];
-        for (let j = 1; j <= {keyboard.Count}; j++) {{
-            try {{
-                element.dispatchEvent (aw_event);
-                if (j === 1) {{
-                    aw_event.repeat = true;
-                }}
-                log.Info (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令成功, 次数: ${{j}}`);
-            }} catch (e) {{
-                log.Error (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
-            }} finally {{
-                await sleep ({keyboard.Delay});
+    let element = {this.VariableName}[{this.Index}];
+    for (let j = 1; j <= {keyboard.Count}; j++) {{
+        try {{
+            element.dispatchEvent (aw_event);
+            if (j === 1) {{
+                aw_event.repeat = true;
             }}
+            log.Info (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令成功, 次数: ${{j}}`);
+        }} catch (e) {{
+            log.Error (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
+        }} finally {{
+            await sleep ({keyboard.Delay});
         }}
     }}
     wait.Set ();
-}}
-{this.VariableName}_ActionCommand_Keyboard_{this.TypeArg}_Func ();
+}}) ();
 ".Trim ();
                             this.WebView.SafeExecuteScriptAsync (script).Wait ();
                             this.WebView.WaitHostScript.WaitOne ();
