@@ -118,7 +118,7 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands.Mouse
 }}) ();
 ".Trim ();
                         this.WebView.SafeExecuteScriptAsync (script).Wait ();
-                        this.WebView.WaitHostScript.WaitOne ();
+                        this.WebView.WaitHostScript?.WaitOne ();
                         return true;
                     }
                     catch (JsonException e)

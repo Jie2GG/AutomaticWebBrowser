@@ -21,6 +21,11 @@ namespace AutomaticWebBrowser.Domain.Configuration.Models
         public AWCondition? Condition { get; set; } = null;
 
         /// <summary>
+        /// 动作执行内嵌框架
+        /// </summary>
+        public AWIframe? Iframe { get; set; } = null;
+
+        /// <summary>
         /// 动作执行元素
         /// </summary>
         [JsonPropertyName ("element")]

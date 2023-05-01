@@ -22,7 +22,7 @@ namespace AutomaticWebBrowser.Controls
     {
         #region --字段--
         private readonly ConditionSynchronous conditionSynchronous;
-        private AsyncWaitHostScript waitHostScript;
+        private AsyncWaitHostScript? waitHostScript;
         #endregion
 
         #region --属性--
@@ -32,7 +32,7 @@ namespace AutomaticWebBrowser.Controls
 
         public WebView2 WebView { get; }
 
-        AsyncWaitHostScript IWebView.WaitHostScript => this.waitHostScript;
+        AsyncWaitHostScript? IWebView.WaitHostScript => this.waitHostScript;
         #endregion
 
         #region --构造函数--
@@ -142,6 +142,17 @@ namespace AutomaticWebBrowser.Controls
                     if (job.Element != null)
                     {
                         ElementCommand elementCommand = ElementCommandDispatcher.Dispatcher (this, this.Log, job.Element);
+                        if (elementCommand.Execute ())
+                        {
+                            for (int i = 0; i < elementCommand.Result; i++)
+                            {
+                                RunActions (elementCommand.VariableName, i, job.Actions);
+                            }
+                        }
+                    }
+                    else if (job.Iframe != null)
+                    {
+                        ElementCommand elementCommand = ElementCommandDispatcher.Dispatcher (this, this.Log, job.Iframe);
                         if (elementCommand.Execute ())
                         {
                             for (int i = 0; i < elementCommand.Result; i++)

@@ -35,7 +35,7 @@
     // 任务配置
     "task": [
         {
-            "url": "https://cps-check.com/cn/mouse-buttons-test",
+            "url": "https://www.w3school.com.cn/tiy/t.asp?f=eg_html_video",
             "url-reload-count": 1,
             "url-reload-delay": 1000,
             "auto-close": false,
@@ -44,9 +44,13 @@
                     "condition": {
                         "type": "Ready"
                     },
-                    "element": {
-                        "type": "GetElementById",
-                        "value": "mouse-container"
+                    "iframe": {
+                        "type": "",
+                        "value": "",
+                        "element": {
+                            "type": "GetElementById",
+                            "value": "mouse-container"
+                        }
                     },
                     "actions": [
                         {

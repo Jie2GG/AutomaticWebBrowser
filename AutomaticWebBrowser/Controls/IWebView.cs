@@ -9,7 +9,7 @@ namespace AutomaticWebBrowser.Controls
     /// </summary>
     interface IWebView
     {
-        AsyncWaitHostScript WaitHostScript { get; }
+        AsyncWaitHostScript? WaitHostScript { get; }
 
         /// <summary>
         /// 导航到指定地址 (该方法是线程安全的)
