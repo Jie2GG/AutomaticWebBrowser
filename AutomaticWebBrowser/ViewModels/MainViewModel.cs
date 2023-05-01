@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -79,7 +81,7 @@ namespace AutomaticWebBrowser.ViewModels
         #endregion
 
         #region --命令--
-        public ICommand InitializeCommand => new DelegateCommand<HandyControl.Controls.Window> (async (window) =>
+        public ICommand InitializeCommand => new DelegateCommand<HandyControl.Controls.Window> ((window) =>
         {
             if (this.Config != null && this.LoggerService?.Logger != null)
             {
@@ -101,10 +103,10 @@ namespace AutomaticWebBrowser.ViewModels
                 }
                 this.LoggerService?.Logger.Information ($"初始化 --> 窗体大小: [{window.Width}, {window.Height}]");
 
-                await this.StartTask (window.Dispatcher);
+                // 开始任务
+                this.StartTask ();
             }
         });
-
 
         public static ICommand ShowLog => new DelegateCommand (() =>
         {
@@ -113,14 +115,13 @@ namespace AutomaticWebBrowser.ViewModels
         #endregion
 
         #region --私有方法--
-        private async Task StartTask (Dispatcher dispatcher)
+        private async void StartTask ()
         {
             this.LoggerService!.Logger!.Information ($"自动化任务 --> 加载任务清单, 数量: {this.Config!.Tasks.Length}");
-
             foreach (AWTask task in this.Config.Tasks)
             {
                 // 创建标签页
-                WebTabItem webTabItem = dispatcher.Invoke<WebTabItem> (() => new (this.Config!, this.LoggerService!.Logger!));
+                WebTabItem webTabItem = new (this.Config!, this.LoggerService!.Logger!);
                 this.BrowserTabs.Add (webTabItem);
 
                 // 初始化浏览器
@@ -132,16 +133,14 @@ namespace AutomaticWebBrowser.ViewModels
                 // 关闭标签页
                 if (task.AutoClose)
                 {
-                    dispatcher.Invoke (() => this.BrowserTabs.Remove (webTabItem));
+                    this.BrowserTabs.Remove (webTabItem);
                 }
 
-                await Task.Delay (1000);
+                Thread.Sleep (1000);
             }
 
             this.LoggerService!.Logger!.Information ($"自动化任务 --> 任务执行完毕");
         }
         #endregion
-
-
     }
 }

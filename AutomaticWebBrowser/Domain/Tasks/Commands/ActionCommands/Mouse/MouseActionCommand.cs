@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System;
+using System.Reflection;
 using System.Text.Json;
 
 using AutomaticWebBrowser.Controls;
@@ -6,6 +8,7 @@ using AutomaticWebBrowser.Domain.Configuration.Attributes;
 using AutomaticWebBrowser.Domain.Configuration.Models;
 
 using Serilog.Core;
+using System.Windows;
 
 namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands.Mouse
 {
@@ -98,7 +101,6 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands.Mouse
         button: {this.GetButton (mouse.Buttons)},
         buttons: {this.GetButtons (mouse.Buttons)}
     }});
-        
     for (let j = 1; j <= {mouse.Count}; j++) {{
         try {{
             element.dispatchEvent (aw_event);
@@ -106,10 +108,10 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands.Mouse
                 aw_event.repeat = true;
             }}
             log.Info (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令成功, 次数: ${{j}}`);
+            await sleep ({mouse.Delay});
         }} catch (e) {{
             log.Error (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
-        }} finally {{
-            await sleep ({mouse.Delay});
+            break;
         }}
     }}
     wait.Set ();
@@ -117,6 +119,7 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands.Mouse
 ".Trim ();
                         this.WebView.SafeExecuteScriptAsync (script).Wait ();
                         this.WebView.WaitHostScript.WaitOne ();
+                        return true;
                     }
                     catch (JsonException e)
                     {

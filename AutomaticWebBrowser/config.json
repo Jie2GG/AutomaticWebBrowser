@@ -16,8 +16,8 @@
             "state": "Normal",
             // 窗体位置 (参考: System.Windows.WindowStartupLocation 枚举)
             "startup-location": "CenterScreen",
-            "width": 1200,
-            "height": 900
+            "width": 800,
+            "height": 500
         },
         // 数据路径
         "data-path": "./data",
@@ -50,11 +50,15 @@
                     },
                     "actions": [
                         {
-                            "type": "MouseClick",
+                            "type": "MouseDown",
                             "value": {
-                                "buttons": "Left",
-                                "count": 5,
-                                "delay": 1000
+                                "buttons": "Left"
+                            }
+                        },
+                        {
+                            "type": "MouseUp",
+                            "value": {
+                                "buttons": "Left"
                             }
                         }
                     ]

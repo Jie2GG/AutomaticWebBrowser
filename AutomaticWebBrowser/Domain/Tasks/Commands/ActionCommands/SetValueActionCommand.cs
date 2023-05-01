@@ -48,9 +48,8 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands
 }}) ();
 ".Trim ();
                     this.WebView.SafeExecuteScriptAsync (script).Wait ();
+                    return true;
                 }
-
-                return true;
             }
 
             return false;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -21,6 +22,7 @@ namespace AutomaticWebBrowser.Controls
     {
         #region --字段--
         private readonly ConditionSynchronous conditionSynchronous;
+        private AsyncWaitHostScript waitHostScript;
         #endregion
 
         #region --属性--
@@ -30,7 +32,7 @@ namespace AutomaticWebBrowser.Controls
 
         public WebView2 WebView { get; }
 
-        AsyncWaitHostScript IWebView.WaitHostScript => new ();
+        AsyncWaitHostScript IWebView.WaitHostScript => this.waitHostScript;
         #endregion
 
         #region --构造函数--
@@ -102,10 +104,13 @@ namespace AutomaticWebBrowser.Controls
             }
         }
 
-        public Task RunTask (AWTask task)
+        public async Task RunTask (AWTask task)
         {
-            return Task.Factory.StartNew (() =>
+            await Task.Factory.StartNew (() =>
             {
+                // 导航到指定 URL
+                ((IWebView)this).SafeNavigate (task.Url);
+
                 #region 任务作业预处理
                 for (int i = 0; i < task.Jobs.Length; i++)
                 {
@@ -117,8 +122,10 @@ namespace AutomaticWebBrowser.Controls
                 this.Log.Information ($"自动化任务 --> 处理作业列表, 数量: {task.Jobs.Length}");
                 #endregion
 
-                // 导航到指定 URL
-                ((IWebView)this).SafeNavigate (task.Url);
+                // 注册 JavaScript 异步等待对象
+                this.waitHostScript = new AsyncWaitHostScript ();
+                ((IWebView)this).SafeAddHostObjectToScript ("wait", this.waitHostScript);
+                this.Log.Information ($"浏览器 --> 注入 wait 宿主对象");
 
                 // 开始执行作业
                 foreach (AWJob job in task.Jobs)
@@ -147,7 +154,6 @@ namespace AutomaticWebBrowser.Controls
                     {
                         RunActions (null, null, job.Actions);
                     }
-
                 }
             });
 
@@ -172,9 +178,14 @@ namespace AutomaticWebBrowser.Controls
             this.WebView.Dispatcher.Invoke (() => this.WebView.CoreWebView2?.Navigate (url));
         }
 
-        async Task<string> IWebView.SafeExecuteScriptAsync (string javaScript)
+        Task<string> IWebView.SafeExecuteScriptAsync (string javaScript)
         {
-            return await this.WebView.Dispatcher.Invoke (() => this.WebView.CoreWebView2.ExecuteScriptAsync (javaScript));
+            return this.WebView.Dispatcher.Invoke (() => this.WebView.CoreWebView2.ExecuteScriptAsync (javaScript));
+        }
+
+        void IWebView.SafeAddHostObjectToScript (string name, object rawObject)
+        {
+            this.WebView.Dispatcher.Invoke (() => this.WebView.CoreWebView2.AddHostObjectToScript (name, rawObject));
         }
         #endregion
 
@@ -199,10 +210,6 @@ namespace AutomaticWebBrowser.Controls
             // 注册 JavaSciprt 回调对象
             this.WebView.CoreWebView2.AddHostObjectToScript ("log", new LoggerHostScript (this.Log));
             this.Log.Information ($"浏览器 --> 注入 log 宿主对象");
-
-            // 注册 JavaScript 异步等待对象
-            this.WebView.CoreWebView2.AddHostObjectToScript ("wait", ((IWebView)this).WaitHostScript);
-            this.Log.Information ($"浏览器 --> 注入 wait 宿主对象");
         }
 
         // 浏览器导航完成

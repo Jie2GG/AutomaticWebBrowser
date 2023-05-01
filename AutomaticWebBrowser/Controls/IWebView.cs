@@ -23,5 +23,12 @@ namespace AutomaticWebBrowser.Controls
         /// <param name="javaScript"></param>
         /// <returns></returns>
         Task<string> SafeExecuteScriptAsync (string javaScript);
+
+        /// <summary>
+        /// 将 Javasscript 对象注入到浏览器 (该方法是线程安全的)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="rawObject"></param>
+        void SafeAddHostObjectToScript (string name, object rawObject);
     }
 }
