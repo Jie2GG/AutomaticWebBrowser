@@ -34,7 +34,7 @@ namespace AutomaticWebBrowser.Commons
         }
 
         /// <summary>
-        /// 设置异步等待结束
+        /// 设置等待为有信号状态
         /// </summary>
         public void Set ()
         {

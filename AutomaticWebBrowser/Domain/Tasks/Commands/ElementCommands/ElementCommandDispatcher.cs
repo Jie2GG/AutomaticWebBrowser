@@ -33,6 +33,18 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ElementCommands
             }
             return new DefaultElementCommand (webView, log, element);
         }
+
+        public static ElementCommand Dispatcher (IWebView webView, Logger log, AWElement element, string? variableName)
+        {
+            foreach (Type type in types)
+            {
+                if (type.GetCustomAttribute<ElementCommandAttribute> ()?.ElementType == element.Type)
+                {
+                    return (ElementCommand)(Activator.CreateInstance (type, new object?[] { webView, log, element, variableName }) ?? new DefaultElementCommand (webView, log, element, variableName));
+                }
+            }
+            return new DefaultElementCommand (webView, log, element, variableName);
+        }
         #endregion
     }
 }

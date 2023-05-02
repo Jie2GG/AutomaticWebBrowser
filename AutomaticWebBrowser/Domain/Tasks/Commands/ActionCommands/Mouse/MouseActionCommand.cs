@@ -1,13 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Diagnostics;
+using System;
 using System.Reflection;
 using System.Text.Json;
-using System.Windows.Input;
 
 using AutomaticWebBrowser.Controls;
 using AutomaticWebBrowser.Domain.Configuration.Attributes;
 using AutomaticWebBrowser.Domain.Configuration.Models;
 
 using Serilog.Core;
+using System.Windows;
 
 namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands.Mouse
 {
@@ -31,8 +32,8 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands.Mouse
         /// <param name="log"></param>
         /// <param name="action"></param>
         /// <param name="variableName"></param>
-        protected MouseActionCommand (IWebView webView, Logger log, AWAction action, string? variableName)
-            : base (webView, log, action, variableName)
+        protected MouseActionCommand (IWebView webView, Logger log, AWAction action, string? variableName, int? index)
+            : base (webView, log, action, variableName, index)
         { }
         #endregion
 
@@ -48,9 +49,8 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands.Mouse
                         // 获取鼠标事件参数
                         AWMouse mouse = this.Action.Value?.Deserialize<AWMouse> ()!;
 
-
                         string script = $@"
-async function {this.VariableName}_ActionCommand_Mouse_{this.TypeArg}_Func () {{
+(async function () {{
     const log = chrome.webview.hostObjects.log;
     const wait = chrome.webview.hostObjects.wait;
     const sleep = function (seconds) {{
@@ -85,44 +85,41 @@ async function {this.VariableName}_ActionCommand_Mouse_{this.TypeArg}_Func () {{
         }}
     }}
 
-    for (let i = 0; i <= {this.VariableName}.length; i++) {{
-        let element = {this.VariableName}[i];
-        let aw_event = new MouseEvent ('{this.TypeArg}', {{
-            view: this.window,
-            bubbles: true,
-            cancelable: true,
-            ctrlKey: {mouse.CtrlKey.ToString ().ToLower ()},
-            shiftKey: {mouse.ShiftKey.ToString ().ToLower ()},
-            altKey: {mouse.AltKey.ToString ().ToLower ()},
-            metaKey: {mouse.MetaKey.ToString ().ToLower ()},
-            screenX: this.window.screenX + getX (element),
-            screenY: this.window.screenY + getY (element),
-            clientX: getX (element),
-            clientY: getY (element),
-            button: {this.GetButton (mouse.Buttons)},
-            buttons: {this.GetButtons (mouse.Buttons)}
-        }});
-        console.log(aw_event);
-        for (let j = 1; j <= {mouse.Count}; j++) {{
-            try {{
-                element.dispatchEvent (aw_event);
-                if (j === 1) {{
-                    aw_event.repeat = true;
-                }}
-                log.Info (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令成功, 次数: ${{j}}`);
-            }} catch (e) {{
-                log.Error (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
-            }} finally {{
-                await sleep ({mouse.Delay});
+    let element = {this.VariableName}[{this.Index}];
+    let aw_event = new MouseEvent ('{this.TypeArg}', {{
+        view: this.window,
+        bubbles: true,
+        cancelable: true,
+        ctrlKey: {mouse.CtrlKey.ToString ().ToLower ()},
+        shiftKey: {mouse.ShiftKey.ToString ().ToLower ()},
+        altKey: {mouse.AltKey.ToString ().ToLower ()},
+        metaKey: {mouse.MetaKey.ToString ().ToLower ()},
+        screenX: this.window.screenX + getX (element),
+        screenY: this.window.screenY + getY (element),
+        clientX: getX (element),
+        clientY: getY (element),
+        button: {this.GetButton (mouse.Buttons)},
+        buttons: {this.GetButtons (mouse.Buttons)}
+    }});
+    for (let j = 1; j <= {mouse.Count}; j++) {{
+        try {{
+            element.dispatchEvent (aw_event);
+            if (j === 1) {{
+                aw_event.repeat = true;
             }}
+            log.Info (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令成功, 次数: ${{j}}`);
+            await sleep ({mouse.Delay});
+        }} catch (e) {{
+            log.Error (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
+            break;
         }}
     }}
     wait.Set ();
-}}
-{this.VariableName}_ActionCommand_Mouse_{this.TypeArg}_Func ();
+}}) ();
 ".Trim ();
                         this.WebView.SafeExecuteScriptAsync (script).Wait ();
-                        this.WebView.WaitHostScript.WaitOne ();
+                        this.WebView.WaitHostScript?.WaitOne ();
+                        return true;
                     }
                     catch (JsonException e)
                     {

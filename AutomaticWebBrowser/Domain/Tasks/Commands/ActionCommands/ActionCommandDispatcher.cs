@@ -22,17 +22,17 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands
         #endregion
 
         #region --公开方法--
-        public static ActionCommand Dispatcher (IWebView webView, Logger log, AWAction action, string? variableName)
+        public static ActionCommand Dispatcher (IWebView webView, Logger log, AWAction action, string? variableName, int? index)
         {
             foreach (Type type in types)
             {
                 if (type.GetCustomAttribute<ActionCommandAttribute> ()?.ActionType == action.Type)
                 {
-                    return (ActionCommand)(Activator.CreateInstance (type, new object?[] { webView, log, action, variableName }) ?? new DefaultActionCommand (webView, log, action, variableName));
+                    return (ActionCommand)(Activator.CreateInstance (type, new object?[] { webView, log, action, variableName, index }) ?? new DefaultActionCommand (webView, log, action, variableName, index));
                 }
             }
 
-            return new DefaultActionCommand (webView, log, action, variableName);
+            return new DefaultActionCommand (webView, log, action, variableName, index);
         }
         #endregion
     }

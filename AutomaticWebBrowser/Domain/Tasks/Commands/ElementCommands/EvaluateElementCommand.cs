@@ -15,20 +15,28 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ElementCommands
         /// <summary>
         /// 初始化 <see cref="EvaluateElementCommand"/> 类的新实例
         /// </summary>
-        /// <param name="webView"></param>
-        /// <param name="log"></param>
-        /// <param name="element"></param>
         public EvaluateElementCommand (IWebView webView, Logger log, AWElement element)
             : base (webView, log, element)
+        { }
+
+        /// <summary>
+        /// 初始化 <see cref="EvaluateElementCommand"/> 类的新实例
+        /// </summary>
+        public EvaluateElementCommand (IWebView webView, Logger log, AWElement element, string? iframeVariableName)
+            : base (webView, log, element, iframeVariableName)
         { }
         #endregion
 
         #region --公开方法--
         public override bool Execute ()
         {
-            string script = $@"
-const {this.Result} = [];
-function {this.Result}_ElementCommand_Evaluate_Func () {{
+            string script;
+
+            if (this.IframeVariableName is null)
+            {
+                script = $@"
+const {this.ResultVariableName} = [];
+(function () {{
     const log = chrome.webview.hostObjects.log;
     try {{
         let result = this.document.evaluate ('{this.Element.Value}', this.document);
@@ -36,23 +44,54 @@ function {this.Result}_ElementCommand_Evaluate_Func () {{
             while (true) {{
                 let item = result.iterateNext ();
                 if (item == null) {{
-                    {this.Result}.push (item);
+                    {this.ResultVariableName}.push (item);
                 }}
             }}
         }}
-        return {this.Result}.length;
+        return {this.ResultVariableName}.length;
     }} catch (e) {{
         log.Error (`自动化任务 --> 执行 Element({this.Element.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
         return 0;
     }}
-}}
-{this.Result}_ElementCommand_Evaluate_Func ();
+}}) ();
 ".Trim ();
+            }
+            else
+            {
+                script = $@"
+const {this.ResultVariableName} = [];
+(function () {{
+    const log = chrome.webview.hostObjects.log;
+    try {{
+        for (let i = 0; i < {this.IframeVariableName}.length; i++) {{
+            let iframe_window = {this.IframeVariableName}[i].contentWindow;
+            if (iframe_window != null || iframe_window != undefined){{
+                let result = iframe_window.document.evaluate ('{this.Element.Value}', iframe_window.document);
+                if (result != null && result != undefined) {{
+                    while (true) {{
+                        let item = result.iterateNext ();
+                        if (item == null) {{
+                            break;
+                        }}
+                        {this.ResultVariableName}.push (item);
+                    }}
+                }}  
+            }}
+        }}
+        return {this.ResultVariableName}.length;
+    }} catch (e) {{
+        log.Error (`自动化任务 --> 执行 Element({this.Element.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
+        return 0;
+    }}
+}}) ();
+".Trim ();
+            }
 
             // 执行 javascript 代码
             string result = this.WebView.SafeExecuteScriptAsync (script).Result;
             if (int.TryParse (result, out int count) && count > 0)
             {
+                this.Result = count;
                 this.Log.Information ($"自动化任务 --> 执行 Element({this.Element.Type}) 命令成功, 值: {this.Element.Value}, 结果: {count}");
                 return true;
             }
@@ -62,7 +101,7 @@ function {this.Result}_ElementCommand_Evaluate_Func () {{
             }
 
             return false;
-        } 
+        }
         #endregion
     }
 }

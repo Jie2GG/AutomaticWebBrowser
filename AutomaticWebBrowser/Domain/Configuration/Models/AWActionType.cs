@@ -49,5 +49,17 @@
         /// 触发 dbclick 事件
         /// </summary>
         MouseDbClick = 10,
+        /// <summary>
+        /// 调用元素的 play 函数
+        /// </summary>
+        Play = 11,
+        /// <summary>
+        /// 调用元素的 pause 函数
+        /// </summary>
+        Pause = 12,
+        /// <summary>
+        /// 等待元素引发 ended 事件
+        /// </summary>
+        WaitEndedEvent = 13,
     }
 }

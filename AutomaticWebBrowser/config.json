@@ -16,8 +16,8 @@
             "state": "Normal",
             // 窗体位置 (参考: System.Windows.WindowStartupLocation 枚举)
             "startup-location": "CenterScreen",
-            "width": 1200,
-            "height": 900
+            "width": 800,
+            "height": 500
         },
         // 数据路径
         "data-path": "./data",
@@ -35,7 +35,7 @@
     // 任务配置
     "task": [
         {
-            "url": "https://cps-check.com/cn/mouse-buttons-test",
+            "url": "https://www.w3school.com.cn/tiy/t.asp?f=eg_html_video",
             "url-reload-count": 1,
             "url-reload-delay": 1000,
             "auto-close": false,
@@ -44,18 +44,20 @@
                     "condition": {
                         "type": "Ready"
                     },
-                    "element": {
+                    "iframe": {
                         "type": "GetElementById",
-                        "value": "mouse-container"
+                        "value": "iframeResult",
+                        "element": {
+                            "type": "Evaluate",
+                            "value": "/html/body/video"
+                        }
                     },
                     "actions": [
                         {
-                            "type": "MouseDown",
-                            "value": {
-                                "buttons": "Left",
-                                "count": 5,
-                                "delay": 1000
-                            }
+                            "type": "Play"
+                        },
+                        {
+                            "type": "WaitEndedEvent"
                         }
                     ]
                 }

@@ -21,8 +21,8 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands
         /// <param name="log"></param>
         /// <param name="action"></param>
         /// <param name="variableName"></param>
-        public SetValueActionCommand (IWebView webView, Logger log, AWAction action, string? variableName)
-            : base (webView, log, action, variableName)
+        public SetValueActionCommand (IWebView webView, Logger log, AWAction action, string? variableName, int? index) 
+            : base (webView, log, action, variableName, index)
         { }
         #endregion
 
@@ -36,23 +36,20 @@ namespace AutomaticWebBrowser.Domain.Tasks.Commands.ActionCommands
                     string value = this.Action.Value?.Deserialize<string> (Global.DefaultJsonSerializerOptions)!;
 
                     string script = $@"
-function {this.VariableName}_ActionCommand_SetValue_Func () {{
+(function () {{
     const log = chrome.webview.hostObjects.log;
-    {this.VariableName}.forEach(element => {{
-        try {{
-            element.value = '{value}';
-            log.Info (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令成功, 值: {value}`);
-        }} catch (e) {{
-            log.Error (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
-        }}
-    }});
-}}
-{this.VariableName}_ActionCommand_SetValue_Func ();
+    const element = {this.VariableName}[{this.Index}];
+    try {{
+        element.value = '{value}';
+        log.Info (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令成功, 值: {value}`);
+    }} catch (e) {{
+        log.Error (`自动化任务 --> ${{element.nodeName == undefined ? ""WINDOW"" : element.nodeName}} 执行 Action({this.Action.Type}) 命令失败, 原因: JavaScript 函数执行发生异常, 异常信息: ${{e.message}}`);
+    }}
+}}) ();
 ".Trim ();
                     this.WebView.SafeExecuteScriptAsync (script).Wait ();
+                    return true;
                 }
-
-                return true;
             }
 
             return false;
