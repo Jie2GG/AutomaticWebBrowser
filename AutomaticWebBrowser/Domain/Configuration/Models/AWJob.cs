@@ -23,6 +23,7 @@ namespace AutomaticWebBrowser.Domain.Configuration.Models
         /// <summary>
         /// 动作执行内嵌框架
         /// </summary>
+        [JsonPropertyName ("iframe")]
         public AWIframe? Iframe { get; set; } = null;
 
         /// <summary>

@@ -138,26 +138,31 @@ namespace AutomaticWebBrowser.Controls
                         this.conditionSynchronous.WaitOneEx ();
                     }
 
-                    // 处理作业执行元素
                     if (job.Element != null)
                     {
+                        // 处理作业执行元素
                         ElementCommand elementCommand = ElementCommandDispatcher.Dispatcher (this, this.Log, job.Element);
                         if (elementCommand.Execute ())
                         {
                             for (int i = 0; i < elementCommand.Result; i++)
                             {
-                                RunActions (elementCommand.VariableName, i, job.Actions);
+                                RunActions (elementCommand.ResultVariableName, i, job.Actions);
                             }
                         }
                     }
                     else if (job.Iframe != null)
                     {
-                        ElementCommand elementCommand = ElementCommandDispatcher.Dispatcher (this, this.Log, job.Iframe);
-                        if (elementCommand.Execute ())
+                        // 处理作业执行内嵌框架的元素
+                        ElementCommand iframeCommand = ElementCommandDispatcher.Dispatcher (this, this.Log, job.Iframe);
+                        if (iframeCommand.Execute () && job.Iframe.Element is not null)
                         {
-                            for (int i = 0; i < elementCommand.Result; i++)
+                            ElementCommand elementCommand = ElementCommandDispatcher.Dispatcher (this, this.Log, job.Iframe.Element, iframeCommand.ResultVariableName);
+                            if (elementCommand.Execute ())
                             {
-                                RunActions (elementCommand.VariableName, i, job.Actions);
+                                for (int i = 0; i < elementCommand.Result; i++)
+                                {
+                                    RunActions (elementCommand.ResultVariableName, i, job.Actions);
+                                }
                             }
                         }
                     }
