@@ -54,16 +54,10 @@
                     },
                     "actions": [
                         {
-                            "type": "MouseDown",
-                            "value": {
-                                "buttons": "Left"
-                            }
+                            "type": "Play"
                         },
                         {
-                            "type": "MouseUp",
-                            "value": {
-                                "buttons": "Left"
-                            }
+                            "type": "WaitEndedEvent"
                         }
                     ]
                 }
