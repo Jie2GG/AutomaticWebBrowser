@@ -37,7 +37,7 @@ AutomaticWebBrowser 需要使用 JSON 脚本来定义浏览器执行的任务, �
 
 config.json 是 AutomaticWebBrowser 的核心配置文件, 定义日志、浏览器和任务信息, 浏览器将根据这些配置来执行预定义的任务.
 
-> 详细配置文件参考: <a src="doc/config/AWConfig.md">配置文件</a>
+> 详细配置文件参考: <a href="doc/config/AWConfig.md">配置文件</a>
 
 ## :sparkling_heart: 支持这个项目
 
