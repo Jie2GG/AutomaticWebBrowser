@@ -35,7 +35,7 @@ namespace AutomaticWebBrowser.Domain.Configuration.Models
         /// <summary>
         /// 动作列表
         /// </summary>
-        [JsonPropertyName ("actions")]
+        [JsonPropertyName ("action")]
         public AWAction[] Actions { get; set; } = Array.Empty<AWAction> ();
     }
 }

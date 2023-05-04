@@ -39,7 +39,7 @@
             "url-reload-count": 1,
             "url-reload-delay": 1000,
             "auto-close": false,
-            "jobs": [
+            "job": [
                 {
                     "condition": {
                         "type": "Ready"
@@ -52,7 +52,7 @@
                             "value": "/html/body/video"
                         }
                     },
-                    "actions": [
+                    "action": [
                         {
                             "type": "Play"
                         },

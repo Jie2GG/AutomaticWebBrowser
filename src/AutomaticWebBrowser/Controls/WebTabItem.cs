@@ -82,9 +82,8 @@ namespace AutomaticWebBrowser.Controls
 
                 // 显示状态条
                 this.WebView.CoreWebView2.Settings.IsStatusBarEnabled = true;
-
-                this.WebView.CoreWebView2.Settings.IsScriptEnabled = this.Config.Browser.EnableJavaScript;
-                this.Log.Information ($"浏览器 --> 启用 JavaScript 代码: {this.WebView.CoreWebView2.Settings.IsScriptEnabled}");
+                // 启用 Javascript
+                this.WebView.CoreWebView2.Settings.IsScriptEnabled = true
 
                 this.WebView.CoreWebView2.Settings.IsPasswordAutosaveEnabled = this.Config.Browser.EnablePasswordAutosave;
                 this.Log.Information ($"浏览器 --> 启用密码自动保存: {this.WebView.CoreWebView2.Settings.IsPasswordAutosaveEnabled}");

@@ -35,7 +35,7 @@ namespace AutomaticWebBrowser.Domain.Configuration.Models
         /// <summary>
         /// 作业列表
         /// </summary>
-        [JsonPropertyName ("jobs")]
+        [JsonPropertyName ("job")]
         public AWJob[] Jobs { get; set; } = Array.Empty<AWJob> ();
     }
 }

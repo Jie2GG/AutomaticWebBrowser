@@ -33,12 +33,6 @@ namespace AutomaticWebBrowser.Domain.Configuration.Models
         public bool EnableTrackingPrevention { get; set; } = true;
 
         /// <summary>
-        /// 启用 JavaScript
-        /// </summary>
-        [JsonPropertyName ("enable-javascript")]
-        public bool EnableJavaScript { get; set; } = true;
-
-        /// <summary>
         /// 启用密码自动保存
         /// </summary>
         [JsonPropertyName ("enable-password-autosave")]

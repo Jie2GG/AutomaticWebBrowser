@@ -27,7 +27,7 @@
 
 # 关于项目
 
-AutomaticWebBrowser 是一个基于 WebView2 的自动化工具, 可用于模拟用户在浏览器中的各种操作, 如打开网页、填写表单、点击按钮等. 它可以通过 JSON 脚本来控制浏览器的行为, 使用户能够不在精通编程的情况下自动化执行繁琐的网页操作, 从而提高工作效率. 
+AutomaticWebBrowser 是一个基于 WebView2 的自动化工具, 可用于模拟用户在浏览器中的各种操作, 如打开网页、填写表单、点击按钮等. 它可以通过 JSON 脚本来控制浏览器的行为, 使用户能够不在精通编程的情况下自动化执行繁琐的网页操作, 从而提高工作效率.
 
 # 快速开始
 
@@ -37,7 +37,7 @@ AutomaticWebBrowser 需要使用 JSON 脚本来定义浏览器执行的任务, �
 
 config.json 是 AutomaticWebBrowser 的核心配置文件, 定义日志、浏览器和任务信息, 浏览器将根据这些配置来执行预定义的任务.
 
-> 详细配置文件参考: <a href="doc/config/AWConfig.md">配置文件</a>
+> 详细配置文件参考: <a href="doc/config/Home.md">配置文件</a>
 
 ## :sparkling_heart: 支持这个项目
 
@@ -52,4 +52,3 @@ config.json 是 AutomaticWebBrowser 的核心配置文件, 定义日志、浏览
 谢谢！ :heart:
 
 <img id="alipay" src="doc/img/Alipay.jpg?raw=true" alt="支付宝收款码" width="220" height="330" /><img id="wechatpay" src="doc/img/WechatPay.jpg?raw=true" alt="微信收款码" width="220" height="330" />
-
