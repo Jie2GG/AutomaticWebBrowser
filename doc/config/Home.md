@@ -1,7 +1,5 @@
 # 首页
 
----
-
 JSON 配置文件是 AutomaticWebBrowser 的核心配置文件, 本文将详细介绍 JSON 配置中包含的配置项目.
 
 ## 目录

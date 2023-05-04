@@ -1,7 +1,5 @@
 # 根配置
 
----
-
 ## 说明
 
 AutomaticWebBrowser 的 JSON 配置文件的根包含3个可配置的选项, 分别是:

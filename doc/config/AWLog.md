@@ -1,7 +1,5 @@
 # 跟踪器配置
 
----
-
 ## 说明
 
 AutomaticWebBrowser 的日志跟踪模块基于 Serilog 开发, 提供了必要的可配置项目:
