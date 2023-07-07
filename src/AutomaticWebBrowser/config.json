@@ -16,8 +16,8 @@
             "state": "Normal",
             // 窗体位置 (参考: System.Windows.WindowStartupLocation 枚举)
             "startup-location": "CenterScreen",
-            "width": 800,
-            "height": 500
+            "width": 1024,
+            "height": 768
         },
         // 数据路径
         "data-path": "./data",
@@ -35,29 +35,34 @@
     // 任务配置
     "task": [
         {
-            "url": "https://www.w3school.com.cn/tiy/t.asp?f=eg_html_video",
-            "url-reload-count": 1,
-            "url-reload-delay": 1000,
-            "auto-close": false,
+            "url": "https://www.pptv.com/",
             "job": [
                 {
                     "condition": {
                         "type": "Ready"
                     },
-                    "iframe": {
-                        "type": "GetElementById",
-                        "value": "iframeResult",
-                        "element": {
-                            "type": "Evaluate",
-                            "value": "/html/body/video"
-                        }
+                    "element": {
+                        "type": "GetElementsByClassName",
+                        "value": "title-link"
                     },
                     "action": [
                         {
-                            "type": "Play"
+                            "type": "Click"
                         },
                         {
-                            "type": "WaitEndedEvent"
+                            "type": "RunSubJob",
+                            "value": [
+                                {
+                                    "condition": {
+                                        "type": "Ready"
+                                    },
+                                    "action": [
+                                        {
+                                            "type": "CloseTab"
+                                        }
+                                    ]
+                                }
+                            ]
                         }
                     ]
                 }

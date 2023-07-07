@@ -2,144 +2,216 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 
-using AutomaticWebBrowser.Controls;
-using AutomaticWebBrowser.Domain.Configuration.Models;
-using AutomaticWebBrowser.Services;
-using AutomaticWebBrowser.Views;
+using AutomaticWebBrowser.Wpf.Controls;
+using AutomaticWebBrowser.Wpf.Core;
+using AutomaticWebBrowser.Wpf.Services.Configuration.Models;
 
 using HandyControl.Controls;
-using HandyControl.Tools.Extension;
 
 using Prism.Commands;
 using Prism.Mvvm;
 
+using Serilog;
+
 using Unity;
 
-namespace AutomaticWebBrowser.ViewModels
+namespace AutomaticWebBrowser.Wpf.ViewModels
 {
-    /// <summary>
-    /// MainView.xaml 的业务逻辑
-    /// </summary>
     class MainViewModel : BindableBase
     {
         #region --字段--
-        private string title = "自动化浏览器";
-        private ObservableCollection<WebTabItem> browserTabs = new ();
-        private int browserTabIndex = 0;
+        private ObservableCollection<IWebView> webViewTabs;
+        private int webViewTabCurrentIndex;
         #endregion
 
         #region --属性--
         /// <summary>
+        /// 日志
+        /// </summary>
+        public ILogger Logger { get; set; }
+
+        /// <summary>
         /// 配置
         /// </summary>
-        [Dependency (nameof (AWConfig))]
-        public AWConfig? Config { get; set; }
+        public AWConfig Config { get; set; }
 
         /// <summary>
-        /// IOC容器
+        /// WebView 标签页集合
         /// </summary>
-        [Dependency]
-        public UnityContainer? Container { get; set; }
-
-        /// <summary>
-        /// 日志服务
-        /// </summary>
-        [Dependency]
-        public LoggerService? LoggerService { get; set; }
-
-        /// <summary>
-        /// 标题
-        /// </summary>
-        public string Title
+        public ObservableCollection<IWebView> WebViewTabs
         {
-            get => this.title;
-            set => this.SetProperty (ref this.title, value);
+            get => this.webViewTabs;
+            set => this.SetProperty (ref this.webViewTabs, value);
         }
 
         /// <summary>
-        /// 浏览器标签页
+        /// WebView 标签页当前索引
         /// </summary>
-        public ObservableCollection<WebTabItem> BrowserTabs
+        public int WebViewTabCurrentIndex
         {
-            get => this.browserTabs;
-            set => this.SetProperty (ref this.browserTabs, value);
-        }
-
-        /// <summary>
-        /// 标签页索引
-        /// </summary>
-        public int BrowserTabIndex
-        {
-            get => this.browserTabIndex;
-            set => this.SetProperty (ref this.browserTabIndex, value);
+            get => this.webViewTabCurrentIndex;
+            set => this.SetProperty (ref this.webViewTabCurrentIndex, value);
         }
         #endregion
 
         #region --命令--
-        public ICommand InitializeCommand => new DelegateCommand<HandyControl.Controls.Window> ((window) =>
+        /// <summary>
+        /// 初始化命令
+        /// </summary>
+        public ICommand InitializeCommand => new DelegateCommand (() =>
         {
-            if (this.Config != null && this.LoggerService?.Logger != null)
-            {
-                this.LoggerService?.Logger.Information ($"初始化 --> 跟踪程序启动完毕");
-                // 设置窗体属性
-                window.WindowState = this.Config.Browser.Window.State;
-                this.LoggerService?.Logger.Information ($"初始化 --> 窗体状态: {window.WindowState}");
-                window.WindowStartupLocation = this.Config.Browser.Window.StartupLocation;
-                this.LoggerService?.Logger.Information ($"初始化 --> 窗体启动位置: {window.WindowStartupLocation}");
-                window.Width = this.Config.Browser.Window.Width;
-                window.Height = this.Config.Browser.Window.Height;
-                if (this.Config.Browser.Window.Left is not null)
-                {
-                    window.Left = (double)this.Config.Browser.Window.Left;
-                }
-                if (this.Config.Browser.Window.Top is not null)
-                {
-                    window.Top = (double)this.Config.Browser.Window.Top;
-                }
-                this.LoggerService?.Logger.Information ($"初始化 --> 窗体大小: [{window.Width}, {window.Height}]");
-
-                // 开始任务
-                this.StartTask ();
-            }
+            this.LoadTasks ();
         });
 
-        public static ICommand ShowLog => new DelegateCommand (() =>
+        /// <summary>
+        /// 显示关于命令
+        /// </summary>
+        public static ICommand ShowAboutCommand => new DelegateCommand (() =>
         {
-            new LogView ().Show ();
+            Growl.InfoGlobal ($"正在开发中");
+        });
+
+        /// <summary>
+        /// 运行命令, 开始自动化任务的命令
+        /// </summary>
+        public ICommand RunCommand => new DelegateCommand (() =>
+        {
+            this.WebViewTabs[this.WebViewTabCurrentIndex].Run ();
+        });
+
+        /// <summary>
+        /// 停止命令, 停止自动化任务的命令
+        /// </summary>
+        public ICommand StopCommand => new DelegateCommand (() =>
+        {
+            this.WebViewTabs[this.WebViewTabCurrentIndex].Stop ();
+        });
+
+        /// <summary>
+        /// 显示日志命令
+        /// </summary>
+        public static ICommand ShowLogCommand => new DelegateCommand (() =>
+        {
+            Growl.InfoGlobal ($"正在开发中");
+        });
+
+        /// <summary>
+        /// 显示设置命令
+        /// </summary>
+        public static ICommand ShowSettingCommand => new DelegateCommand (() =>
+        {
+            Growl.InfoGlobal ($"正在开发中");
         });
         #endregion
 
-        #region --私有方法--
-        private async void StartTask ()
+        #region --构造函数--
+        /// <summary>
+        /// 初始化 <see cref="MainViewModel"/> 类的新实例
+        /// </summary>
+        /// <param name="logger"></param>
+        public MainViewModel ([Dependency] ILogger logger, [Dependency] AWConfig config)
         {
-            this.LoggerService!.Logger!.Information ($"自动化任务 --> 加载任务清单, 数量: {this.Config!.Tasks.Length}");
-            foreach (AWTask task in this.Config.Tasks)
+            this.Logger = logger;
+            this.Config = config;
+
+            // 设定默认值
+            this.webViewTabs = new ObservableCollection<IWebView> ();
+            this.webViewTabCurrentIndex = 0;
+        }
+        #endregion
+
+        #region --私有方法--
+        private async void LoadTasks ()
+        {
+            this.Logger.Information ($"自动化任务 --> 任务加载开始, 数量: {this.Config.Tasks.Length}");
+
+            #region 任务处理
+            for (int i = 0; i < this.Config.Tasks.Length; i++)
             {
-                // 创建标签页
-                WebTabItem webTabItem = new (this.Config!, this.LoggerService!.Logger!);
-                this.BrowserTabs.Add (webTabItem);
+                int taskNumber = i + 1;
 
-                // 初始化浏览器
-                await webTabItem.InitializeWebView ();
-
-                // 投递任务
-                await webTabItem.RunTask (task);
-
-                // 关闭标签页
-                if (task.AutoClose)
+                if (this.Config.Tasks[i].Name is null)
                 {
-                    this.BrowserTabs.Remove (webTabItem);
+                    this.Config.Tasks[i].Name = $"Task: {taskNumber}";
                 }
 
-                Thread.Sleep (1000);
-            }
+                for (int j = 0; j < this.Config.Tasks[i].Jobs.Length; j++)
+                {
+                    int jobNumber = j + 1;
 
-            this.LoggerService!.Logger!.Information ($"自动化任务 --> 任务执行完毕");
+                    if (this.Config.Tasks[i].Jobs[j].Name is null)
+                    {
+                        this.Config.Tasks[i].Jobs[j].Name = $"Job: {taskNumber}-{jobNumber}";
+                    }
+                }
+            }
+            #endregion
+
+            #region 任务加载
+            foreach (AWTask task in this.Config.Tasks)
+            {
+                this.Logger.Information ($"自动化任务 --> 任务 ({task.Name}) 正在加载");
+
+                try
+                {
+                    // 创建浏览器
+                    IWebView webView = new WebViewTab (this.Logger, this.Config.Browser);
+                    this.WebViewTabs.Add (webView);
+                    this.WebViewTabCurrentIndex = this.WebViewTabs.Count - 1;
+
+                    // 挂载浏览器事件
+                    webView.CreateNew += this.WebViewCreateNewTabEventHandler;
+                    webView.DestroyItself += this.WebViewDestroyItselfEventHandler;
+
+                    // 投递任务
+                    webView.PutTask (task);
+
+                    // 初始化浏览器
+                    await webView.InitializeAsync ();
+
+                    // 导航到网页
+                    await webView.NavigateAsync (task.Url);
+                }
+                catch (Exception ex)
+                {
+                    this.Logger.Error (ex, $"自动化任务 --> 任务 ({task.Name}) 加载失败");
+                }
+                this.Logger.Information ($"自动化任务 --> 任务 ({task.Name}) 加载完成");
+
+            }
+            #endregion
+
+            this.Logger.Information ($"自动化任务 --> 任务加载结束");
+        }
+
+        /// <summary>
+        /// Web 视图创建新标签页事件处理函数
+        /// </summary>
+        private void WebViewCreateNewTabEventHandler (object? sender, IWebView.NewWebViewEventArgs e)
+        {
+            this.Logger.Information ($"浏览器 --> 重定向到新标签页");
+
+            // 创建标签页
+            IWebView webview = new WebViewTab (this.Logger, this.Config.Browser);
+            this.WebViewTabs.Add (webview);
+            this.WebViewTabCurrentIndex = this.WebViewTabs.Count - 1;
+
+            // 挂载新 Tab 事件
+            webview.CreateNew += this.WebViewCreateNewTabEventHandler;
+            webview.DestroyItself += this.WebViewDestroyItselfEventHandler;
+
+            // 放入事件参数
+            e.NewWebView = webview;
+        }
+
+        private void WebViewDestroyItselfEventHandler (object? sender, EventArgs e)
+        {
+            if (sender is IWebView webView)
+            {
+                this.WebViewTabs.Remove (webView);
+            }
         }
         #endregion
     }

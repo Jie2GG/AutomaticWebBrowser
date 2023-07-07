@@ -3,5 +3,8 @@
     <ResourceDictionary.MergedDictionaries>
         <!--图标-->
         <ResourceDictionary Source="/Properties/Resources/Themes/Default/Basic/Icon.xaml" />
+        
+        <!--控件-->
+        <ResourceDictionary Source="/Properties/Resources/Themes/Default/Control/TabControl.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
