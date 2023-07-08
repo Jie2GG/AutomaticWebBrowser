@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 using AutomaticWebBrowser.Controls;
@@ -119,6 +120,7 @@ namespace AutomaticWebBrowser.ViewModels
         public ICommand ShowSettingCommand => new DelegateCommand (() =>
         {
             this.SettingView ??= this.UnityContainer!.Resolve<SettingView> ();
+            this.SettingView.Owner = Application.Current.MainWindow;
             this.SettingView.Closed += (sender, e) =>
             {
                 this.SettingView = null;

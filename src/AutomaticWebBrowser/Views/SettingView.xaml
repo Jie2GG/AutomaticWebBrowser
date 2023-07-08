@@ -6,11 +6,71 @@
            xmlns:local="clr-namespace:AutomaticWebBrowser.Views"
            xmlns:hc="https://handyorg.github.io/handycontrol"
            xmlns:prims="http://prismlibrary.com/"
+           xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
+           xmlns:viewmodels="clr-namespace:AutomaticWebBrowser.ViewModels"
+           d:DataContext="{d:DesignInstance Type=viewmodels:SettingViewModel}"
            mc:Ignorable="d"
-           Title="SettingView"
-           Height="450"
-           Width="800">
+           Title="任务设置"
+           Height="600"
+           Width="800"
+           WindowStartupLocation="CenterOwner"
+           Background="{hc:DynamicColor RegionBrush}"
+           prims:ViewModelLocator.AutoWireViewModel="True">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
+        <!--选择区-->
+        <Grid Grid.Row="0"
+              Margin="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!--配置文件选择-->
+            <hc:ComboBox Grid.Column="0"
+                         Margin="0 0 6 0"
+                         IsEditable="True"
+                         ItemsSource="{Binding ConfigSource}"
+                         DisplayMemberPath="Name"
+                         SelectedIndex="{Binding ConfigSelectedIndex,Mode=TwoWay}"
+                         hc:InfoElement.Title="配置文件"
+                         hc:InfoElement.TitlePlacement="Left"
+                         hc:InfoElement.ShowClearButton="True" />
+
+            <!--新建配置按钮-->
+            <Button Grid.Column="1"
+                    Content="新建"
+                    Command="{Binding CreateNewCommand}"
+                    hc:IconElement.Geometry="{DynamicResource AddGeometry}" />
+        </Grid>
+
+        <!--编辑区-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="260" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <!--任务树-->
+            <TreeView Grid.Column="0"
+                      Margin="6 6 3 6"
+                      BorderThickness="0" />
+
+            <!--属性编辑器-->
+            <hc:PropertyGrid Grid.Column="1"
+                             Margin="3 6 6 6"
+                             Padding="0" />
+        </Grid>
     </Grid>
+
+    <!--触发器-->
+    <behavior:Interaction.Triggers>
+        <behavior:EventTrigger EventName="Loaded">
+            <behavior:InvokeCommandAction Command="{Binding InitializeCommand}" />
+        </behavior:EventTrigger>
+    </behavior:Interaction.Triggers>
 </hc:Window>

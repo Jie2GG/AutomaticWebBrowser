@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.Json;
 using System.Windows;
 
+using AutomaticWebBrowser.Services.Configuration;
 using AutomaticWebBrowser.Services.Configuration.Models;
 using AutomaticWebBrowser.Services.Logger;
 using AutomaticWebBrowser.Services.Startup;
@@ -26,18 +27,19 @@ namespace AutomaticWebBrowser
     public partial class App : PrismApplication
     {
         #region --字段--
+        private BootParameters? parameters;
         private AWConfig? config;
         private LoggerSubscriber? loggerSubscriber;
         private ILogger? logger;
         #endregion
 
-        #region --公开方法--
+        #region --私有方法--
         protected override void OnStartup (StartupEventArgs e)
         {
-            BootParameters? parameters = CommandLineParser.Parse<BootParameters> (e.Args);
+            this.parameters = CommandLineParser.Parse<BootParameters> (e.Args);
             if (parameters is not null)
             {
-                this.InitializeConfig (parameters.ConfigPath);
+                this.InitializeConfig ();
                 this.InitializeLogger ();
             }
 
@@ -46,6 +48,10 @@ namespace AutomaticWebBrowser
 
         protected override void RegisterTypes (IContainerRegistry containerRegistry)
         {
+            if (this.parameters is not null)
+            {
+                containerRegistry.RegisterInstance (this.parameters);
+            }
             if (this.config is not null)
             {
                 containerRegistry.RegisterInstance (this.config);
@@ -89,31 +95,24 @@ namespace AutomaticWebBrowser
 
             base.InitializeShell (shell);
         }
-        #endregion
 
-        #region --私有方法--
         /// <summary>
         /// 初始化配置文件
         /// </summary>
         /// <param name="configFileInfo"></param>
-        private void InitializeConfig (string configPath)
+        private void InitializeConfig ()
         {
-            FileInfo configFileInfo = new (Path.GetFullPath (configPath));
-            if (configFileInfo.Exists)
+            if (this.parameters is not null)
             {
                 try
                 {
-                    this.config = JsonSerializer.Deserialize<AWConfig> (configFileInfo.OpenRead (), Global.DefaultJsonSerializerOptions);
-
-                    if (this.config is null)
-                    {
-                        MessageBox.Show ($"配置文件 ({configFileInfo.Name}) 加载失败. {Environment.NewLine} 原因: 未知错误");
-                        this.Shutdown ();
-                    }
+                    FileInfo configFileInfo = new (Path.GetFullPath (Path.Combine (this.parameters.ConfigDirectory, this.parameters.ConfigName)));
+                    this.config = JsonConfiguration.LoadFile (configFileInfo);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show ($"配置文件 ({configFileInfo.Name}) 加载失败. {Environment.NewLine} 原因: {ex.Message}", $"提示", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show (ex.Message, "提示", MessageBoxButton.OK, MessageBoxImage.Error);
+                    this.Shutdown ();
                 }
             }
         }

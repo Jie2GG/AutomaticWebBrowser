@@ -8,9 +8,15 @@ namespace AutomaticWebBrowser.Services.Startup
     class BootParameters
     {
         /// <summary>
-        /// 配置文件位置
+        /// 配置文件名称
         /// </summary>
-        [CommandLineArgument ("config", DefaultValue = "Config/config.json")]
-        public string ConfigPath { get; set; } = "config.json";
+        [CommandLineArgument ("config", DefaultValue = "config.json")]
+        public string ConfigName { get; set; } = "config.json";
+
+        /// <summary>
+        /// 配置文件路径
+        /// </summary>
+        [CommandLineArgument ("dir", DefaultValue = "Config")]
+        public string ConfigDirectory { get; set; } = "Config";
     }
 }

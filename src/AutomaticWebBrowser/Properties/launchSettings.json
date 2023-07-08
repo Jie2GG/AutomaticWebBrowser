@@ -2,7 +2,7 @@
   "profiles": {
     "AutomaticWebBrowser": {
       "commandName": "Project",
-      "commandLineArgs": "-config Config/config.json"
+      "commandLineArgs": "-dir Config -config config.json"
     }
   }
 }

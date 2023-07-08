@@ -7,32 +7,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomaticWebBrowser", "Auto
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|ARM32 = Debug|ARM32
-		Debug|ARM64 = Debug|ARM64
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|ARM32 = Release|ARM32
-		Release|ARM64 = Release|ARM64
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Debug|ARM32.ActiveCfg = Debug|AMR32
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Debug|ARM32.Build.0 = Debug|AMR32
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Debug|ARM64.ActiveCfg = Debug|AMR64
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Debug|ARM64.Build.0 = Debug|AMR64
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Debug|x64.ActiveCfg = Debug|x64
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Debug|x64.Build.0 = Debug|x64
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Debug|x86.ActiveCfg = Debug|x86
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Debug|x86.Build.0 = Debug|x86
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Release|ARM32.ActiveCfg = Release|Any CPU
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Release|ARM32.Build.0 = Release|Any CPU
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Release|ARM64.Build.0 = Release|Any CPU
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Release|x64.ActiveCfg = Release|x64
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Release|x64.Build.0 = Release|x64
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Release|x86.ActiveCfg = Release|x86
-		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Release|x86.Build.0 = Release|x86
+		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4078E2E-F374-4636-80C5-21C7C0C83CC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

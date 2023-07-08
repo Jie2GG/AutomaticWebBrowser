@@ -9,7 +9,8 @@ namespace AutomaticWebBrowser.Views
     {
         public SettingView ()
         {
-            InitializeComponent ();
+            this.InitializeComponent ();
+            Dialog.SetToken (this, nameof (SettingView));
         }
     }
 }
