@@ -55,10 +55,21 @@ namespace AutomaticWebBrowser.ViewModels
         }
 
         /// <summary>
-        /// 日志窗口
+        /// Unity 容器
+        /// </summary>
+        [Dependency]
+        public UnityContainer? UnityContainer { get; set; }
+
+        /// <summary>
+        /// 日志窗体
         /// </summary>
         [Dependency]
         public LogView? LogView { get; set; }
+
+        /// <summary>
+        /// 设置窗体
+        /// </summary>
+        public SettingView? SettingView { get; set; }
         #endregion
 
         #region --命令--
@@ -105,9 +116,15 @@ namespace AutomaticWebBrowser.ViewModels
         /// <summary>
         /// 显示设置命令
         /// </summary>
-        public static ICommand ShowSettingCommand => new DelegateCommand (() =>
+        public ICommand ShowSettingCommand => new DelegateCommand (() =>
         {
-            Growl.InfoGlobal ($"正在开发中");
+            this.SettingView ??= this.UnityContainer!.Resolve<SettingView> ();
+            this.SettingView.Closed += (sender, e) =>
+            {
+                this.SettingView = null;
+            };
+            this.SettingView.Show ();
+            this.SettingView.Activate ();
         });
         #endregion
 

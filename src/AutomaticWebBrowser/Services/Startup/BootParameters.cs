@@ -10,7 +10,7 @@ namespace AutomaticWebBrowser.Services.Startup
         /// <summary>
         /// 配置文件位置
         /// </summary>
-        [CommandLineArgument ("config", DefaultValue = "config.json")]
+        [CommandLineArgument ("config", DefaultValue = "Config/config.json")]
         public string ConfigPath { get; set; } = "config.json";
     }
 }

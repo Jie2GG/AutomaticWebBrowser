@@ -39,23 +39,89 @@
                 <Menu>
                     <MenuItem Height="28"
                               Header="任务">
-                        <MenuItem Header="运行"
-                                  Command="{Binding RunCommand}" />
+                        <MenuItem Header="启动"
+                                  Command="{Binding RunCommand}">
+                            <MenuItem.Icon>
+                                <Image>
+                                    <Image.Source>
+                                        <DrawingImage>
+                                            <DrawingImage.Drawing>
+                                                <GeometryDrawing Geometry="{DynamicResource RunGeometry}"
+                                                                 Brush="{hc:DynamicColor SuccessBrush}" />
+                                            </DrawingImage.Drawing>
+                                        </DrawingImage>
+                                    </Image.Source>
+                                </Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
                         <MenuItem Header="停止"
-                                  Command="{Binding StopCommand}" />
+                                  Command="{Binding StopCommand}">
+                            <MenuItem.Icon>
+                                <Image>
+                                    <Image.Source>
+                                        <DrawingImage>
+                                            <DrawingImage.Drawing>
+                                                <GeometryDrawing Geometry="{DynamicResource StopGeometry}"
+                                                                 Brush="{hc:DynamicColor DangerBrush}" />
+                                            </DrawingImage.Drawing>
+                                        </DrawingImage>
+                                    </Image.Source>
+                                </Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
                         <MenuItem Header="任务日志"
-                                  Command="{Binding ShowLogCommand}" />
+                                  Command="{Binding ShowLogCommand}">
+                            <MenuItem.Icon>
+                                <Image>
+                                    <Image.Source>
+                                        <DrawingImage>
+                                            <DrawingImage.Drawing>
+                                                <GeometryDrawing Geometry="{DynamicResource LogGeometry}"
+                                                                 Brush="{hc:DynamicColor PrimaryTextBrush}" />
+                                            </DrawingImage.Drawing>
+                                        </DrawingImage>
+                                    </Image.Source>
+                                </Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                     <MenuItem Height="28"
                               Header="工具">
                         <MenuItem Header="设置"
-                                  Command="{Binding ShowSettingCommand}" />
+                                  Command="{Binding ShowSettingCommand}">
+                            <MenuItem.Icon>
+                                <Image>
+                                    <Image.Source>
+                                        <DrawingImage>
+                                            <DrawingImage.Drawing>
+                                                <GeometryDrawing Geometry="{DynamicResource SettingGeometry}"
+                                                                 Brush="{hc:DynamicColor PrimaryTextBrush}" />
+                                            </DrawingImage.Drawing>
+                                        </DrawingImage>
+                                    </Image.Source>
+                                </Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                     <MenuItem Height="28"
                               Header="帮助">
                         <MenuItem Header="Github"
                                   Command="hc:ControlCommands.OpenLink"
-                                  CommandParameter="https://github.com/Jie2GG/AutomaticWebBrowser" />
+                                  CommandParameter="https://github.com/Jie2GG/AutomaticWebBrowser">
+                            <MenuItem.Icon>
+                                <Image>
+                                    <Image.Source>
+                                        <DrawingImage>
+                                            <DrawingImage.Drawing>
+                                                <GeometryDrawing Geometry="{DynamicResource GithubGeometry}"
+                                                                 Brush="#1f2328" />
+                                            </DrawingImage.Drawing>
+                                        </DrawingImage>
+                                    </Image.Source>
+                                </Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
                         <Separator />
                         <MenuItem Header="关于"
                                   Command="{Binding ShowAboutCommand}" />
@@ -69,7 +135,7 @@
                                  Orientation="Horizontal">
                 <Button Foreground="{hc:DynamicColor SuccessBrush}"
                         Style="{DynamicResource ButtonIcon.Small}"
-                        ToolTip="运行"
+                        ToolTip="启动"
                         Command="{Binding RunCommand}"
                         hc:IconElement.Geometry="{StaticResource RunGeometry}"
                         hc:IconElement.Width="16"
@@ -83,7 +149,7 @@
                         hc:IconElement.Height="16" />
                 <Button Foreground="{hc:DynamicColor PrimaryTextBrush}"
                         Style="{DynamicResource ButtonIcon.Small}"
-                        ToolTip="日志"
+                        ToolTip="运行日志"
                         Command="{Binding ShowLogCommand}"
                         hc:IconElement.Geometry="{StaticResource LogGeometry}"
                         hc:IconElement.Width="16"
@@ -106,7 +172,7 @@
                        ShowOverflowButton="True"
                        ItemsSource="{Binding WebViewTabs, Mode=TwoWay}"
                        SelectedIndex="{Binding WebViewTabCurrentIndex, Mode=TwoWay}"
-                       ItemContainerStyle="{StaticResource TabItemBrowserStyle}"/>
+                       ItemContainerStyle="{StaticResource TabItemBrowserStyle}" />
     </hc:Window.Content>
 
     <!--触发器-->

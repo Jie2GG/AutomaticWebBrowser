@@ -60,6 +60,7 @@ namespace AutomaticWebBrowser
             }
 
             containerRegistry.RegisterSingleton<LogView> ();
+            containerRegistry.Register<SettingView> ();
         }
 
         protected override Window CreateShell ()
