@@ -95,14 +95,19 @@ namespace AutomaticWebBrowser.Wpf.Core
         /// <summary>
         /// 运行自动化任务
         /// </summary>
-        Task Run ();
+        void Start ();
+
+        /// <summary>
+        /// 运行自动化任务
+        /// </summary>
+        /// <param name="tokenSource">线程取消令牌</param>
+        Task Start (CancellationTokenSource tokenSource);
 
         /// <summary>
         /// 停止自动化任务
         /// </summary>
-        /// <returns></returns>
         void Stop ();
-        
+
         /// <summary>
         /// 关闭当前 Web 视图
         /// </summary>

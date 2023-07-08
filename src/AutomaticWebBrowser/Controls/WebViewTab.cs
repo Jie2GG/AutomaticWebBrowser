@@ -211,24 +211,122 @@ namespace AutomaticWebBrowser.Wpf.Controls
         /// <summary>
         /// 运行自动化任务
         /// </summary>
-        public async Task Run ()
+        /// <param name="waitExit">等待退出</param>
+        public void Start (bool waitExit = false)
         {
             if (this.taskInfo is null)
             {
-                this.logger.Error ($"自动化任务 --> 任务运行失败, 原因: 未投递任务作业或作业为空");
+                this.logger.Error ($"自动化任务 --> 任务停止失败, 原因: 未投递任务作业或作业为空");
                 return;
             }
 
-            if (!this.isRunning)
+            if (!this.isRunning && this.taskTokenSource is null)
             {
                 this.isRunning = true;
 
-                // 创建任务取消令牌
-                this.taskTokenSource ??= new CancellationTokenSource ();
+                // 创建任务等待对象
+                AutoResetEvent? taskWait = waitExit ? new AutoResetEvent (false) : null;
+
+
+
+                //// 处理结果
+                //task.ContinueWith (result =>
+                //{
+                //    Debug.WriteLine ($"Thread: {task.Id} --- 结束, IsCanceled: {result.IsCanceled}, IsCompleted: {result.IsCompleted}, IsFaulted: {result.IsFaulted}");
+                //    if (result.IsCanceled)
+                //    {
+
+                //    }
+
+                //    if (result.IsCompletedSuccessfully)
+                //    {
+                //    }
+
+                //    // 释放 TokenSource 以便还能继续开始任务
+                //    this.taskTokenSource = null;
+
+                //    // 如果需要, 取消挂起线程
+                //    taskWait?.Set ();
+                //});
+
+                //// 启动任务
+                //task.Start ();
+                //taskWait?.WaitOne ();
+            }
+        }
+
+        /// <summary>
+        /// 运行自动化任务
+        /// </summary>
+        public void Start ()
+        {
+            if (!this.isRunning)
+            {
+                // 启动任务
+                this.Start (new CancellationTokenSource ())
+                    .ContinueWith (task =>
+                    {
+                        if (this.taskInfo is not null)
+                        {
+                            if (task.IsCanceled)
+                            {
+                                this.logger.Warning ($"自动化任务({this.taskInfo.Name}) --> 任务执行被用户取消");
+                            }
+
+                            if (task.IsCompletedSuccessfully)
+                            {
+                                this.logger.Information ($"自动化任务({this.taskInfo.Name}) --> 任务执行成功");
+                                this.Reset ();
+                            }
+                        }
+                        else
+                        {
+                            if (task.IsCanceled)
+                            {
+                                this.logger.Warning ($"自动化任务 --> 任务执行被用户取消");
+                            }
+
+                            if (task.IsCompletedSuccessfully)
+                            {
+                                this.logger.Information ($"自动化任务 --> 任务执行成功");
+                                this.Reset ();
+                            }
+                        }
+
+                        // 重置任务取消令牌
+                        this.taskTokenSource = null;
+                    });
+            }
+            else
+            {
+                this.logger.Warning ($"自动化任务 --> 任务正在执行");
+            }
+        }
+
+        /// <summary>
+        /// 运行自动化任务
+        /// </summary>
+        /// <param name="tokenSource">线程取消令牌</param>
+        public Task Start (CancellationTokenSource tokenSource)
+        {
+            if (tokenSource is null)
+            {
+                throw new ArgumentNullException (nameof (tokenSource));
+            }
+
+            if (this.taskInfo is null)
+            {
+                this.logger.Error ($"自动化任务 --> 任务停止失败, 原因: 未投递任务作业或作业为空");
+            }
+            else if (!this.isRunning)
+            {
+                this.isRunning = true;
+
+                this.taskTokenSource ??= tokenSource;
                 this.taskTokenSource.Token.Register (this.Reset);
 
-                // 启动任务
-                Task task = Task.Run (() =>
+                // 创建任务
+                return Task.Run (() =>
                 {
                     this.logger.Information ($"自动化任务({this.taskInfo.Name}) --> 任务执行开始");
 
@@ -241,7 +339,7 @@ namespace AutomaticWebBrowser.Wpf.Controls
                     foreach (AWJob job in this.taskInfo.Jobs)
                     {
                         // 检查是否停止任务
-                        this.taskTokenSource.Token.ThrowIfCancellationRequested ();
+                        tokenSource.Token.ThrowIfCancellationRequested ();
 
                         // 处理作业执行条件
                         if (job.Condition != null)
@@ -259,23 +357,23 @@ namespace AutomaticWebBrowser.Wpf.Controls
                         }
 
                         // 检查是否停止任务
-                        this.taskTokenSource.Token.ThrowIfCancellationRequested ();
+                        tokenSource.Token.ThrowIfCancellationRequested ();
 
                         // 进行元素查找
                         if (job.Element != null)
                         {
                             ElementCommand elementCommand = ElementCommandDispatcher.Dispatcher (this, this.logger, job.Element);
-                            if (!this.taskTokenSource.Token.IsCancellationRequested && elementCommand.Execute ())
+                            if (!tokenSource.Token.IsCancellationRequested && elementCommand.Execute ())
                             {
                                 for (int i = 0; i < elementCommand.Result; i++)
                                 {
                                     if (!RunActions (elementCommand.ResultVariableName, i, job.Actions))
                                     {
-                                        return;
+                                        break;
                                     }
 
                                     // 检查是否停止任务
-                                    this.taskTokenSource.Token.ThrowIfCancellationRequested ();
+                                    tokenSource.Token.ThrowIfCancellationRequested ();
                                 }
                             }
                         }
@@ -283,20 +381,20 @@ namespace AutomaticWebBrowser.Wpf.Controls
                         else if (job.Iframe != null)
                         {
                             ElementCommand iframeCommand = ElementCommandDispatcher.Dispatcher (this, this.logger, job.Iframe);
-                            if (!this.taskTokenSource.Token.IsCancellationRequested && iframeCommand.Execute () && job.Iframe.Element is not null)
+                            if (!tokenSource.Token.IsCancellationRequested && iframeCommand.Execute () && job.Iframe.Element is not null)
                             {
                                 ElementCommand elementCommand = ElementCommandDispatcher.Dispatcher (this, this.logger, job.Iframe.Element, iframeCommand.ResultVariableName);
-                                if (!this.taskTokenSource.Token.IsCancellationRequested && elementCommand.Execute ())
+                                if (!tokenSource.Token.IsCancellationRequested && elementCommand.Execute ())
                                 {
                                     for (int i = 0; i < elementCommand.Result; i++)
                                     {
                                         if (!RunActions (elementCommand.ResultVariableName, i, job.Actions))
                                         {
-                                            return;
+                                            break;
                                         }
 
                                         // 检查是否停止任务
-                                        this.taskTokenSource.Token.ThrowIfCancellationRequested ();
+                                        tokenSource.Token.ThrowIfCancellationRequested ();
                                     }
                                 }
                             }
@@ -305,25 +403,14 @@ namespace AutomaticWebBrowser.Wpf.Controls
                         {
                             if (!RunActions (null, null, job.Actions))
                             {
-                                return;
+                                break;
                             }
                         }
                     }
-
                 }, this.taskTokenSource.Token);
-
-                // 等待任务执行完毕
-                await task;
-
-                // 处理任务结果
-                this.logger.Information ($"自动化任务({this.taskInfo.Name}) --> 任务执行结束");
-
-                this.taskTokenSource = null;
             }
-            else
-            {
-                this.logger.Warning ($"自动化任务({this.taskInfo.Name}) --> 任务正在执行");
-            }
+
+            return Task.FromResult (false);
 
             bool RunActions (string? variableName, int? index, AWAction[] actions)
             {
@@ -335,6 +422,7 @@ namespace AutomaticWebBrowser.Wpf.Controls
                     ActionCommand actionCommand = ActionCommandDispatcher.Dispatcher (this, this.logger, action, variableName, index);
                     if (!actionCommand.Execute ())
                     {
+                        this.logger.Warning ($"自动化任务({this.taskInfo.Name}) --> 执行 Action({action.Type}) 命令失败, 任务取消执行");
                         return false;
                     }
 
@@ -358,11 +446,6 @@ namespace AutomaticWebBrowser.Wpf.Controls
 
             if (this.isRunning && this.taskTokenSource is not null)
             {
-                for (int i = this.subTabs.Count - 1; i >= 0; i--)
-                {
-                    this.subTabs[i].TaskTokenSource.Cancel ();
-                }
-
                 this.taskTokenSource.Cancel ();
             }
             else
