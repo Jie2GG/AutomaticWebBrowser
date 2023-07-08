@@ -4,13 +4,13 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-using AutomaticWebBrowser.Wpf.Common;
-using AutomaticWebBrowser.Wpf.Core;
-using AutomaticWebBrowser.Wpf.Services.Automatic.Commands.ActionCommands;
-using AutomaticWebBrowser.Wpf.Services.Automatic.Commands.ElementCommands;
-using AutomaticWebBrowser.Wpf.Services.Configuration.Models;
-using AutomaticWebBrowser.Wpf.Services.Logger;
-using AutomaticWebBrowser.Wpf.Services.Thread;
+using AutomaticWebBrowser.Common;
+using AutomaticWebBrowser.Core;
+using AutomaticWebBrowser.Services.Automatic.Commands.ActionCommands;
+using AutomaticWebBrowser.Services.Automatic.Commands.ElementCommands;
+using AutomaticWebBrowser.Services.Configuration.Models;
+using AutomaticWebBrowser.Services.Logger;
+using AutomaticWebBrowser.Services.Thread;
 
 using HandyControl.Controls;
 
@@ -19,9 +19,9 @@ using Microsoft.Web.WebView2.Wpf;
 
 using Serilog;
 
-using static AutomaticWebBrowser.Wpf.Core.IWebView;
+using static AutomaticWebBrowser.Core.IWebView;
 
-namespace AutomaticWebBrowser.Wpf.Controls
+namespace AutomaticWebBrowser.Controls
 {
     /// <summary>
     /// Web 标签视图
@@ -206,53 +206,6 @@ namespace AutomaticWebBrowser.Wpf.Controls
         public void PutTask (AWTask taskInfo)
         {
             this.taskInfo = taskInfo ?? throw new ArgumentNullException (nameof (taskInfo));
-        }
-
-        /// <summary>
-        /// 运行自动化任务
-        /// </summary>
-        /// <param name="waitExit">等待退出</param>
-        public void Start (bool waitExit = false)
-        {
-            if (this.taskInfo is null)
-            {
-                this.logger.Error ($"自动化任务 --> 任务停止失败, 原因: 未投递任务作业或作业为空");
-                return;
-            }
-
-            if (!this.isRunning && this.taskTokenSource is null)
-            {
-                this.isRunning = true;
-
-                // 创建任务等待对象
-                AutoResetEvent? taskWait = waitExit ? new AutoResetEvent (false) : null;
-
-
-
-                //// 处理结果
-                //task.ContinueWith (result =>
-                //{
-                //    Debug.WriteLine ($"Thread: {task.Id} --- 结束, IsCanceled: {result.IsCanceled}, IsCompleted: {result.IsCompleted}, IsFaulted: {result.IsFaulted}");
-                //    if (result.IsCanceled)
-                //    {
-
-                //    }
-
-                //    if (result.IsCompletedSuccessfully)
-                //    {
-                //    }
-
-                //    // 释放 TokenSource 以便还能继续开始任务
-                //    this.taskTokenSource = null;
-
-                //    // 如果需要, 取消挂起线程
-                //    taskWait?.Set ();
-                //});
-
-                //// 启动任务
-                //task.Start ();
-                //taskWait?.WaitOne ();
-            }
         }
 
         /// <summary>

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 
-using AutomaticWebBrowser.Wpf.Core;
-using AutomaticWebBrowser.Wpf.Services.Logger.Models;
+using AutomaticWebBrowser.Core;
+using AutomaticWebBrowser.Services.Logger.Models;
 
 using Serilog.Events;
 using Serilog.Formatting;
 
-namespace AutomaticWebBrowser.Wpf.Services.Logger
+namespace AutomaticWebBrowser.Services.Logger
 {
     class LoggerSubscriber : ILog, IObservable<Log>
     {

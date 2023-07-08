@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AutomaticWebBrowser.Wpf.Services.Configuration.Models
+namespace AutomaticWebBrowser.Services.Configuration.Models
 {
     /// <summary>
     /// <c>getElementsByNameNS 搜索元素的参数</c>

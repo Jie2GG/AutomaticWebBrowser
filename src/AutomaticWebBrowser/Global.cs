@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace AutomaticWebBrowser.Wpf
+namespace AutomaticWebBrowser
 {
     static class Global
     {

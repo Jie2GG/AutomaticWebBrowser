@@ -1,12 +1,12 @@
 ﻿using System.Threading;
 
-using AutomaticWebBrowser.Wpf.Core;
-using AutomaticWebBrowser.Wpf.Services.Configuration.Attributes;
-using AutomaticWebBrowser.Wpf.Services.Configuration.Models;
+using AutomaticWebBrowser.Core;
+using AutomaticWebBrowser.Services.Configuration.Attributes;
+using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Serilog;
 
-namespace AutomaticWebBrowser.Wpf.Services.Automatic.Commands.ActionCommands.Mouse
+namespace AutomaticWebBrowser.Services.Automatic.Commands.ActionCommands.Mouse
 {
     /// <summary>
     /// 触发 mouseup 事件动作命令

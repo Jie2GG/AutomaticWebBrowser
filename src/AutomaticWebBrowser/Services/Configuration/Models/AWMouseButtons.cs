@@ -1,6 +1,6 @@
-﻿using AutomaticWebBrowser.Wpf.Services.Configuration.Attributes;
+﻿using AutomaticWebBrowser.Services.Configuration.Attributes;
 
-namespace AutomaticWebBrowser.Wpf.Services.Configuration.Models
+namespace AutomaticWebBrowser.Services.Configuration.Models
 {
     /// <summary>
     /// 鼠标按键

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Threading;
 using System.Windows.Input;
 
-using AutomaticWebBrowser.Wpf.Controls;
-using AutomaticWebBrowser.Wpf.Core;
-using AutomaticWebBrowser.Wpf.Services.Configuration.Models;
+using AutomaticWebBrowser.Controls;
+using AutomaticWebBrowser.Core;
+using AutomaticWebBrowser.Services.Configuration.Models;
+using AutomaticWebBrowser.Views;
 
 using HandyControl.Controls;
 
@@ -17,7 +16,7 @@ using Serilog;
 
 using Unity;
 
-namespace AutomaticWebBrowser.Wpf.ViewModels
+namespace AutomaticWebBrowser.ViewModels
 {
     class MainViewModel : BindableBase
     {
@@ -54,6 +53,12 @@ namespace AutomaticWebBrowser.Wpf.ViewModels
             get => this.webViewTabCurrentIndex;
             set => this.SetProperty (ref this.webViewTabCurrentIndex, value);
         }
+
+        /// <summary>
+        /// 日志窗口
+        /// </summary>
+        [Dependency]
+        public LogView? LogView { get; set; }
         #endregion
 
         #region --命令--
@@ -78,7 +83,7 @@ namespace AutomaticWebBrowser.Wpf.ViewModels
         /// </summary>
         public ICommand RunCommand => new DelegateCommand (() =>
         {
-            this.WebViewTabs[this.WebViewTabCurrentIndex].Run ();
+            this.WebViewTabs[this.WebViewTabCurrentIndex].Start ();
         });
 
         /// <summary>
@@ -92,9 +97,9 @@ namespace AutomaticWebBrowser.Wpf.ViewModels
         /// <summary>
         /// 显示日志命令
         /// </summary>
-        public static ICommand ShowLogCommand => new DelegateCommand (() =>
+        public ICommand ShowLogCommand => new DelegateCommand (() =>
         {
-            Growl.InfoGlobal ($"正在开发中");
+            this.LogView?.Show ();
         });
 
         /// <summary>

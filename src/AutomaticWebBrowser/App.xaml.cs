@@ -3,10 +3,10 @@ using System.IO;
 using System.Text.Json;
 using System.Windows;
 
-using AutomaticWebBrowser.Wpf.Services.Configuration.Models;
-using AutomaticWebBrowser.Wpf.Services.Logger;
-using AutomaticWebBrowser.Wpf.Services.Startup;
-using AutomaticWebBrowser.Wpf.Views;
+using AutomaticWebBrowser.Services.Configuration.Models;
+using AutomaticWebBrowser.Services.Logger;
+using AutomaticWebBrowser.Services.Startup;
+using AutomaticWebBrowser.Views;
 
 using Ookii.CommandLine;
 
@@ -18,7 +18,7 @@ using Serilog.Events;
 
 using MessageBox = HandyControl.Controls.MessageBox;
 
-namespace AutomaticWebBrowser.Wpf
+namespace AutomaticWebBrowser
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -58,6 +58,8 @@ namespace AutomaticWebBrowser.Wpf
             {
                 containerRegistry.RegisterInstance (this.logger);
             }
+
+            containerRegistry.RegisterSingleton<LogView> ();
         }
 
         protected override Window CreateShell ()

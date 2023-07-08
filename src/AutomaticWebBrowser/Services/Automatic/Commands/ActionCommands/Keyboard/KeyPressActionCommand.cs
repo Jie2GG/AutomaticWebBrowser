@@ -1,11 +1,11 @@
 ﻿using System.Threading;
 
-using AutomaticWebBrowser.Wpf.Core;
-using AutomaticWebBrowser.Wpf.Services.Configuration.Models;
+using AutomaticWebBrowser.Core;
+using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Serilog;
 
-namespace AutomaticWebBrowser.Wpf.Services.Automatic.Commands.ActionCommands.Keyboard
+namespace AutomaticWebBrowser.Services.Automatic.Commands.ActionCommands.Keyboard
 {
     /// <summary>
     /// 触发 keypress 事件动作命令

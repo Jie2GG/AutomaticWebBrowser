@@ -1,6 +1,6 @@
 ﻿using System;
 
-using AutomaticWebBrowser.Wpf.Core;
+using AutomaticWebBrowser.Core;
 
 using Serilog;
 using Serilog.Configuration;
@@ -9,7 +9,7 @@ using Serilog.Events;
 using Serilog.Formatting;
 using Serilog.Formatting.Display;
 
-namespace AutomaticWebBrowser.Wpf.Services.Logger
+namespace AutomaticWebBrowser.Services.Logger
 {
     static class LoggerConfigurationExtensions
     {

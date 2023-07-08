@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using System.Windows;
 
-namespace AutomaticWebBrowser.Wpf.Services.Configuration.Models
+namespace AutomaticWebBrowser.Services.Configuration.Models
 {
     /// <summary>
     /// 浏览器配置

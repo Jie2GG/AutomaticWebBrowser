@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
-namespace AutomaticWebBrowser.Wpf.Common
+namespace AutomaticWebBrowser.Common
 {
     class Favicon2BitmapImageConverter : IValueConverter
     {

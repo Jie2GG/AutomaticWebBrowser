@@ -6,5 +6,6 @@
         
         <!--控件-->
         <ResourceDictionary Source="/Properties/Resources/Themes/Default/Control/TabControl.xaml"/>
+        <ResourceDictionary Source="/Properties/Resources/Themes/Default/Control/ListBox.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

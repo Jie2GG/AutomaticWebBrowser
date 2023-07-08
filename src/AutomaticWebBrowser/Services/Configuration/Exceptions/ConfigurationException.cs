@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AutomaticWebBrowser.Wpf.Services.Configuration.Exceptions
+namespace AutomaticWebBrowser.Services.Configuration.Exceptions
 {
     class ConfigurationException : Exception
     {

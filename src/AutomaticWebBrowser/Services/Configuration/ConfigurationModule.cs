@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Text.Json;
 
-using AutomaticWebBrowser.Wpf.Services.Configuration.Models;
+using AutomaticWebBrowser.Services.Configuration.Models;
 
-namespace AutomaticWebBrowser.Wpf.Services.Configuration
+namespace AutomaticWebBrowser.Services.Configuration
 {
     /// <summary>
     /// 配置模块

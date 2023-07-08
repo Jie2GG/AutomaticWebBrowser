@@ -1,8 +1,8 @@
 ﻿using System;
 
-using AutomaticWebBrowser.Wpf.Services.Configuration.Models;
+using AutomaticWebBrowser.Services.Configuration.Models;
 
-namespace AutomaticWebBrowser.Wpf.Services.Automatic.Commands.ActionCommands
+namespace AutomaticWebBrowser.Services.Automatic.Commands.ActionCommands
 {
     /// <summary>
     /// 动作命令特性

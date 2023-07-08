@@ -1,9 +1,9 @@
-﻿using AutomaticWebBrowser.Wpf.Core;
-using AutomaticWebBrowser.Wpf.Services.Configuration.Models;
+﻿using AutomaticWebBrowser.Core;
+using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Serilog;
 
-namespace AutomaticWebBrowser.Wpf.Services.Automatic.Commands.ElementCommands
+namespace AutomaticWebBrowser.Services.Automatic.Commands.ElementCommands
 {
     /// <summary>
     /// window 对象元素查找命令

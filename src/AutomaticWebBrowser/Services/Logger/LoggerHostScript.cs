@@ -3,7 +3,7 @@
 using Serilog;
 using Serilog.Events;
 
-namespace AutomaticWebBrowser.Wpf.Services.Logger
+namespace AutomaticWebBrowser.Services.Logger
 {
     /// <summary>
     /// <see cref="ILogger"/> 的 JavaScript 日志主机服务类

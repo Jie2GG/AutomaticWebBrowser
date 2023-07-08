@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AutomaticWebBrowser.Wpf.Services.Configuration.Attributes
+namespace AutomaticWebBrowser.Services.Configuration.Attributes
 {
     [AttributeUsage (AttributeTargets.Field)]
     class ButtonAttribute : Attribute

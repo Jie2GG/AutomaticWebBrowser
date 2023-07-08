@@ -2,7 +2,7 @@
 using Serilog.Core;
 using Serilog.Formatting;
 
-namespace AutomaticWebBrowser.Wpf.Core
+namespace AutomaticWebBrowser.Core
 {
     /// <summary>
     /// 日志接口

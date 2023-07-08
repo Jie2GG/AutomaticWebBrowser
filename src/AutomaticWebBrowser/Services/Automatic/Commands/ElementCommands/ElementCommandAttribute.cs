@@ -1,8 +1,8 @@
 ﻿using System;
 
-using AutomaticWebBrowser.Wpf.Services.Configuration.Models;
+using AutomaticWebBrowser.Services.Configuration.Models;
 
-namespace AutomaticWebBrowser.Wpf.Services.Automatic.Commands.ElementCommands
+namespace AutomaticWebBrowser.Services.Automatic.Commands.ElementCommands
 {
     /// <summary>
     /// 元素命令特性

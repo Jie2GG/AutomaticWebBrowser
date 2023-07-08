@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Text.Json;
 using System.Threading;
+using System.Threading.Tasks;
 
-using AutomaticWebBrowser.Wpf.Core;
-using AutomaticWebBrowser.Wpf.Services.Configuration.Models;
+using AutomaticWebBrowser.Core;
+using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Serilog;
 
-namespace AutomaticWebBrowser.Wpf.Services.Automatic.Commands.ActionCommands
+namespace AutomaticWebBrowser.Services.Automatic.Commands.ActionCommands
 {
     /// <summary>
     /// 运行子作业动作命令
@@ -40,6 +41,14 @@ namespace AutomaticWebBrowser.Wpf.Services.Automatic.Commands.ActionCommands
                     // 执行子作业
                     if (this.WebView.SubTabs.Count > 0)
                     {
+                        for (int i = 0; i < subJob.Length; i++)
+                        {
+                            if (subJob[i].Name is null)
+                            {
+                                subJob[i].Name = $"Job{i + 1}";
+                            }
+                        }
+
                         IWebView subWebView = this.WebView.SubTabs[^1];
 
                         AWTask subTask = new () { Name = $"{this.WebView.TaskInfo.Name}-SubTask", Jobs = subJob };
@@ -49,19 +58,23 @@ namespace AutomaticWebBrowser.Wpf.Services.Automatic.Commands.ActionCommands
                         subWebView.PutTask (subTask);
                         this.Logger.Information ($"自动化任务({this.WebView.TaskInfo.Name}) --> 执行 Action({this.Action.Type}) 命令, 子任务: {subTask.Name} 执行开始");
 
-                        // 运行并等待子任务
-                        try
-                        {
-                            subWebView.Run ().Wait ();
-                        }
-                        catch (AggregateException)
-                        {
-                            this.Logger.Warning ($"自动化任务({this.WebView.TaskInfo.Name}) --> 执行 Action({this.Action.Type}) 命令, 子任务: {subTask.Name} 执行被中断");
-                            return false;
-                        }
+                        // 启动并等待执行结果
+                        return subWebView.Start (this.WebView.TaskTokenSource)
+                            .ContinueWith (task =>
+                            {
+                                if (task.IsCanceled)
+                                {
+                                    this.Logger.Warning ($"自动化任务({this.WebView.TaskInfo.Name}) --> 执行 Action({this.Action.Type}) 命令, 子任务: {subTask.Name} 执行被取消");
+                                    return false;
+                                }
 
-                        this.Logger.Information ($"自动化任务({this.WebView.TaskInfo.Name}) --> 执行 Action({this.Action.Type}) 命令, 子任务: {subTask.Name} 执行结束");
-                        return true;
+                                if (task.IsCompletedSuccessfully)
+                                {
+                                    this.Logger.Information ($"自动化任务({this.WebView.TaskInfo.Name}) --> 执行 Action({this.Action.Type}) 命令, 子任务: {subTask.Name} 执行成功");
+                                    return true;
+                                }
+                                return false;
+                            }).Result;
                     }
                     else
                     {

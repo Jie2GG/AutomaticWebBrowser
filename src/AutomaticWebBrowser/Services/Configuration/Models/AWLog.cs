@@ -2,7 +2,7 @@
 
 using Serilog.Events;
 
-namespace AutomaticWebBrowser.Wpf.Services.Configuration.Models
+namespace AutomaticWebBrowser.Services.Configuration.Models
 {
     /// <summary>
     /// 日志

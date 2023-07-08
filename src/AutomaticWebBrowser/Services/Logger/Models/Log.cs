@@ -1,6 +1,6 @@
 ﻿using Serilog.Events;
 
-namespace AutomaticWebBrowser.Wpf.Services.Logger.Models
+namespace AutomaticWebBrowser.Services.Logger.Models
 {
     class Log
     {

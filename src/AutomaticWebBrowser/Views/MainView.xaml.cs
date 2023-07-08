@@ -1,6 +1,6 @@
 ﻿using HandyControl.Controls;
 
-namespace AutomaticWebBrowser.Wpf.Views
+namespace AutomaticWebBrowser.Views
 {
     /// <summary>
     /// MainView.xaml 的交互逻辑

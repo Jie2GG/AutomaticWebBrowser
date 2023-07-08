@@ -1,4 +1,4 @@
-﻿namespace AutomaticWebBrowser.Wpf.Services.Automatic.Commands
+﻿namespace AutomaticWebBrowser.Services.Automatic.Commands
 {
     /// <summary>
     /// 表示命令的接口

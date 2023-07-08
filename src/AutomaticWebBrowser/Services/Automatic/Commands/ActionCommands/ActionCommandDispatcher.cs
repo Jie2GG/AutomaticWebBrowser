@@ -4,12 +4,12 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 
-using AutomaticWebBrowser.Wpf.Core;
-using AutomaticWebBrowser.Wpf.Services.Configuration.Models;
+using AutomaticWebBrowser.Core;
+using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Serilog;
 
-namespace AutomaticWebBrowser.Wpf.Services.Automatic.Commands.ActionCommands
+namespace AutomaticWebBrowser.Services.Automatic.Commands.ActionCommands
 {
     /// <summary>
     /// <see cref="ActionCommand"/> 命令调度程序

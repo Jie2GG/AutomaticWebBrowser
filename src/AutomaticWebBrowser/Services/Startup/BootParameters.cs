@@ -1,6 +1,6 @@
 ﻿using Ookii.CommandLine;
 
-namespace AutomaticWebBrowser.Wpf.Services.Startup
+namespace AutomaticWebBrowser.Services.Startup
 {
     /// <summary>
     /// 启动参数模块类

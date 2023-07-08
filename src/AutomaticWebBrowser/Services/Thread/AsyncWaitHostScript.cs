@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AutomaticWebBrowser.Wpf.Services.Thread
+namespace AutomaticWebBrowser.Services.Thread
 {
     /// <summary>
     /// 线程等待 JavaScript 主机服务类

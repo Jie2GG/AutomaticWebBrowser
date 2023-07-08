@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:hc="https://handyorg.github.io/handycontrol">
+
+    <Style x:Key="ListBoxItem.Log"
+           TargetType="ListBoxItem"
+           BasedOn="{hc:StaticResource ListBoxItemBaseStyle.Small}">
+        <Setter Property="Margin"
+                Value="0" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="hc:EdgeElement.ShowEdgeContent"
+                Value="False" />
+    </Style>
+
+</ResourceDictionary>

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Text.Json;
 
-using AutomaticWebBrowser.Wpf.Core;
-using AutomaticWebBrowser.Wpf.Services.Configuration.Models;
+using AutomaticWebBrowser.Core;
+using AutomaticWebBrowser.Services.Configuration.Models;
 
 using Serilog;
 
-namespace AutomaticWebBrowser.Wpf.Services.Automatic.Commands.ElementCommands
+namespace AutomaticWebBrowser.Services.Automatic.Commands.ElementCommands
 {
     /// <summary>
     /// document.getElementsByClassName 元素查找命令

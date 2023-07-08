@@ -8,7 +8,7 @@ using System.Windows;
 
 using HandyControl.Controls;
 
-namespace AutomaticWebBrowser.Wpf.Common
+namespace AutomaticWebBrowser.Common
 {
     class FaviconElement
     {

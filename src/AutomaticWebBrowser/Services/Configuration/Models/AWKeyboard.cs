@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AutomaticWebBrowser.Wpf.Services.Configuration.Models
+namespace AutomaticWebBrowser.Services.Configuration.Models
 {
     /// <summary>
     /// 键盘

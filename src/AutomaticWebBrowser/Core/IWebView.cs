@@ -3,13 +3,13 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 
-using AutomaticWebBrowser.Wpf.Services.Configuration.Models;
-using AutomaticWebBrowser.Wpf.Services.Logger;
-using AutomaticWebBrowser.Wpf.Services.Thread;
+using AutomaticWebBrowser.Services.Configuration.Models;
+using AutomaticWebBrowser.Services.Logger;
+using AutomaticWebBrowser.Services.Thread;
 
 using Microsoft.Web.WebView2.Wpf;
 
-namespace AutomaticWebBrowser.Wpf.Core
+namespace AutomaticWebBrowser.Core
 {
     /// <summary>
     /// Web 视图接口
