@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,11 +28,11 @@ namespace AutomaticWebBrowser.Services.Automatic.Commands.ActionCommands
         #region --公开方法--
         public override bool Execute ()
         {
-            if (this.VariableName is not null && this.Action.Value != null)
+            if (this.VariableName is not null && this.Action.Value is JsonElement json)
             {
-                if (this.Action.Value?.ValueKind == JsonValueKind.String)
+                try
                 {
-                    string value = this.Action.Value?.Deserialize<string> (Global.DefaultJsonSerializerOptions)!;
+                    string value = json.Deserialize<string> (Global.DefaultJsonSerializerOptions)!;
 
                     string script = $@"
 (function () {{
@@ -54,6 +55,10 @@ namespace AutomaticWebBrowser.Services.Automatic.Commands.ActionCommands
 ".Trim ();
                     this.WebView.ExecuteScriptAsync (script);
                     return true;
+                }
+                catch (JsonException e)
+                {
+                    this.Logger.Error (e, $"自动化任务({this.WebView.TaskInfo.Name}) --> 执行 Action({this.Action.Type}) 命令失败, 原因: 值反序列化为 {nameof (String)} 类型失败");
                 }
             }
 

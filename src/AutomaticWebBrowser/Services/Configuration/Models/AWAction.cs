@@ -19,6 +19,6 @@ namespace AutomaticWebBrowser.Services.Configuration.Models
         /// 动作附件值
         /// </summary>
         [JsonPropertyName ("value")]
-        public JsonElement? Value { get; set; } = null;
+        public object? Value { get; set; } = null;
     }
 }

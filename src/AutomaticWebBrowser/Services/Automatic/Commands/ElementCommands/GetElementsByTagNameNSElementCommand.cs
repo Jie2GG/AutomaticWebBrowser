@@ -33,12 +33,12 @@ namespace AutomaticWebBrowser.Services.Automatic.Commands.ElementCommands
         #region --公开方法--
         public override bool Execute ()
         {
-            if (this.Element.Value is not null)
+            if (this.Element.Value is JsonElement json)
             {
                 try
                 {
                     // 获取搜索值
-                    AWElementsNameNS value = this.Element.Value?.Deserialize<AWElementsNameNS> (Global.DefaultJsonSerializerOptions)!;
+                    AWElementsNameNS value = json.Deserialize<AWElementsNameNS> (Global.DefaultJsonSerializerOptions)!;
 
                     // 组合脚本代码
                     string script;

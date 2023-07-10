@@ -28,11 +28,11 @@ namespace AutomaticWebBrowser.Services.Automatic.Commands.ActionCommands
         #region --公开方法--
         public override bool Execute ()
         {
-            if (this.VariableName is not null && this.Action.Value is not null)
+            if (this.VariableName is not null && this.Action.Value is JsonElement json)
             {
                 try
                 {
-                    string value = this.Action.Value?.Deserialize<string> (Global.DefaultJsonSerializerOptions)!;
+                    string value = json.Deserialize<string> (Global.DefaultJsonSerializerOptions)!;
 
                     string script = $@"
 (function () {{

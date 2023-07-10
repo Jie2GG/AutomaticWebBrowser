@@ -35,12 +35,12 @@ namespace AutomaticWebBrowser.Services.Automatic.Commands.ActionCommands.Mouse
         #region --公开方法--
         public override bool Execute ()
         {
-            if (this.VariableName is not null && this.Action.Value != null)
+            if (this.VariableName is not null && this.Action.Value is JsonElement json)
             {
                 try
                 {
                     // 获取鼠标事件参数
-                    AWMouse mouse = this.Action.Value?.Deserialize<AWMouse> ()!;
+                    AWMouse mouse = json.Deserialize<AWMouse> ()!;
 
                     string script = $@"
 (async function () {{

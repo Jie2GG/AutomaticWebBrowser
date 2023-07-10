@@ -35,12 +35,12 @@ namespace AutomaticWebBrowser.Services.Automatic.Commands.ActionCommands.Keyboar
         #region --公开方法--
         public override bool Execute ()
         {
-            if (this.VariableName is not null && this.Action.Value != null)
+            if (this.VariableName is not null && this.Action.Value is JsonElement json)
             {
                 try
                 {
                     // 获取键盘事件参数
-                    AWKeyboard keyboard = this.Action.Value?.Deserialize<AWKeyboard> (Global.DefaultJsonSerializerOptions)!;
+                    AWKeyboard keyboard = json.Deserialize<AWKeyboard> (Global.DefaultJsonSerializerOptions)!;
 
                     // 获取 KeyAttribute
                     KeyAttribute? keyAttribute = GetKeyAttribute (keyboard.Code);

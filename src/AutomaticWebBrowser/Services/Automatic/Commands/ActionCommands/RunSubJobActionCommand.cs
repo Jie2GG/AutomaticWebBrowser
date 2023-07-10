@@ -28,12 +28,12 @@ namespace AutomaticWebBrowser.Services.Automatic.Commands.ActionCommands
         #region --公开方法--
         public override bool Execute ()
         {
-            if (this.VariableName is not null && this.Action.Value != null)
+            if (this.VariableName is not null && this.Action.Value is JsonElement json)
             {
                 try
                 {
                     // 获取子任务参数
-                    AWJob[] subJob = this.Action.Value?.Deserialize<AWJob[]> (Global.DefaultJsonSerializerOptions)!;
+                    AWJob[] subJob = json.Deserialize<AWJob[]> (Global.DefaultJsonSerializerOptions)!;
 
                     // 等待子页面就绪
                     this.WebView.WebView2CreateNewAsyncWait.WaitOne ();
