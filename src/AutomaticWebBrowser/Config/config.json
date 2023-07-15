@@ -10,15 +10,6 @@
     },
     // 浏览器配置
     "browser": {
-        // 窗体配置
-        "window": {
-            // 窗体状态 (参考: System.Windows.WindowState 枚举)
-            "state": "Normal",
-            // 窗体位置 (参考: System.Windows.WindowStartupLocation 枚举)
-            "startup-location": "CenterScreen",
-            "width": 1024,
-            "height": 768
-        },
         // 数据路径
         "data-path": "./data",
         // 启用跟踪防护功能
@@ -46,6 +37,10 @@
                         "value": "title-link"
                     },
                     "action": [
+                        {
+                            "type": "InputValue",
+                            "value": "TestValue"
+                        },
                         {
                             "type": "Click"
                         },

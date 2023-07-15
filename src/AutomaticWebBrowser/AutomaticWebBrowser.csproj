@@ -8,6 +8,10 @@
 		<LangVersion>11.0</LangVersion>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<Version>1.0-alpha</Version>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!--UI框架-->
 		<PackageReference Include="HandyControls" Version="3.4.5" />

@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net7.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		
+		<RootNamespace>AutomaticWebBrowser</RootNamespace>
+		<PackageId>AutomaticWebBrowser</PackageId>
+		<AssemblyName>AutomaticWebBrowser</AssemblyName>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Folder Include="Modules\Home\" />
+	  <Folder Include="Modules\WebView\Commands\" />
+	  <Folder Include="Modules\WebView\Views\" />
+	  <Folder Include="Modules\WebView\ViewModels\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Gemini.Modules.Output" Version="1.0.60-beta" />
+	  <PackageReference Include="GeminiWpf" Version="1.0.60-beta" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Properties\Resource.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Resource.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Properties\Resource.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+</Project>

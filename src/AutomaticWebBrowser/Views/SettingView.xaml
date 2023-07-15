@@ -7,7 +7,9 @@
            xmlns:hc="https://handyorg.github.io/handycontrol"
            xmlns:prims="http://prismlibrary.com/"
            xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
+           xmlns:models="clr-namespace:AutomaticWebBrowser.Models"
            xmlns:viewmodels="clr-namespace:AutomaticWebBrowser.ViewModels"
+           xmlns:common="clr-namespace:AutomaticWebBrowser.Common"
            d:DataContext="{d:DesignInstance Type=viewmodels:SettingViewModel}"
            mc:Ignorable="d"
            Title="任务设置"
@@ -36,10 +38,16 @@
                          IsEditable="True"
                          ItemsSource="{Binding ConfigSource}"
                          DisplayMemberPath="Name"
-                         SelectedIndex="{Binding ConfigSelectedIndex,Mode=TwoWay}"
+                         SelectedIndex="{Binding ConfigCurrentIndex, Mode=TwoWay}"
                          hc:InfoElement.Title="配置文件"
                          hc:InfoElement.TitlePlacement="Left"
-                         hc:InfoElement.ShowClearButton="True" />
+                         hc:InfoElement.ShowClearButton="True">
+                <behavior:Interaction.Triggers>
+                    <behavior:EventTrigger EventName="SelectionChanged">
+                        <behavior:InvokeCommandAction Command="{Binding SwitchConfigCommand}" />
+                    </behavior:EventTrigger>
+                </behavior:Interaction.Triggers>
+            </hc:ComboBox>
 
             <!--新建配置按钮-->
             <Button Grid.Column="1"
@@ -51,19 +59,26 @@
         <!--编辑区-->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="260" />
                 <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="500" />
             </Grid.ColumnDefinitions>
 
             <!--任务树-->
-            <TreeView Grid.Column="0"
+            <TreeView x:Name="tree"
+                      Grid.Column="0"
                       Margin="6 6 3 6"
-                      BorderThickness="0" />
+                      BorderThickness="0"
+                      ItemsSource="{Binding TreeNodes, Mode=TwoWay}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate DataType="models:TreeNode"
+                                              ItemsSource="{Binding Children}">
+                        <TextBlock Text="{Binding Name}" />
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
 
             <!--属性编辑器-->
-            <hc:PropertyGrid Grid.Column="1"
-                             Margin="3 6 6 6"
-                             Padding="0" />
+            
         </Grid>
     </Grid>
 

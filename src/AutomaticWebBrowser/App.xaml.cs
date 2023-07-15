@@ -74,28 +74,6 @@ namespace AutomaticWebBrowser
             return new MainView ();
         }
 
-        protected override void InitializeShell (Window shell)
-        {
-            if (this.config is not null && this.logger is not null)
-            {
-                shell.WindowState = this.config.Browser.Window.State;
-                this.logger.Information ($"初始化 --> 窗体状态: {shell.WindowState}");
-
-                shell.WindowStartupLocation = this.config.Browser.Window.StartupLocation;
-                this.logger.Information ($"初始化 --> 窗体启动位置: {shell.WindowStartupLocation}");
-
-                shell.Width = this.config.Browser.Window.Width;
-                shell.Height = this.config.Browser.Window.Height;
-                this.logger.Information ($"初始化 --> 窗体大小: ({shell.Width},{shell.Height})");
-
-                shell.Left = (double)this.config.Browser.Window.Left;
-                shell.Top = (double)this.config.Browser.Window.Top;
-                this.logger.Information ($"初始化 --> 窗体位置: ({shell.Left},{shell.Top})");
-            }
-
-            base.InitializeShell (shell);
-        }
-
         /// <summary>
         /// 初始化配置文件
         /// </summary>
@@ -107,7 +85,7 @@ namespace AutomaticWebBrowser
                 try
                 {
                     FileInfo configFileInfo = new (Path.GetFullPath (Path.Combine (this.parameters.ConfigDirectory, this.parameters.ConfigName)));
-                    this.config = JsonConfiguration.LoadFile (configFileInfo);
+                    this.config = JsonConfiguration.Load (configFileInfo);
                 }
                 catch (Exception ex)
                 {

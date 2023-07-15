@@ -17,6 +17,8 @@ using Serilog;
 
 using Unity;
 
+using ICommand = System.Windows.Input.ICommand;
+
 namespace AutomaticWebBrowser.ViewModels
 {
     class MainViewModel : BindableBase
@@ -149,32 +151,32 @@ namespace AutomaticWebBrowser.ViewModels
         #region --私有方法--
         private async void LoadTasks ()
         {
-            this.Logger.Information ($"自动化任务 --> 任务加载开始, 数量: {this.Config.Tasks.Length}");
+            this.Logger.Information ($"自动化任务 --> 任务加载开始, 数量: {this.Config.Task.Length}");
 
             #region 任务处理
-            for (int i = 0; i < this.Config.Tasks.Length; i++)
+            for (int i = 0; i < this.Config.Task.Length; i++)
             {
                 int taskNumber = i + 1;
 
-                if (this.Config.Tasks[i].Name is null)
+                if (this.Config.Task[i].Name is null)
                 {
-                    this.Config.Tasks[i].Name = $"Task: {taskNumber}";
+                    this.Config.Task[i].Name = $"Task: {taskNumber}";
                 }
 
-                for (int j = 0; j < this.Config.Tasks[i].Jobs.Length; j++)
+                for (int j = 0; j < this.Config.Task[i].Jobs.Length; j++)
                 {
                     int jobNumber = j + 1;
 
-                    if (this.Config.Tasks[i].Jobs[j].Name is null)
+                    if (this.Config.Task[i].Jobs[j].Name is null)
                     {
-                        this.Config.Tasks[i].Jobs[j].Name = $"Job: {taskNumber}-{jobNumber}";
+                        this.Config.Task[i].Jobs[j].Name = $"Job: {taskNumber}-{jobNumber}";
                     }
                 }
             }
             #endregion
 
             #region 任务加载
-            foreach (AWTask task in this.Config.Tasks)
+            foreach (AWTask task in this.Config.Task)
             {
                 this.Logger.Information ($"自动化任务 --> 任务 ({task.Name}) 正在加载");
 
